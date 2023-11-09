@@ -1,0 +1,286 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300&family=Pacifico&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+}
+
+.public-content {
+  flex: 1;
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.calendar-navigation {
+  font-size: 24px;
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.arrow {
+  cursor: pointer;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  background-color: #f7fafc;
+  padding: 0 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: calc(100% - 40px); /* Adjust the width calculation */
+  z-index: 100;
+}
+
+.topbar .company-title {
+  font-family: 'Pacifico', cursive;
+  font-size: 22px;
+  color: #2d3748;
+  margin: 0;
+}
+
+.navbar-logo-top {
+  max-width: 70px;
+  margin-right: -10px;
+  margin-left: -15px;
+}
+
+.topbar .right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  
+}
+
+.profile,
+.settings {
+  height: 25px;
+  width: 75px;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #495BFA;
+  color: #2d3748;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 3px;
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+
+
+.logout-icon {
+  height: 25px;
+  width: 75px;
+  border-radius: 15px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #f7fafc;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  height: calc(100% - 50px);
+  top: 50px;
+  z-index: 1;
+}
+
+.toggle-sidebar-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: black;
+  font-size: 24px;
+  padding-top: 5px;
+  padding-right: 20px;
+}
+
+.sidebar-collapsed {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.3s;
+  padding: 0;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 220px; /* Adjust this according to your sidebar width */
+  transition: margin-left 0.3s ease-in-out; /* Add a smooth transition */
+  margin-top: 70px;
+}
+
+
+.content-expanded {
+  margin-left: 0; /* Set this to 0 so it takes up the available space */
+  transition: margin-left 0.3s ease-in-out; /* Add a smooth transition */
+}
+
+.sidebar {
+  transition: width 0.3s;
+}
+
+.sidebar-transition {
+  transition: width 0.5s ease-in-out;
+}
+
+.tabs {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tab {
+  padding: 8px 14px; /* Decrease padding */
+  cursor: pointer;
+  padding-bottom: 10px;
+  display: flex;
+  font-size: 15px;
+  align-items: center;
+  border-radius: 15px;
+}
+
+.tab:hover {
+  background-color: #f3f3f3;
+}
+
+.tab-icon {
+  margin-right: 10px;
+  font-size: 10px; /* Decrease icon size */
+}
+
+.tab.active {
+  font-weight: bold;
+  background-color: #f3f3f3;
+}
+.settings-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.settings-toggle {
+  color: white;
+  height: 25px;
+  width: 75px;
+  border-radius: 15px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.settings-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f7fafc;
+  min-width: 150px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.settings-dropdown:hover .settings-menu {
+  display: block;
+}
+
+.dark-light-toggle {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-option {
+  padding: 10px;
+  background-color: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.settings-option:hover {
+  background-color: #e2e8f0;
+}
+
+.dark-light-toggle label {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+.dark-light-toggle input[type="checkbox"] {
+  display: none;
+}
+
+.dark-light-toggle .slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 30px;
+  transition: 0.4s;
+}
+
+.dark-light-toggle .slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+.dark-light-toggle input:checked + .slider {
+  background-color: #495BFA;
+}
+
+.dark-light-toggle input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+.mode-text {
+  display: block;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.dark-light-toggle {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-dropdown:hover .settings-menu {
+  display: block;
+  right: -10px; /* Align with the right side of the Settings button */
+  top: 100%; /* Position flush with the bottom of the Settings button */
+}

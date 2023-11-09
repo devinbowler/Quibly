@@ -1,0 +1,100 @@
+.event-details-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.event-details {
+  background-color: #ffffff;
+  padding: 0; /* Change padding to 0 */
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-details-text {
+  margin-top: -20px;
+}
+
+.event-details-text h2 {
+  margin-bottom: 35px;
+}
+
+.event-details-header {
+  display: flex;
+  background-color: rgb(244, 244, 244);
+  justify-content: flex-end;
+  align-items: center; /* Add align-items to center the close button vertically */
+  padding: 1px; /* Add padding here */
+  border-top-left-radius: 5px; /* Add border-radius for the top left corner */
+  border-top-right-radius: 5px; /* Add border-radius for the top right corner */
+  z-index: 100;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  font-size: .8rem;
+  cursor: pointer;
+}
+
+.delete-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 4px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.delete-modal-content h2 {
+  font-size: 1em !important;
+}
+
+.delete-modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.delete-modal-buttons button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.close-button {
+  border: none;
+  background-color: transparent;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.event-details-text {
+  color: #000000;
+  padding: 20px; /* Add padding here */
+}
+
+.event-description,
+.event-time {
+  font-size: .7rem;
+  margin-bottom: 0.5rem;
+}

@@ -1,0 +1,58 @@
+.vision-board {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align left */
+    padding: 20px;
+  }
+
+  .tasks .header {
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+  
+  
+  .vision-board .header {
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .vision-board .projects {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+
+  
+  .notes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }  
+
+  
+  .project-card {
+    width: 125px; /* Smaller size */
+    height: 125px; /* Smaller size */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid grey;
+    border-radius: 10px; /* Smaller radius */
+    background-color: transparent; /* Transparent background */
+  }
+  
+  .project-card.new {
+    cursor: pointer;
+  }
+  
+  .add-icon {
+    font-size: 1.5rem; /* Smaller icon */
+  }
+  

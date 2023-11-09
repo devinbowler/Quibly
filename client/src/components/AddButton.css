@@ -1,0 +1,50 @@
+.add-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 125px;
+  height: 125px;
+  border: 1px solid #000;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  background: #ffffffcc;
+  overflow: hidden;
+}
+
+.add-button .options {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.05); /* 5% black opacity */
+  border-radius: 15px;
+  gap: 10px; /* Creates spacing between flex items */
+}
+
+.add-button .options .option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 80%; /* Adjust as needed */
+  padding: 5px; /* Adjust as needed */
+  font-size: 0.8em; /* Adjust as needed */
+  box-sizing: border-box;
+  color: #000;
+  border: 1px solid #0000008c;
+  border-radius: 15px; /* creates rounded rectangle buttons */
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
