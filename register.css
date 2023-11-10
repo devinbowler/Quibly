@@ -1,0 +1,100 @@
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .register-logo {
+    display: block;
+    max-width: 250px;
+    margin: 0 auto 1rem;
+    margin-bottom: -30px;
+  }
+  
+  .register-form {
+    position: relative;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    box-shadow: none;
+  }
+  
+  .register-form input[type="text"],
+  .register-form input[type="password"],
+  .register-form input[type="email"] {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    outline: none;
+    margin-bottom: 1rem;
+  }
+  
+  .register-form button {
+    padding: 1rem;
+    background-color: #1C406D;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .register-form button:hover {
+    background-color: #285388;
+  }
+  
+  .login-with-google {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #fff; /* White background */
+    color: #495BFA; /* Text color */
+    font-weight: bold;
+    padding: 1rem;
+    border: 2px solid #495BFA; /* Blue border */
+    border-radius: 25px; /* Rounded corners */
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for depth */
+  }
+  
+  .login-with-google:hover {
+    background-color: #f3f3f3; /* Slightly darker white on hover */
+    border-color: #3a4ae2; /* Darker border on hover */
+  }
+  
+  .login-with-google:focus {
+    outline: none; /* Removes the default focus outline */
+    box-shadow: 0 0 0 3px rgba(73, 91, 250, 0.5); /* Optional: Adds a focus ring for accessibility */
+  }
+  
+  .login-text {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .login-text a {
+    text-decoration: none;
+    color: #1C406D;
+  }
+  
+  .login-text a:hover {
+    text-decoration: underline;
+  }
+
+  .error {
+    background-color: rgba(255, 0, 0, 0.582); /* Transparent red background */
+    border: red solid 2px;
+    color: white;
+    padding: 1rem;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
