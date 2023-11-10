@@ -35,10 +35,9 @@ app.use(cors({
 app.use(express.json());
 
 app.use((req, res, next) => {
-    console.log(req.path, req.method);
+    console.log(`Incoming request: ${req.method} ${req.path}`);
     next();
 });
-
 // Routes
 app.use('/api/schedule', scheduleRoutes);
 app.use('/api/tasks', taskRoutes);
@@ -47,11 +46,10 @@ app.use('/api/user', userRoutes);
 // Connect to DB and start server
 mongoose.connect(process.env.MONG_URI)
     .then(() => {
-        // Listen for requests
         app.listen(process.env.PORT, () => {
             console.log('Connected to DB & Listening on port', process.env.PORT);
-        });
+        })
     })
     .catch((error) => {
-        console.log(error);
+        console.error('Connection to DB failed:', error);
     });
