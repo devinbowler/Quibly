@@ -17,11 +17,16 @@ export const useSignup = () => {
                 body: JSON.stringify({email, password})
             });
 
+            console.log('Sending request to:', 'https://quantumix.onrender.com/api/user/signup');
+            console.log('Request body:', JSON.stringify({email, password}));
+
             const json = await response.json(); // Await the resolution of json()
+            console.log('Response status:', response.status);
+            console.log('Response payload:', json);
 
             if (!response.ok) {
                 setIsLoading(false);
-                setError(json.error); // Use the error from the response
+                setError(json.error || 'An error occurred'); // Fallback error message
             }
 
             if (response.ok) {
@@ -31,7 +36,7 @@ export const useSignup = () => {
             }
         } catch (err) {
             setIsLoading(false);
-            setError('Failed to sign up'); // Generic error message for network errors
+            setError(err.message || 'Failed to sign up');
         }
     };
 
