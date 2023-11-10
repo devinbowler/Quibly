@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import './App.css';
 import { FaBars } from 'react-icons/fa';
 import Project from './components/Project';
 import { useLogout } from './hooks/useLogout';
@@ -38,7 +39,7 @@ const tabs = [
   { id: 1, title: "Home", icon: <FaHome /> },
   { id: 2, title: "Schedule", icon: <FaCalendar /> },
   { id: 3, title: "Tasks", icon: <FaTasks /> },
-  { id: 4, title: "Visionboard", icon: <FaBullseye /> },
+  { id: 4, title: "Visionboard (Coming Soon!)", icon: <FaBullseye /> },
 ];
 
 function App() {
@@ -49,6 +50,10 @@ function App() {
   const { logout } = useLogout();
 
   const handleClick = (tabId) => {
+    if (tabId === 4) {
+      // Do nothing if Visionboard tab is clicked
+      return;
+    }
     setActiveTab(tabId);
     switch (tabId) {
       case 1:
@@ -60,13 +65,12 @@ function App() {
       case 3:
         navigate('/app/tasks');
         break;
-      case 4:
-        navigate('/app/visionboard'); // Lowercase 'v'
-        break;
+      // Remove case 4 as it's now non-clickable
       default:
         break;
     }
   };
+  
 
   const handleLogout = () => {
     logout();
@@ -173,11 +177,11 @@ function App() {
               {tabs.map((tab) => (
                 <div
                   key={tab.id}
-                  className={`tab ${activeTab === tab.id ? "active" : ""}`}
-                  onClick={() => handleClick(tab.id)}
-                >
-                  <span className="tab-icon">{tab.icon}</span>
-                  {tab.title}
+                  className={`tab ${activeTab === tab.id ? "active" : ""} ${tab.id === 4 ? "disabled" : ""}`}
+                    onClick={() => handleClick(tab.id)}
+                  >
+                    <span className="tab-icon">{tab.icon}</span>
+                    {tab.title}
                 </div>
               ))}
             </div>
