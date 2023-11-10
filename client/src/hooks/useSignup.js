@@ -17,12 +17,12 @@ export const useSignup = () => {
                 body: JSON.stringify({email, password})
             });
 
-            console.log('Sending request to:', 'https://quantumix.onrender.com/api/user/signup');
-            console.log('Request body:', JSON.stringify({email, password}));
+            // console.log('Sending request to:', 'https://quantumix.onrender.com/api/user/signup');
+            // console.log('Request body:', JSON.stringify({email, password}));
 
             const json = await response.json(); // Await the resolution of json()
-            console.log('Response status:', response.status);
-            console.log('Response payload:', json);
+            // console.log('Response status:', response.status);
+            // console.log('Response payload:', json);
 
             if (!response.ok) {
                 setIsLoading(false);
