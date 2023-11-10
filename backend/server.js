@@ -35,7 +35,7 @@ app.use(cors({
 app.use(express.json());
 
 app.use((req, res, next) => {
-    console.log(`Incoming request: ${req.method} ${req.path}`);
+    // console.log(`Incoming request: ${req.method} ${req.path}`);
     next();
 });
 // Routes
@@ -47,7 +47,7 @@ app.use('/api/user', userRoutes);
 mongoose.connect(process.env.MONG_URI)
     .then(() => {
         app.listen(process.env.PORT, () => {
-            console.log('Connected to DB & Listening on port', process.env.PORT);
+            // console.log('Connected to DB & Listening on port', process.env.PORT);
         })
     })
     .catch((error) => {
