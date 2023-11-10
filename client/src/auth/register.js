@@ -12,6 +12,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submitting with Email:', email, 'Password:', password);
     const success = await signup(email, password);
     if(success) navigate('/login'); // Navigate to login page after successful registration
   }
