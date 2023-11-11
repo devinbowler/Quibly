@@ -67,7 +67,7 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
     
         try {
             // Make an API call to create the new task using fetch API
-            const apiUrl = `/api/tasks${isEditing ? `/${editTitle}` : ''}`;
+            const apiUrl = `https://quantumix.onrender.com/api/tasks${isEditing ? `/${editTitle}` : ''}`;
             const method = isEditing ? 'PUT' : 'POST';
     
             const response = await fetch(apiUrl, {
