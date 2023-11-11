@@ -45,7 +45,7 @@ const Schedule = ({ currentDate, setCurrentDate }) => {
   useEffect(() => {
     console.log("Running fetchEvents effect."); 
     const fetchEvents = async () => {
-      const response = await fetch('/api/schedule', {
+      const response = await fetch('https://quantumix.onrender.com/api/schedule', {
         headers: {
           'Authorization': `Bearer ${user.token}`
         }
