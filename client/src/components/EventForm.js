@@ -70,7 +70,7 @@ const EventForm = ({ event, selectedDayIndex, closeForm, events, setEvents, isEd
     console.log("Data being sent to the server:", updatedEvent);
   
     const method = isEdit ? 'PATCH' : 'POST';
-    const apiUrl = `/api/schedule${isEdit ? `/${event._id}` : ''}`;
+    const apiUrl = `https://quantumix.onrender.com/api/schedule${isEdit ? `/${event._id}` : ''}`;
   
     const response = await fetch(apiUrl, {
       method: method,
