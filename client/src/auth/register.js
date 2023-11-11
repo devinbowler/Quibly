@@ -13,22 +13,37 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submitting with Email:', email, 'Password:', password);
     // console.log('Submitting with Email:', email, 'Password:', password);
     const success = await signup(email, password);
     if(success) navigate('/login'); // Navigate to login page after successful registration
   }
 
-  const responseGoogle = (response) => {
-    console.log(response);
-  
-    if (response.profileObj) {
-      const { email, googleId } = response.profileObj; // Extract email and Google ID
-      // Send this data to your backend for further processing
-    } else {
-      // Handle login failure
-      console.error('Google Login was unsuccessful');
+const responseGoogle = async (response) => {
+  console.log('Google response:', response);
+  if (response.tokenId) {
+    try {
+      const res = await fetch('https://quantumix.onrender.com/api/user/google-login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: response.tokenId }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        console.error('Error logging in with Google:', data.error);
+      } else {
+        // Handle successful login, e.g., store the received token, navigate to another page, etc.
+      }
+    } catch (error) {
+      console.error('Error during Google login:', error);
     }
-  };
+  } else {
+    console.error('Google Login was unsuccessful');
+  }
+};
+
   
 
     return (
@@ -41,7 +56,7 @@ const Register = () => {
             <button type="submit" disabled={isLoading}>Sign Up with Email</button>
             <GoogleLogin
               clientId={process.env.REACT_APP_CLIENT_ID}
-              buttonText="Login with Google"
+              buttonText="Signup with Google"
               onSuccess={responseGoogle}
               onFailure={responseGoogle}
               cookiePolicy={'single_host_origin'}
