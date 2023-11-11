@@ -31,10 +31,10 @@ const TaskItem = ({
     const days = Math.floor(timeLeft / 86400);
 
     
-    // console.log("Progress Percentage:", progressPercentage);
-    // console.log("Time Left:", timeLeft);
-    // console.log("Total Time:", totalTime);
-    // console.log("Visual Cap:", visualCap);
+    // // console.log("Progress Percentage:", progressPercentage);
+    // // console.log("Time Left:", timeLeft);
+    // // console.log("Total Time:", totalTime);
+    // // console.log("Visual Cap:", visualCap);
 
     
 
@@ -106,13 +106,13 @@ const Tasks = () => {
 
     const handleDelete = async () => {
         if (!user || !taskIdMarkedForDeletion) {
-            console.log("User not logged in or no task marked for deletion");
+            // console.log("User not logged in or no task marked for deletion");
             return;
         }
         
-        console.log("Task ID marked for deletion:", taskIdMarkedForDeletion);
+        // console.log("Task ID marked for deletion:", taskIdMarkedForDeletion);
     
-        const response = await fetch(`/api/tasks/${taskIdMarkedForDeletion}`, {
+        const response = await fetch(`https://quantumix.onrender.com/api/tasks/${taskIdMarkedForDeletion}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${user.token}`
@@ -121,14 +121,14 @@ const Tasks = () => {
     
         const responseData = await response.json();
     
-        console.log("API Response:", responseData);
+        // console.log("API Response:", responseData);
     
         if (response.ok) {
             setTasks(prevTasks => prevTasks.filter(t => t._id !== taskIdMarkedForDeletion));
             setShowDeleteModal(false); 
             setTaskIdMarkedForDeletion(null);  // Reset it
         } else {
-            console.log("Failed to delete the task.");
+            // console.log("Failed to delete the task.");
         }
     };
     
@@ -190,7 +190,7 @@ const Tasks = () => {
         const totalTime = (dueDate - nowTime) / 1000;
         const secondsLeft = Math.floor((dueDate - nowTime) / 1000);
         
-        console.log("Calculated Total Time:", totalTime);
+        // console.log("Calculated Total Time:", totalTime);
         
         if (isEditing) {
             setTasks(prevTasks => prevTasks.map(task => {
@@ -223,7 +223,7 @@ const togglePause = async (taskTitle, timeLeft) => {
         // Resume logic
         // Send a PATCH request to the '/resume/:taskId' endpoint
         // Update the task in the state to set `paused` to false and adjust the `dueDate` and `timeLeft`
-        const response = await fetch(`/api/tasks/resume/${taskTitle}`, {
+        const response = await fetch(`https://quantumix.onrender.com/api/tasks/resume/${taskTitle}`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${user.token}`
@@ -238,7 +238,7 @@ const togglePause = async (taskTitle, timeLeft) => {
     } else {
         // Pause logic
         // Send a PATCH request to the '/pause/:taskId' endpoint
-        const response = await fetch(`/api/tasks/pause/${taskTitle}`, {
+        const response = await fetch(`https://quantumix.onrender.com/api/tasks/pause/${taskTitle}`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${user.token}`
@@ -259,7 +259,7 @@ const togglePause = async (taskTitle, timeLeft) => {
 
     useEffect(() => {
         const fetchTasks = async () => {
-            console.log("Running fetchTasks effect.");
+            // console.log("Running fetchTasks effect.");
     
             // Debug: Manually set a task to see if the issue is with fetching or rendering
             const debugTask = {
@@ -274,26 +274,26 @@ const togglePause = async (taskTitle, timeLeft) => {
             setTasks([debugTask]);
             
             try {
-                const response = await fetch('/api/tasks', {
+                const response = await fetch('https://quantumix.onrender.com/api/tasks', {
                     headers: {
                         'Authorization': `Bearer ${user.token}`
                     }
                 });
     
                 if (!response.ok) {
-                    console.log("Failed to fetch: ", response.status);
+                    // console.log("Failed to fetch: ", response.status);
                     return;
                 }
     
                 const json = await response.json();
-                console.log("Tasks fetched: ", json);
+                // console.log("Tasks fetched: ", json);
     
                 // Explicitly create a new array of objects to ensure React recognizes the change
                 const updatedTasks = json.map(task => ({ ...task }));
                 setTasks(updatedTasks);
                 
             } catch (error) {
-                console.log("An error occurred: ", error);
+                // console.log("An error occurred: ", error);
             }
         };
     
