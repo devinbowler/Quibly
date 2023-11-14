@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const getTasks = async (req, res) => {
     const user_id = req.user._id
 
-    
+
     try {
         const tasks = await Task.find({ user_id })
     } catch (error) {
@@ -21,13 +21,13 @@ const getTask = async (req, res) => {
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({error: 'Invalid task'})
+        return res.status(404).json({ error: 'Invalid task' })
     }
 
     const task = await Task.findById(id)
 
     if (!task) {
-        return res.status(404).json({error: 'No task found'})
+        return res.status(404).json({ error: 'No task found' })
     }
 
     res.status(200).json(task)
@@ -36,7 +36,7 @@ const getTask = async (req, res) => {
 // Create a new task
 const createTask = async (req, res) => {
     console.log("Incoming request body:", req.body);  // Debug print
-    const {title, desc, timer, secondsLeft, type, dueDate, paused, pauseStartTime, user_id} = req.body;
+    const { title, desc, timer, secondsLeft, type, dueDate, paused, pauseStartTime, user_id, lastUpdateTime } = req.body;
 
     try {
         if (isNaN(secondsLeft) || secondsLeft <= 0) {
@@ -47,10 +47,10 @@ const createTask = async (req, res) => {
         const pauseStartTime = null;
 
         const user_id = req.user._id;
-        const task = await Task.create({title, desc, timer, secondsLeft, type, dueDate, paused, pauseStartTime, user_id});
+        const task = await Task.create({ title, desc, timer, secondsLeft, type, dueDate, paused, pauseStartTime, user_id, lastUpdateTime });
         res.status(200).json(task);
     } catch (error) {
-        res.status(400).json({error: error.message});
+        res.status(400).json({ error: error.message });
     }
 };
 
@@ -59,13 +59,13 @@ const deleteTask = async (req, res) => {
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({error: 'Invalid task'})
+        return res.status(404).json({ error: 'Invalid task' })
     }
 
-    const task = await Task.findOneAndDelete({_id: id})
+    const task = await Task.findOneAndDelete({ _id: id })
 
     if (!task) {
-        return res.status(404).json({error: 'No task found'})
+        return res.status(404).json({ error: 'No task found' })
     }
 
     res.status(200).json(task)
@@ -76,15 +76,15 @@ const updateTask = async (req, res) => {
     const { id } = req.params
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({error: 'Invalid task'})
+        return res.status(404).json({ error: 'Invalid task' })
     }
 
-    const task = await Task.findOneAndUpdate({_id: id}, {
+    const task = await Task.findOneAndUpdate({ _id: id }, {
         ...req.body
     })
 
     if (!task) {
-        return res.status(404).json({error: 'No task found'})
+        return res.status(404).json({ error: 'No task found' })
     }
 
     res.status(200).json(task)
@@ -96,13 +96,14 @@ const resumeTask = async (req, res) => {
     if (!task) {
         return res.status(404).json({ message: "Task not found" });
     }
-    const pauseDuration = new Date() - task.pauseStartTime;
-    task.dueDate = new Date(task.dueDate.getTime() + pauseDuration);
+
+    task.lastUpdateTime = new Date();
     task.paused = false;
     task.pauseStartTime = null;
     await task.save();
     res.status(200).json(task);
 };
+
 
 
 const pauseTask = async (req, res) => {
@@ -111,11 +112,17 @@ const pauseTask = async (req, res) => {
     if (!task) {
         return res.status(404).json({ message: "Task not found" });
     }
+
+    const now = new Date();
+    const timeElapsed = (now - task.lastUpdateTime) / 1000;
+    task.secondsLeft = Math.max(0, task.secondsLeft - timeElapsed);
     task.paused = true;
-    task.pauseStartTime = new Date();
+    task.pauseStartTime = now;
+    task.lastUpdateTime = now;
     await task.save();
     res.status(200).json(task);
 };
+
 
 
 module.exports = {

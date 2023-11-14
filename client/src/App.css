@@ -9,9 +9,86 @@ body {
   -moz-osx-font-smoothing: auto;
 }
 
+/* Styles for the scrollbar track (the part the scrollbar sits in) */
+::-webkit-scrollbar {
+  width: 10px;
+  /* width of the entire scrollbar */
+  height: 10px;
+  /* height of the entire scrollbar for horizontal scroll */
+}
+
+/* Handle (the moving part of the scrollbar) */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  /* scrollbar handle color */
+  border-radius: 5px;
+  /* roundness of the scrollbar handle */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+  /* color of the scrollbar handle on hover */
+}
+
+/* Optional: Styles for the scrollbar corner (where both scrollbars meet) */
+::-webkit-scrollbar-corner {
+  background: #f9f9f9;
+}
+
 .public-content {
   flex: 1;
 }
+
+body.dark-mode {
+  background-color: #333;
+  /* Dark background for the app */
+  color: white;
+  /* White text */
+}
+
+/*.dark-mode {
+  background-color: #333;
+  color: white;
+}*/
+
+.dark-sidebar .tab.active {
+  background-color: #555;
+  /* Dark highlight color */
+  color: white;
+  /* White text */
+  /* Other styling as needed */
+}
+
+.dark-sidebar .tab:hover {
+  background-color: #666;
+  /* Slightly darker background for hover */
+  color: white;
+  /* White text, if needed */
+  /* Other styling as needed */
+}
+
+.dark-toggle-sidebar-button {
+  color: white !important;
+  /* White text */
+  /* Add any other styling as needed */
+}
+
+.dark-topbar {
+  background-color: rgb(40, 40, 40) !important;
+  /* Dark grey background for topbar */
+  color: white;
+  /* White text for topbar */
+}
+
+.dark-sidebar {
+  background-color: #3b3b3b !important;
+  /* Darker grey background for sidebar */
+  color: white;
+  /* White text for sidebar */
+}
+
+
 
 .app {
   display: flex;
@@ -40,7 +117,8 @@ body {
   padding: 0 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
-  width: calc(100% - 40px); /* Adjust the width calculation */
+  width: calc(100% - 40px);
+  /* Adjust the width calculation */
   z-index: 100;
 }
 
@@ -61,7 +139,7 @@ body {
   display: flex;
   align-items: center;
   margin-left: auto;
-  
+
 }
 
 .profile,
@@ -101,7 +179,7 @@ body {
   position: fixed;
   height: calc(100% - 50px);
   top: 50px;
-  z-index: 1;
+  z-index: 2;
 }
 
 .toggle-sidebar-button {
@@ -124,15 +202,19 @@ body {
 .content {
   flex: 1;
   padding: 20px;
-  margin-left: 220px; /* Adjust this according to your sidebar width */
-  transition: margin-left 0.3s ease-in-out; /* Add a smooth transition */
+  margin-left: 220px;
+  /* Adjust this according to your sidebar width */
+  transition: margin-left 0.3s ease-in-out;
+  /* Add a smooth transition */
   margin-top: 70px;
 }
 
 
 .content-expanded {
-  margin-left: 0; /* Set this to 0 so it takes up the available space */
-  transition: margin-left 0.3s ease-in-out; /* Add a smooth transition */
+  margin-left: 0;
+  /* Set this to 0 so it takes up the available space */
+  transition: margin-left 0.3s ease-in-out;
+  /* Add a smooth transition */
 }
 
 .sidebar {
@@ -151,11 +233,12 @@ body {
 }
 
 .tab {
-  padding: 8px 14px; /* Decrease padding */
+  padding: 8px 14px;
+  /* Decrease padding */
   cursor: pointer;
   padding-bottom: 10px;
   display: flex;
-  font-size: 15px;
+  font-size: 13px;
   align-items: center;
   border-radius: 15px;
 }
@@ -166,13 +249,15 @@ body {
 
 .tab-icon {
   margin-right: 10px;
-  font-size: 10px; /* Decrease icon size */
+  font-size: 10px;
+  /* Decrease icon size */
 }
 
 .tab.active {
   font-weight: bold;
   background-color: #f3f3f3;
 }
+
 .settings-dropdown {
   position: relative;
   display: inline-block;
@@ -199,6 +284,11 @@ body {
   z-index: 1;
 }
 
+.dark-settings-menu {
+  background-color: #2e2e2e;
+  color: white;
+}
+
 .settings-dropdown:hover .settings-menu {
   display: block;
 }
@@ -217,6 +307,10 @@ body {
   width: 100%;
   text-align: left;
   cursor: pointer;
+}
+
+.dark-settings-option {
+  color: white;
 }
 
 .settings-option:hover {
@@ -257,11 +351,11 @@ body {
   transition: 0.4s;
 }
 
-.dark-light-toggle input:checked + .slider {
+.dark-light-toggle input:checked+.slider {
   background-color: #495BFA;
 }
 
-.dark-light-toggle input:checked + .slider:before {
+.dark-light-toggle input:checked+.slider:before {
   transform: translateX(30px);
 }
 
@@ -281,6 +375,8 @@ body {
 
 .settings-dropdown:hover .settings-menu {
   display: block;
-  right: -10px; /* Align with the right side of the Settings button */
-  top: 100%; /* Position flush with the bottom of the Settings button */
+  right: -10px;
+  /* Align with the right side of the Settings button */
+  top: 100%;
+  /* Position flush with the bottom of the Settings button */
 }

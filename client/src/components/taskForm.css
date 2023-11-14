@@ -1,6 +1,6 @@
-
 .task-form-container {
   position: fixed;
+  z-index: 1;
   top: 0;
   left: 0;
   width: 100%;
@@ -20,6 +20,57 @@
   gap: 1rem;
 }
 
+.dark-task-form {
+  background-color: rgb(45, 45, 45) !important;
+  ;
+  /* Dark background for the form in dark mode */
+  color: white;
+}
+
+.dark-task-form input,
+.dark-task-form textarea,
+.dark-task-form button {
+  background-color: #555;
+  /* Dark background for input fields and buttons */
+  color: white !important;
+  /* White text for input fields and buttons */
+  border-color: #666;
+  /* Dark border for input fields and buttons */
+}
+
+.dark-task-form label {
+  color: white;
+  /* White text for labels */
+}
+
+.dark-task-form .task-form-header {
+  background-color: #3e3e3e;
+}
+
+.dark-task-form form {
+  background-color: rgb(45, 45, 45) !important;
+  ;
+  /* Dark background for the form in dark mode */
+  color: white;
+}
+
+/* Style for the select box in dark mode */
+.dark-styled-select {
+  color: white;
+  /* White color for the selected option text */
+  background-color: #333;
+  /* Dark background for the dropdown */
+}
+
+/* Style for options when the select box is open */
+.dark-styled-select option {
+  color: black;
+  /* Black color for dropdown options */
+  background-color: white;
+  /* Light background for dropdown options */
+}
+
+
 .task-form-header {
   display: flex;
   background-color: rgb(240, 240, 240);
@@ -33,7 +84,8 @@
   cursor: pointer;
 }
 
-input, textarea {
+input,
+textarea {
   padding: 0.5rem;
   border: none;
   border-bottom: 1px solid #ccc;
@@ -76,12 +128,14 @@ input:focus {
   padding: .75rem;
   border: 1px solid #ccc;
   background: none;
-  border-radius: 10px;  /* Rounded corners */
+  border-radius: 10px;
+  /* Rounded corners */
   outline: none;
   font-size: 1rem;
   transition: border-color 0.3s;
   width: 100%;
-  margin-top: 2rem;  /* Added margin to push it down */
+  margin-top: 2rem;
+  /* Added margin to push it down */
 }
 
 .styled-select:focus {

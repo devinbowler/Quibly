@@ -34,7 +34,8 @@
 }
 
 .time-series-label {
-  height: 40px; /* Adjust this value based on your requirements */
+  height: 40px;
+  /* Adjust this value based on your requirements */
   display: flex;
   align-items: center;
   color: rgb(131, 131, 131);
@@ -52,6 +53,11 @@
   background-color: #ccc;
 }
 
+.dark-mode .time-series-label::after {
+  background-color: #464646 !important;
+  /* Darker color for dark mode */
+}
+
 .days {
   display: flex;
   flex-grow: 1;
@@ -64,6 +70,11 @@
   position: relative;
   max-width: 200px;
   min-width: 150px;
+}
+
+.dark-mode .day {
+  border-left: 1px solid #595959 !important;
+  /* Darker color for dark mode */
 }
 
 .day-header {
@@ -82,7 +93,8 @@
 
 .event {
   position: relative;
-  padding: 5px; /* Adjust this value based on your requirements */
+  padding: 5px;
+  /* Adjust this value based on your requirements */
   border-radius: 8px;
   color: #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
@@ -93,15 +105,17 @@
 
 /* This is the circular backdrop for the current day */
 .current-day {
-    background-color: lightgrey;
-    border-radius: 50%; /* Makes it circular */
+  background-color: lightgrey;
+  border-radius: 50%;
+  /* Makes it circular */
 }
 
 /* This is the rounded rectangle for the 7-day range */
 .seven-day-range {
-    background-color: grey;
-    border-radius: 10px; /* Adjust for desired roundness */
-    /* You may need additional styles to stretch or position this background correctly */
+  background-color: grey;
+  border-radius: 10px;
+  /* Adjust for desired roundness */
+  /* You may need additional styles to stretch or position this background correctly */
 }
 
 

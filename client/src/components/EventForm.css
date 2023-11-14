@@ -21,6 +21,37 @@ form {
   gap: 1rem;
 }
 
+.dark-event-form input,
+.dark-event-form textarea,
+.dark-event-form button {
+  background-color: #555;
+  /* Dark background for input fields and buttons */
+  color: white;
+  /* White text for input fields and buttons */
+  border-color: #666;
+  /* Dark border for input fields and buttons */
+}
+
+.dark-event-form label {
+  color: white;
+  /* White text for labels */
+}
+
+.dark-event-form .event-form-header {
+  background-color: #3e3e3e;
+}
+
+.dark-event-form form {
+  background-color: rgb(45, 45, 45) !important;
+  ;
+  /* Dark background for the form in dark mode */
+  color: white;
+  /* Optional: change the text color to white for better visibility */
+  /* You can add other dark mode specific styles here if needed */
+}
+
+
+
 .event-form-wrapper {
   position: absolute;
   top: 0;

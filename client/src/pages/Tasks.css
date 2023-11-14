@@ -1,36 +1,67 @@
 .content {
     flex: 1;
     padding: 20px;
-    width: 80%; /* Set width to 80% */
-    transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out; /* Add a width transition */
+    width: 80%;
+    /* Set width to 80% */
+    transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    /* Add a width transition */
     margin-top: 70px;
-  }
+}
 
-  .task-card {
+.task-card {
     display: flex;
     flex-direction: column;
-    width: 65vw;  /* 80% of the viewport width */
+    width: 65vw;
+    /* 80% of the viewport width */
     margin-top: 20px;
     border-radius: 12px;
     padding: 15px;
     background-color: #f9f9f9;
 }
-  
-  .content-expanded {
-    margin-left: auto; 
-    margin-right: auto; 
-    width: 80%; /* When sidebar is closed, width is still 80% */
-    transition: margin-left 1s ease-in-out, width 1s ease-in-out; 
-  }
 
-  .taskPage {
+.dark-task-card {
+    color: white;
+    background-color: #282828;
+}
+
+.dark-task-title {
+    color: white !important;
+}
+
+.dark-task-description {
+    color: white !important;
+}
+
+.dark-circle-bg {
+    stroke: rgb(65, 65, 65) !important;
+}
+
+.dark-tab-container {
+    background-color: #282828 !important;
+    color: white !important;
+}
+
+.dark-tab-item {
+    color: white !important;
+}
+
+.content-expanded {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    /* When sidebar is closed, width is still 80% */
+    transition: margin-left 1s ease-in-out, width 1s ease-in-out;
+}
+
+.taskPage {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100%;
     overflow-y: auto;
-    padding-bottom: 60px; /* Space for the floating button */
+    padding-bottom: 60px;
+    /* Space for the floating button */
 }
 
 .task-header {
@@ -55,9 +86,11 @@
     margin-top: 10px;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;  /* Limits text to 3 lines */
+    -webkit-line-clamp: 3;
+    /* Limits text to 3 lines */
     -webkit-box-orient: vertical;
-    max-width: 40%;  /* Limit the max width */
+    max-width: 40%;
+    /* Limit the max width */
 }
 
 
@@ -68,8 +101,10 @@
 }
 
 .taskItem {
-    display: flex;  /* Change grid to flex */
-    justify-content: space-between;  /* Space out the child elements */
+    display: flex;
+    /* Change grid to flex */
+    justify-content: space-between;
+    /* Space out the child elements */
     align-items: center;
     min-width: 500px;
     max-width: 80%;
@@ -81,15 +116,19 @@
 }
 
 .icon {
-    opacity: 0.5;  /* Low opacity as you wanted */
-    font-size: 24px;  /* Size of the clipboard icon */
-    margin-right: 20px;  /* Space between the clipboard icon and the title */
+    opacity: 0.5;
+    /* Low opacity as you wanted */
+    font-size: 24px;
+    /* Size of the clipboard icon */
+    margin-right: 20px;
+    /* Space between the clipboard icon and the title */
 }
 
 
 .titleAndTime {
     flex-grow: 1;
-    flex-shrink: 0;  /* Ensure it doesn't shrink */
+    flex-shrink: 0;
+    /* Ensure it doesn't shrink */
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -99,6 +138,7 @@
 
 .circle-container {
     position: relative;
+    z-index: 0;
     grid-column: 2 / 3;
     top: -30px;
     width: 130px;
@@ -118,7 +158,8 @@
     fill: none;
     stroke: #e5e5e5;
     stroke-width: 3.8;
-    stroke-dasharray: 83, 15;  /* 85% visual stroke with 15% gap */
+    stroke-dasharray: 83, 15;
+    /* 85% visual stroke with 15% gap */
 }
 
 .circle {
@@ -127,24 +168,28 @@
     stroke-width: 3.8;
     stroke-linecap: round;
     transition: stroke-dasharray 0.3s linear;
-    
+
 }
 
 .timeLeft {
     position: absolute;
     top: 50%;
-    left: 50%;  /* Center it */
-    transform: translate(-50%, -50%);  /* Adjust positioning to center it inside the circle */
+    left: 50%;
+    /* Center it */
+    transform: translate(-50%, -50%);
+    /* Adjust positioning to center it inside the circle */
     font-size: 18px;
     cursor: pointer;
     z-index: 10;
     padding-left: 10px;
     padding-right: 10px;
-    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+    transition: transform 0.3s ease;
+    /* Smooth transition for hover effect */
 }
 
 .timeLeft:hover {
-    transform: translate(-115%, -50%);  /* Shift it slightly to the left on hover */
+    transform: translate(-115%, -50%);
+    /* Shift it slightly to the left on hover */
 }
 
 
@@ -160,8 +205,10 @@
 }
 
 .description {
-    flex-grow: 2;  /* This gives it more space */
-    margin-right: 20px;  /* Space between this and the options */
+    flex-grow: 2;
+    /* This gives it more space */
+    margin-right: 20px;
+    /* Space between this and the options */
 }
 
 .options {
@@ -181,18 +228,22 @@
 
 .timeBarContainer {
     margin-top: 10px;
-    background-color: #e5e5e5; /* background for progress */
+    background-color: #e5e5e5;
+    /* background for progress */
     border-radius: 10px;
     height: 20px;
-    overflow: hidden; /* to ensure inner bar respects border-radius */
+    overflow: hidden;
+    /* to ensure inner bar respects border-radius */
 }
 
 
 
 .floatingButton {
     font-family: 'Noto Sans KR', 'Arial', sans-serif;
-    position: absolute;  /* Changed to absolute for responsiveness */
-    bottom: 70px;  /* Same distance from the bottom as the task container has from the top */
+    position: absolute;
+    /* Changed to absolute for responsiveness */
+    bottom: 70px;
+    /* Same distance from the bottom as the task container has from the top */
     background-color: #495BFA;
     color: white;
     font-size: 14px;
@@ -230,9 +281,12 @@
     background-color: #f8f8f8;
     margin-bottom: 20px;
     border-radius: 40px;
-    overflow: visible;  /* Set to visible to not cut off the pseudo-element */
-    position: relative;  /* Relative positioning for the pseudo-element */
-    z-index: 0;  /* Behind tab items */
+    overflow: visible;
+    /* Set to visible to not cut off the pseudo-element */
+    position: relative;
+    /* Relative positioning for the pseudo-element */
+    z-index: 0;
+    /* Behind tab items */
 }
 
 .tab-container::before {
@@ -240,12 +294,17 @@
     position: absolute;
     top: 0;
     left: var(--before-left, 0);
-    width: calc(100% / 3);  /* Assuming there are 3 tabs */
+    width: calc(100% / 3);
+    /* Assuming there are 3 tabs */
     height: 100%;
-    background-color: #495BFA;  /* The active background color */
-    border-radius: 40px;  /* Rounded corners */
-    transition: left 0.3s ease-in-out;  /* Transition effect */
-    z-index: 1;  /* Place it above the tab-container but behind the tabs */
+    background-color: #495BFA;
+    /* The active background color */
+    border-radius: 40px;
+    /* Rounded corners */
+    transition: left 0.3s ease-in-out;
+    /* Transition effect */
+    z-index: 1;
+    /* Place it above the tab-container but behind the tabs */
 }
 
 .tab-item {
@@ -256,13 +315,17 @@
     border: 2px solid transparent;
     font-size: 1em;
     color: #7d7d7d;
-    transition: color 0.3s ease-in-out;  /* Transition for color change */
-    position: relative;  /* Relative positioning for z-index */
-    z-index: 2;  /* Place it above the pseudo-element */
+    transition: color 0.3s ease-in-out;
+    /* Transition for color change */
+    position: relative;
+    /* Relative positioning for z-index */
+    z-index: 2;
+    /* Place it above the pseudo-element */
 }
 
 .tab-item.active {
-    color: #e5e5e5;  /* Change text color, not background */
+    color: #e5e5e5;
+    /* Change text color, not background */
 }
 
 
@@ -293,43 +356,45 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 250px; /* Adjust this value based on your sidebar width */
-  }
-  
-  .taskPage-container.collapsed {
-    margin-left: 70px; /* Adjust this value based on your collapsed sidebar width */
-  }
-  
-  .task-action-container {
+    margin-left: 250px;
+    /* Adjust this value based on your sidebar width */
+}
+
+.taskPage-container.collapsed {
+    margin-left: 70px;
+    /* Adjust this value based on your collapsed sidebar width */
+}
+
+.task-action-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 100px;
     margin-bottom: 100px;
-  }
+}
 
 .delete-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .delete-modal-content {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 5px;
-  width: 300px;
-  text-align: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
 }
 
 .delete-modal-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-around;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
 }

@@ -4,16 +4,19 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { EventContextProvider } from './context/EventContext';
 import { AuthContextProvider } from './context/AuthContext';
+import { ThemeProvider } from './ThemeContext';
 
 ReactDOM.render(
   <React.StrictMode>
-   <AuthContextProvider>
-    <EventContextProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </EventContextProvider>
-   </AuthContextProvider>
+    <AuthContextProvider>
+      <EventContextProvider>
+        <ThemeProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
+      </EventContextProvider>
+    </AuthContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

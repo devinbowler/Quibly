@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import TaskForm from '../components/TaskForm';
 import './Tasks.css';
-import { useAuthContext } from '../hooks/useAuthContext'; 
+import { useAuthContext } from '../hooks/useAuthContext';
+import { useTheme } from '../ThemeContext';
 
-const TaskItem = ({ 
-    title, 
-    dueDate, 
-    description, 
-    totalTime, 
-    timeLeft, 
-    togglePause, 
-    pausedTask, 
-    hovering, 
-    setHovering, 
+const TaskItem = ({
+    title,
+    dueDate,
+    description,
+    totalTime,
+    timeLeft,
+    togglePause,
+    pausedTask,
+    hovering,
+    setHovering,
     handleEditTask,
     taskId,
     handleDelete,
@@ -30,36 +31,38 @@ const TaskItem = ({
     const hours = Math.floor((timeLeft / 3600) % 24);
     const days = Math.floor(timeLeft / 86400);
 
-    
+
     // // console.log("Progress Percentage:", progressPercentage);
     // // console.log("Time Left:", timeLeft);
     // // console.log("Total Time:", totalTime);
     // // console.log("Visual Cap:", visualCap);
 
-    
 
-    const timeDisplay = timeLeft >= 0 
+
+    const timeDisplay = timeLeft >= 0
         ? `${days}:${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
         : 'Invalid Time';
 
-        const handleMarkForDeletion = (taskId) => {
-            // Set the task ID that is marked for deletion
-            setTaskIdMarkedForDeletion(taskId);
-            // Show the delete modal
-            setShowDeleteModal(true);
-          };
-          
+    const handleMarkForDeletion = (taskId) => {
+        // Set the task ID that is marked for deletion
+        setTaskIdMarkedForDeletion(taskId);
+        // Show the delete modal
+        setShowDeleteModal(true);
+    };
+
+
+    const { darkMode } = useTheme();
 
     return (
-        <div className="task-card">
+        <div className={`task-card ${darkMode ? "dark-task-card" : ""}`}>
             <div className="task-header">
-                <div className="task-description-container">
-                    <div className="task-title">{title}</div>
-                    <div className="task-description">
+                <div className={`task-description-container ${darkMode ? "dark-task-description-container" : ""}`}>
+                    <div className={`task-title ${darkMode ? "dark-task-title" : ""}`}>{title}</div>
+                    <div className={`task-description ${darkMode ? "dark-task-description" : ""}`}>
                         {description}
                         <div className="circle-container">
                             <svg className="circle-progress" viewBox="0 0 36 36">
-                                <path className="circle-bg"
+                                <path className={`circle-bg ${darkMode ? "dark-circle-bg" : ""}`}
                                     d="M18 2.0845
                                         a 15.9155 15.9155 0 0 1 0 31.831
                                         a 15.9155 15.9155 0 0 1 0 -31.831"/>
@@ -69,8 +72,8 @@ const TaskItem = ({
                                         a 15.9155 15.9155 0 0 1 0 31.831
                                         a 15.9155 15.9155 0 0 1 0 -31.831"/>
                             </svg>
-                            <div 
-                                className="timeLeft" 
+                            <div
+                                className="timeLeft"
                                 onMouseEnter={() => setHovering(true)}
                                 onMouseLeave={() => setHovering(false)}
                                 onClick={() => togglePause(title, timeLeft)}
@@ -103,36 +106,37 @@ const Tasks = () => {
     const [pausedTask, setPausedTask] = useState(null);
     const [storedTimeLeft, setStoredTimeLeft] = useState(null);
     const [hovering, setHovering] = useState(false);
+    const { darkMode } = useTheme();
 
     const handleDelete = async () => {
         if (!user || !taskIdMarkedForDeletion) {
             // console.log("User not logged in or no task marked for deletion");
             return;
         }
-        
+
         // console.log("Task ID marked for deletion:", taskIdMarkedForDeletion);
-    
+
         const response = await fetch(`https://quantumix.onrender.com/api/tasks/${taskIdMarkedForDeletion}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${user.token}`
             }
         });
-    
+
         const responseData = await response.json();
-    
+
         // console.log("API Response:", responseData);
-    
+
         if (response.ok) {
             setTasks(prevTasks => prevTasks.filter(t => t._id !== taskIdMarkedForDeletion));
-            setShowDeleteModal(false); 
+            setShowDeleteModal(false);
             setTaskIdMarkedForDeletion(null);  // Reset it
         } else {
             // console.log("Failed to delete the task.");
         }
     };
-    
-    
+
+
     const handleTabChange = (tabName) => {
         setActiveTab(tabName);
 
@@ -174,24 +178,24 @@ const Tasks = () => {
     const handleEditTask = (title, dueDate, description) => {
         setIsEditing(true);
         setEditTitle(title);
-        
+
         // Convert the timestamp to the required format for input
         const date = new Date(dueDate);
         const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-        
+
         setEditDueTime(formattedDate);
         setEditDescription(description);
         setShowForm(true);
     };
-    
+
     const addTask = (title, dueDateTime, description) => {
         const dueDate = new Date(dueDateTime).getTime();
         const nowTime = new Date().getTime();
-        const totalTime = (dueDate - nowTime) / 1000;
+        const totalTime = Math.floor((dueDate - nowTime) / 1000);
         const secondsLeft = Math.floor((dueDate - nowTime) / 1000);
-        
+
         // console.log("Calculated Total Time:", totalTime);
-        
+
         if (isEditing) {
             setTasks(prevTasks => prevTasks.map(task => {
                 if (task.title === editTitle) {
@@ -207,10 +211,10 @@ const Tasks = () => {
             }));
             setIsEditing(false);
         } else {
-            const newTask = { 
-                title, 
-                dueDate, 
-                description, 
+            const newTask = {
+                title,
+                dueDate,
+                description,
                 totalTime, // <-- Add this line
                 secondsLeft
             };
@@ -218,152 +222,168 @@ const Tasks = () => {
         }
     };
 
-const togglePause = async (taskTitle, timeLeft) => {
-    if (pausedTask === taskTitle) {
-        // Resume logic
-        // Send a PATCH request to the '/resume/:taskId' endpoint
-        // Update the task in the state to set `paused` to false and adjust the `dueDate` and `timeLeft`
-        const response = await fetch(`https://quantumix.onrender.com/api/tasks/resume/${taskTitle}`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${user.token}`
+    const togglePause = async (taskTitle, timeLeft) => {
+        if (pausedTask === taskTitle) {
+            // Resume logic
+            // Send a PATCH request to the '/resume/:taskId' endpoint
+            // Update the task in the state to set `paused` to false and adjust the `dueDate` and `timeLeft`
+            const response = await fetch(`https://quantumix.onrender.com/api/tasks/resume/${taskTitle}`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
+
+            // Handle response and update state
+            if (response.ok) {
+                setPausedTask(null);
+                // Fetch tasks again or adjust timeLeft based on the response
             }
-        });
-        
-        // Handle response and update state
-        if (response.ok) {
-            setPausedTask(null);
-            // Fetch tasks again or adjust timeLeft based on the response
-        }
-    } else {
-        // Pause logic
-        // Send a PATCH request to the '/pause/:taskId' endpoint
-        const response = await fetch(`https://quantumix.onrender.com/api/tasks/pause/${taskTitle}`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${user.token}`
+        } else {
+            // Pause logic
+            // Send a PATCH request to the '/pause/:taskId' endpoint
+            const response = await fetch(`https://quantumix.onrender.com/api/tasks/pause/${taskTitle}`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                }
+            });
+
+            // Handle response and update state
+            if (response.ok) {
+                setPausedTask(taskTitle);
+                setStoredTimeLeft(timeLeft);
+                // Fetch tasks again or adjust timeLeft based on the response
             }
-        });
-        
-        // Handle response and update state
-        if (response.ok) {
-            setPausedTask(taskTitle);
-            setStoredTimeLeft(timeLeft);
-            // Fetch tasks again or adjust timeLeft based on the response
         }
-    }
-};
+    };
 
 
-    const {user} = useAuthContext()
+    const { user } = useAuthContext()
 
     useEffect(() => {
         const fetchTasks = async () => {
-            // console.log("Running fetchTasks effect.");
-    
-            // Debug: Manually set a task to see if the issue is with fetching or rendering
-            const debugTask = {
-                _id: 'debug123',
-                title: 'Debug Task',
-                dueDate: new Date().toISOString(),
-                description: 'This is a debug task',
-                totalTime: 5000,
-                secondsLeft: 3000,
-                type: 'Single' // Make sure this matches one of your tabs
-            };
-            setTasks([debugTask]);
-            
             try {
                 const response = await fetch('https://quantumix.onrender.com/api/tasks', {
                     headers: {
                         'Authorization': `Bearer ${user.token}`
                     }
                 });
-    
+
                 if (!response.ok) {
-                    // console.log("Failed to fetch: ", response.status);
+                    console.error("Failed to fetch tasks:", response.status);
                     return;
                 }
-    
+
                 const json = await response.json();
-                // console.log("Tasks fetched: ", json);
-    
-                // Explicitly create a new array of objects to ensure React recognizes the change
-                const updatedTasks = json.map(task => ({ ...task }));
-                setTasks(updatedTasks);
-                
+                setTasks(json.map(task => ({ ...task, lastUpdateTime: new Date(task.lastUpdateTime) })));
             } catch (error) {
-                // console.log("An error occurred: ", error);
+                console.error("An error occurred while fetching tasks:", error);
             }
         };
-    
+
+        const updateTaskTime = async (taskId, newSecondsLeft) => {
+            console.log(`Updating task ${taskId} with new seconds left: ${newSecondsLeft}`);
+            await fetch(`https://quantumix.onrender.com/api/tasks/update-time/${taskId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${user.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ secondsLeft: newSecondsLeft })
+            });
+        };
+
         if (user) {
             fetchTasks();
         }
-    
-        // Interval to update the `secondsLeft` for each task
+
         const interval = setInterval(() => {
             setTasks(prevTasks => prevTasks.map(task => {
-                let newSecondsLeft = task.secondsLeft;
-                // If the task is paused, don't decrease its secondsLeft
-                if (task.title === pausedTask) {
-                    newSecondsLeft = storedTimeLeft;
-                } else if (task.secondsLeft > 0) {
-                    newSecondsLeft -= 1;
-                } else {
-                    newSecondsLeft = 0;
+                if (!task.paused && task.secondsLeft > 0) {
+                    const now = new Date();
+                    const timeElapsed = (now - task.lastUpdateTime) / 1000;
+                    const newSecondsLeft = Math.max(0, task.secondsLeft - timeElapsed);
+
+                    if (task._id) {
+                        updateTaskTime(task._id, newSecondsLeft);
+                    } else {
+                        console.error("Task ID is undefined for task:", task.title);
+                    }
+
+                    return { ...task, secondsLeft: newSecondsLeft, lastUpdateTime: now };
                 }
-                // Explicitly set a new object to trigger a re-render
-                return {...task, secondsLeft: newSecondsLeft};
+                return task;
             }));
         }, 1000);
-    
-        // Cleanup: clear the interval when the component unmounts
-        return () => clearInterval(interval);
-    }, [pausedTask, storedTimeLeft, user]);
-    
+
+
+        const handleVisibilityChange = async () => {
+            if (document.visibilityState === 'hidden') {
+                tasks.forEach(task => {
+                    if (!task.paused && task.secondsLeft > 0) {
+                        const now = new Date();
+                        const timeElapsed = (now - task.lastUpdateTime) / 1000;
+                        const newSecondsLeft = Math.max(0, task.secondsLeft - timeElapsed);
+                        updateTaskTime(task._id, newSecondsLeft);
+                    }
+                });
+            } else {
+                fetchTasks();
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            clearInterval(interval);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [user, tasks]);
+
+
 
     return (
         <div className="taskPage">
             {/* Tab Container */}
-            <div className="tab-container">
-                <div 
-                    className={`tab-item ${activeTab === 'Single' ? 'active' : ''}`} 
+            <div className={`tab-container ${darkMode ? "dark-tab-container" : ""}`}>
+                <div
+                    className={`tab-item ${activeTab === 'Single' ? 'active' : ''}`}
                     onClick={() => handleTabChange('Single')}
                 >
                     Single
                 </div>
-                <div 
-                    className={`tab-item ${activeTab === 'Routine' ? 'active' : ''}`} 
+                <div
+                    className={`tab-item ${activeTab === 'Routine' ? 'active' : ''}`}
                     onClick={() => handleTabChange('Routine')}
                 >
                     Routine
                 </div>
-                <div 
-                    className={`tab-item ${activeTab === 'Project' ? 'active' : ''}`} 
+                <div
+                    className={`tab-item ${activeTab === 'Project' ? 'active' : ''}`}
                     onClick={() => handleTabChange('Project')}
                 >
                     Project
                 </div>
             </div>
-            
+
             {/* Task Form */}
-            {showForm && <TaskForm 
-                onAddTask={addTask} 
+            {showForm && <TaskForm
+                onAddTask={addTask}
                 closeForm={() => {
                     setShowForm(false);
                     setIsEditing(false);
-                }} 
-                editTitle={editTitle} 
-                editDueTime={editDueTime} 
-                editDescription={editDescription} 
-                isEditing={isEditing} 
+                }}
+                editTitle={editTitle}
+                editDueTime={editDueTime}
+                editDescription={editDescription}
+                isEditing={isEditing}
             />}
 
             {/* Task List */}
             <div className="taskList">
-            {tasks.filter(task => task.type === activeTab).map(task => (
-                    <TaskItem 
+                {tasks.filter(task => task.type === activeTab).map(task => (
+                    <TaskItem
                         handleEditTask={handleEditTask}
                         key={task._id}
                         title={task.title}
@@ -386,7 +406,7 @@ const togglePause = async (taskTitle, timeLeft) => {
 
             {/* Floating Button */}
             <button className="floatingButton" onClick={() => setShowForm(true)}>
-            New Task
+                New Task
             </button>
 
             {/* Add this code here for the Delete Modal */}

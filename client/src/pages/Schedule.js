@@ -3,6 +3,7 @@ import "./Schedule.css";
 import EventForm from "../components/EventForm";
 import EventDetails from "../components/EventDetails";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { useTheme } from '../ThemeContext';
 
 const parseTime = (dateString) => {
   // Convert spaces to "T" to handle both formats
@@ -38,12 +39,12 @@ const getEventStyle = (event) => {
 const initialDate = new Date();
 
 const Schedule = ({ currentDate, setCurrentDate }) => {
-
+  const { darkMode } = useTheme();
   const [events, setEvents] = useState([]);
-  const {user} = useAuthContext()
+  const { user } = useAuthContext()
 
   useEffect(() => {
-    console.log("Running fetchEvents effect."); 
+    // console.log("Running fetchEvents effect."); 
     const fetchEvents = async () => {
       const response = await fetch('https://quantumix.onrender.com/api/schedule', {
         headers: {
@@ -53,7 +54,7 @@ const Schedule = ({ currentDate, setCurrentDate }) => {
       const json = await response.json();
       if (response.ok) {
         setEvents(json);
-        console.log("Events fetched:", json);
+        // console.log("Events fetched:", json);
       }
     };
 
@@ -63,7 +64,7 @@ const Schedule = ({ currentDate, setCurrentDate }) => {
   }, [user]);
 
   const changeDays = (offset) => {
-    console.log("About to change days by offset", offset); 
+    console.log("About to change days by offset", offset);
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + offset);
     setCurrentDate(newDate);
@@ -78,11 +79,11 @@ const Schedule = ({ currentDate, setCurrentDate }) => {
       days.push(day);
     }
     return days;
-};
+  };
 
-const days = generateDays();
+  const days = generateDays();
 
-const lastDayOfWeek = days[days.length - 1];
+  const lastDayOfWeek = days[days.length - 1];
 
   const [selectedDayIndex, setSelectedDayIndex] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
@@ -98,7 +99,7 @@ const lastDayOfWeek = days[days.length - 1];
 
   const selectDate = (date) => {
     setCurrentDate(new Date(date.getFullYear(), date.getMonth(), date.getDate()));
-};
+  };
 
   const strippedDate = (dateObj) => {
     return new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
@@ -109,18 +110,18 @@ const lastDayOfWeek = days[days.length - 1];
   const [, forceUpdate] = useState({});
 
   const changeMiniCalendarMonth = (offset) => {
-    console.log("About to change mini calendar month by offset", offset); 
+    console.log("About to change mini calendar month by offset", offset);
     let newDate = new Date(miniCalendarDate);
     newDate.setMonth(miniCalendarDate.getMonth() + offset);
     setMiniCalendarDate(newDate);
-    
+
     // Force a re-render after changing the miniCalendarDate
     forceUpdate({});
   };
 
   useEffect(() => {
     setMiniCalendarDate(new Date(currentDate.getFullYear(), currentDate.getMonth(), 1));
-}, [currentDate]);
+  }, [currentDate]);
 
 
 
@@ -133,7 +134,7 @@ const lastDayOfWeek = days[days.length - 1];
       const prevDate = new Date(firstDayOfMonth);
       prevDate.setDate(firstDayOfMonth.getDate() - i);
       dates.push(prevDate);
-  }  
+    }
 
     for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
       dates.push(new Date(miniCalendarDate.getFullYear(), miniCalendarDate.getMonth(), i));
@@ -141,10 +142,10 @@ const lastDayOfWeek = days[days.length - 1];
 
     let nextDateCounter = 1;
     while (dates.length % 7 !== 0) {
-        const nextDate = new Date(lastDayOfMonth);
-        nextDate.setDate(lastDayOfMonth.getDate() + nextDateCounter);
-        dates.push(nextDate);
-        nextDateCounter++;
+      const nextDate = new Date(lastDayOfMonth);
+      nextDate.setDate(lastDayOfMonth.getDate() + nextDateCounter);
+      dates.push(nextDate);
+      nextDateCounter++;
     }
 
     return dates;
@@ -157,7 +158,7 @@ const lastDayOfWeek = days[days.length - 1];
     <div className="schedule-container">
       <div className="mini-calendar">
         <div className="mini-calendar-header">
-        <span>{miniCalendarDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</span>
+          <span>{miniCalendarDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</span>
           <div className="arrow-container">
             <span className="arrow" onClick={() => changeMiniCalendarMonth(-1)}>
               &lt;
@@ -173,18 +174,18 @@ const lastDayOfWeek = days[days.length - 1];
               key={index}
               className={`mini-calendar-date${miniCalendarDate.getMonth() !== date.getMonth() ? " mini-calendar-date-faded" : ""}`}
               style={
-                strippedDate(currentDate).getTime() === strippedDate(date).getTime() ? 
-                { backgroundColor: 'rgba(0, 0, 0, 0.1)' } : 
-                strippedDate(lastDayOfWeek).getTime() === strippedDate(date).getTime() ? 
-                { backgroundColor: 'rgba(0, 0, 0, 0.1)' } : 
-                {}
+                strippedDate(currentDate).getTime() === strippedDate(date).getTime() ?
+                  { backgroundColor: 'rgba(0, 0, 0, 0.1)' } :
+                  strippedDate(lastDayOfWeek).getTime() === strippedDate(date).getTime() ?
+                    { backgroundColor: 'rgba(0, 0, 0, 0.1)' } :
+                    {}
               }
               onClick={() => {
                 const selectedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
                 setCurrentDate(selectedDate);
-                console.log("Setting Mini Calendar Date to:", date.getFullYear(), date.getMonth(), 1);
+                // console.log("Setting Mini Calendar Date to:", date.getFullYear(), date.getMonth(), 1);
                 setMiniCalendarDate(new Date(date.getFullYear(), date.getMonth(), 1)); // Set to the first day of the month
-            }}                
+              }}
             >
               {date.getDate()}
             </div>
@@ -194,73 +195,73 @@ const lastDayOfWeek = days[days.length - 1];
       <div className="schedule">
         <div className="time-series">
           {Array.from({ length: 24 }).map((_, index) => (
-            <div className="time-series-label" key={index}>
+            <div className={`time-series-label ${darkMode ? "dark-mode-style" : ""}`} key={index}>
               {formatHour(index)}
             </div>
           ))}
         </div>
         <div className="days">
-        {days.map((day, index) => (
-          <div
-            className="day"
-            key={index}
-            onClick={() => {
-              setShowEventForm(true);
-              setSelectedDayIndex(index);
-              console.log("Selected day: " + day);
-            }}
-          >
-            <div className="day-header">
-              <div className="day-prefix">{day.toLocaleDateString("en-US", { weekday: "short" })}</div>
-              <div>{day.getDate()}</div>
-            </div>  
-            {events
-              .filter((event) => {
-                const eventDay = new Date(event.startT); // Use 'startT' instead of 'date'
-                const isSameDay = (
-                  eventDay.getDate() === day.getDate() &&
-                  eventDay.getMonth() === day.getMonth() &&
-                  eventDay.getFullYear() === day.getFullYear()
-                );
-                return isSameDay;
-              })
-              .map((event) => {
-                const startTime = parseTime(event.startT);
-                const endTime = parseTime(event.endT);
-                return (
-                  <div
-                    key={event._id}
-                    className="event"
-                    style={{ backgroundColor: event.color, ...getEventStyle({ startTime, endTime }) }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedEvent(event);
-                    }}
-                  >
-                    <div className="event-title">{event.title}</div>
-                    <div className="event-time">{startTime} - {endTime}</div>
-                </div>
-                );
-              })}
-          </div>
-        ))}
+          {days.map((day, index) => (
+            <div
+              className={`day ${darkMode ? "dark-mode" : ""}`}
+              key={index}
+              onClick={() => {
+                setShowEventForm(true);
+                setSelectedDayIndex(index);
+                console.log("Selected day: " + day);
+              }}
+            >
+              <div className="day-header">
+                <div className="day-prefix">{day.toLocaleDateString("en-US", { weekday: "short" })}</div>
+                <div>{day.getDate()}</div>
+              </div>
+              {events
+                .filter((event) => {
+                  const eventDay = new Date(event.startT); // Use 'startT' instead of 'date'
+                  const isSameDay = (
+                    eventDay.getDate() === day.getDate() &&
+                    eventDay.getMonth() === day.getMonth() &&
+                    eventDay.getFullYear() === day.getFullYear()
+                  );
+                  return isSameDay;
+                })
+                .map((event) => {
+                  const startTime = parseTime(event.startT);
+                  const endTime = parseTime(event.endT);
+                  return (
+                    <div
+                      key={event._id}
+                      className="event"
+                      style={{ backgroundColor: event.color, ...getEventStyle({ startTime, endTime }) }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedEvent(event);
+                      }}
+                    >
+                      <div className="event-title">{event.title}</div>
+                      <div className="event-time">{startTime} - {endTime}</div>
+                    </div>
+                  );
+                })}
+            </div>
+          ))}
         </div>
       </div>
       {showEventForm && (
-      <EventForm
-      selectedDayIndex={selectedDayIndex}
-        closeForm={() => setShowEventForm(false)}
-        events={events}
-        setEvents={setEvents}
-        days={days}
-      />
-    )}
-    {selectedEvent && (
-      <EventDetails
-        event={selectedEvent}
-        closeDetails={() => setSelectedEvent(null)}
-        events={events}
-        setEvents={setEvents}
+        <EventForm
+          selectedDayIndex={selectedDayIndex}
+          closeForm={() => setShowEventForm(false)}
+          events={events}
+          setEvents={setEvents}
+          days={days}
+        />
+      )}
+      {selectedEvent && (
+        <EventDetails
+          event={selectedEvent}
+          closeDetails={() => setSelectedEvent(null)}
+          events={events}
+          setEvents={setEvents}
         />
       )}
     </div>

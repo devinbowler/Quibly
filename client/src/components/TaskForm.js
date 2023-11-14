@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Draggable from 'react-draggable';
 import './taskForm.css';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useTheme } from '../ThemeContext';
 
 const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", editDescription = "", isEditing = false }) => {
     const [title, setTitle] = useState(editTitle);
@@ -9,6 +10,7 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
     const [description, setDescription] = useState(editDescription);
     const [taskType, setTaskType] = useState('Single');
     const [projectFolder, setProjectFolder] = useState('');
+    const { darkMode } = useTheme();
 
     const { user } = useAuthContext()
 
@@ -22,20 +24,20 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         // Check if the user is logged in
         if (!user) {
             console.error('You must be logged in');
             return;
         }
-    
+
         // Calculate the difference between the selected time and the current time in seconds
         const selectedDate = new Date(dueTime);
         const now = new Date();
         const secondsLeft = Math.floor((selectedDate - now) / 1000);
         const dueDate = selectedDate.toISOString();  // Convert the date to a string
 
-    
+
         if (isNaN(secondsLeft) || secondsLeft <= 0) {
             console.error('Invalid secondsLeft value');
             alert('Please enter a valid future date and time.');
@@ -48,7 +50,7 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
         console.log("Task Type:", taskType);
         console.log("User ID:", user ? user.token : "User not logged in");
 
-    
+
         // Prepare the task object
         const newTask = {
             title: title,
@@ -61,15 +63,15 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
             type: taskType,
             user_id: user.token
         };
-    
+
         console.log("Data being sent to the server:", newTask);
-        
-    
+
+
         try {
             // Make an API call to create the new task using fetch API
             const apiUrl = `https://quantumix.onrender.com/api/tasks${isEditing ? `/${editTitle}` : ''}`;
             const method = isEditing ? 'PUT' : 'POST';
-    
+
             const response = await fetch(apiUrl, {
                 method: method,
                 headers: {
@@ -78,9 +80,9 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
                 },
                 body: JSON.stringify(newTask)
             });
-    
+
             let responseData = await response.json(); // Only calling response.json() once
-    
+
             if (!response.ok) {
                 console.error('Response status:', response.status);
                 console.error('Response status text:', response.statusText);
@@ -91,7 +93,7 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
         } catch (err) {
             console.error('An error occurred while creating the task:', err);
         }
-    
+
         setTitle('');
         setDueTime('');
         setDescription('');
@@ -100,9 +102,9 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
 
     return (
         <Draggable handle=".task-form-header">
-            <div className="task-form-container">
-                <div className="task-form">
-                    <div className="task-form-header">
+            <div className={`task-form-container ${darkMode ? 'dark-task-container' : ''}`}>
+                <div className={`task-form ${darkMode ? 'dark-task-form' : ''}`}>
+                    <div className={`task-form-header ${darkMode ? 'dark-task-form-header' : ''}`}>
                         <button className="close-button" onClick={closeForm}>
                             X
                         </button>
@@ -130,9 +132,9 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
                             placeholder="Description"
                             onChange={(e) => setDescription(e.target.value)}
                         />
-                        <select 
-                            className="styled-select"
-                            value={taskType} 
+                        <select
+                            className={`styled-select ${darkMode ? 'dark-styled-select' : ''}`}
+                            value={taskType}
                             onChange={handleTaskTypeChange}
                             required
                         >
@@ -142,11 +144,11 @@ const TaskForm = ({ onAddTask, closeForm, editTitle = "", editDueTime = "", edit
                             <option value="Project">Project</option>
                         </select>
                         {taskType === 'Project' && (
-                            <input 
-                                type="text" 
-                                value={projectFolder} 
-                                onChange={handleProjectFolderChange} 
-                                placeholder="Enter project folder name or select..." 
+                            <input
+                                type="text"
+                                value={projectFolder}
+                                onChange={handleProjectFolderChange}
+                                placeholder="Enter project folder name or select..."
                             />
                         )}
                         <button type="submit">{isEditing ? "Save" : "Create Task"}</button>

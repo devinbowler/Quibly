@@ -3,6 +3,8 @@ import Draggable from 'react-draggable';
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useEventsContext } from '../hooks/useEventsContext';
+import { useTheme } from '../ThemeContext'; // Adjust the path as necessary
+
 
 
 const extractTimeFromISOString = (isoString) => {
@@ -19,6 +21,7 @@ const EventForm = ({ event, selectedDayIndex, closeForm, events, setEvents, isEd
 
   const [error, setError] = useState(null)
   const { user } = useAuthContext()
+  const { darkMode } = useTheme();
 
   const handleCloseOnEscape = (e) => {
     if (e.key === 'Escape') {
@@ -40,25 +43,25 @@ const EventForm = ({ event, selectedDayIndex, closeForm, events, setEvents, isEd
       setError('You must be logged in')
       return
     }
-  
+
     if (!isEdit) {
       if (!days || selectedDayIndex >= days.length || selectedDayIndex < 0) {
         console.error("Invalid days array or index.");
         return;
       }
     }
-  
+
     const getSimpleDate = (dateStr) => {
       const d = new Date(dateStr);
       return d.toISOString().split('T')[0];
     }
-  
+
     const selectedDate = isEdit ? getSimpleDate(event.startT) : getSimpleDate(days[selectedDayIndex]);
-  
+
     console.log("Selected Date:", selectedDate);
     console.log("Start Time:", startTime);
     console.log("End Time:", endTime);
-  
+
     const updatedEvent = {
       title: title,
       desc: description,
@@ -66,12 +69,12 @@ const EventForm = ({ event, selectedDayIndex, closeForm, events, setEvents, isEd
       startT: `${selectedDate}T${startTime}:00`,  // Added seconds for ISO format
       endT: `${selectedDate}T${endTime}:00`
     };
-  
+
     console.log("Data being sent to the server:", updatedEvent);
-  
+
     const method = isEdit ? 'PATCH' : 'POST';
     const apiUrl = `https://quantumix.onrender.com/api/schedule${isEdit ? `/${event._id}` : ''}`;
-  
+
     const response = await fetch(apiUrl, {
       method: method,
       headers: {
@@ -80,13 +83,13 @@ const EventForm = ({ event, selectedDayIndex, closeForm, events, setEvents, isEd
       },
       body: JSON.stringify(updatedEvent)
     });
-  
+
     let responseData = await response.json(); // Only calling response.json() once
-  
+
     if (!response.ok) {
-        console.error('Response status:', response.status);
-        console.error('Response status text:', response.statusText);
-        console.error('Response body:', responseData);
+      console.error('Response status:', response.status);
+      console.error('Response status text:', response.statusText);
+      console.error('Response body:', responseData);
     } else {
       // Process responseData here
       setEvents(prevEvents => {
@@ -94,13 +97,13 @@ const EventForm = ({ event, selectedDayIndex, closeForm, events, setEvents, isEd
         return updatedEvents;
       });
     }
-  
+
     closeForm();
   };
 
   return (
     <Draggable handle=".event-form-header">
-      <div className="event-form-container">
+      <div className={`event-form-container ${darkMode ? 'dark-event-form' : ''}`}>
         <div className="event-form">
           <div className="event-form-header">
             <button className="close-button" onClick={closeForm}>

@@ -42,6 +42,10 @@ const scheduleSchema = new Schema({
     user_id: {
         type: String,
         required: true
+    },
+    lastUpdateTime: {
+        type: Date,
+        default: Date.now
     }
 })
 
