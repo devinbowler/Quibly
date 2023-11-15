@@ -4,16 +4,17 @@ const mongoose = require('mongoose')
 // Get all tasks
 const getTasks = async (req, res) => {
     const user_id = req.user._id
-
+    let tasks; // Declare tasks outside the try block
 
     try {
-        const tasks = await Task.find({ user_id })
+        tasks = await Task.find({ user_id }); // Assign the result to tasks
     } catch (error) {
         console.error("Error fetching tasks:", error);
         res.status(500).send("Internal Server Error");
+        return; // Make sure to return here so that the function doesn't continue executing
     }
 
-    res.status(200).json(tasks)
+    res.status(200).json(tasks); // Now tasks is accessible here
 }
 
 // Get one event
@@ -67,7 +68,7 @@ const deleteTask = async (req, res) => {
     if (!task) {
         return res.status(404).json({ error: 'No task found' })
     }
-
+    console.log(task)
     res.status(200).json(task)
 }
 
