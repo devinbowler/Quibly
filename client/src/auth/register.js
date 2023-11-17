@@ -19,7 +19,7 @@ const Register = () => {
     if(success) navigate('/login'); // Navigate to login page after successful registration
   }
 
-const responseGoogle = async (response) => {
+/*const responseGoogle = async (response) => {
   console.log('Google response:', response);
   if (response.tokenId) {
     try {
@@ -44,6 +44,15 @@ const responseGoogle = async (response) => {
   }
 };
 
+<GoogleLogin
+clientId={process.env.REACT_APP_CLIENT_ID}
+buttonText="Signup with Google"
+onSuccess={responseGoogle}
+onFailure={responseGoogle}
+cookiePolicy={'single_host_origin'}
+className="login-with-google"
+/>*/
+
   
 
     return (
@@ -54,14 +63,6 @@ const responseGoogle = async (response) => {
             <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
             <input type="password" placeholder="Confirm Password" />
             <button type="submit" disabled={isLoading}>Sign Up with Email</button>
-            <GoogleLogin
-              clientId={process.env.REACT_APP_CLIENT_ID}
-              buttonText="Signup with Google"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={'single_host_origin'}
-              className="login-with-google"
-            />
             <p className="login-text">Already have an account? <a href="/login">Log In</a></p>
             {error && <div className='error'>{error}</div>}
           </form>
