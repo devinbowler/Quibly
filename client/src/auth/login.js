@@ -17,7 +17,7 @@ const Login = () => {
     if(success) navigate('/app/home'); // Navigate to home page after successful login
   }
 
-  const responseGoogle = (response) => {
+  /*const responseGoogle = (response) => {
     console.log(response);
   
     if (response.profileObj) {
@@ -28,6 +28,14 @@ const Login = () => {
       console.error('Google Login was unsuccessful');
     }
   };
+  <GoogleLogin
+  clientId={process.env.REACT_APP_CLIENT_ID}
+  buttonText="Login with Google"
+  onSuccess={responseGoogle}
+  onFailure={responseGoogle}
+  cookiePolicy={'single_host_origin'}
+  className="login-with-google"
+/>*/
 
   return (
     <div className="login-container">
@@ -36,14 +44,6 @@ const Login = () => {
         <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
         <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
         <button type="submit" disabled={isLoading}>Log In</button>
-        <GoogleLogin
-              clientId={process.env.REACT_APP_CLIENT_ID}
-              buttonText="Login with Google"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={'single_host_origin'}
-              className="login-with-google"
-            />
         <p className="signup-text">Don't have an account? <a href="/register">Sign Up</a></p>
         {error && <div className="error">{error}</div>}
       </form>
