@@ -10,7 +10,6 @@ const {
 } = require('../controllers/taskController')
 const requireAuth = require('../middleware/requireAuth')
 
-const Event = require('../models/taskModel')
 
 const router = express.Router()
 
