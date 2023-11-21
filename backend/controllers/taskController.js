@@ -3,19 +3,23 @@ const mongoose = require('mongoose')
 
 // Get all tasks
 const getTasks = async (req, res) => {
-    const user_id = req.user._id
-    let tasks; // Declare tasks outside the try block
-
+    const user_id = req.user._id;
+  
     try {
-        tasks = await Task.find({ user_id }); // Assign the result to tasks
+      const tasks = await Task.find({ user_id });
+      const categorizedTasks = tasks.reduce((acc, task) => {
+        acc[task.status] = acc[task.status] || [];
+        acc[task.status].push(task);
+        return acc;
+      }, {});
+  
+      res.status(200).json(categorizedTasks);
     } catch (error) {
-        console.error("Error fetching tasks:", error);
-        res.status(500).send("Internal Server Error");
-        return; // Make sure to return here so that the function doesn't continue executing
+      console.error("Error fetching tasks:", error);
+      res.status(500).send("Internal Server Error");
     }
-
-    res.status(200).json(tasks); // Now tasks is accessible here
-}
+  };
+  
 
 // Get one event
 const getTask = async (req, res) => {
@@ -37,7 +41,7 @@ const getTask = async (req, res) => {
 // Create a new task
 const createTask = async (req, res) => {
     console.log("Incoming request body:", req.body);  // Debug print
-    const { title, desc, timer, secondsLeft, type, dueDate, paused, pauseStartTime, user_id, lastUpdateTime } = req.body;
+    const { title, desc, timer, secondsLeft, dueDate, paused, pauseStartTime, user_id, lastUpdateTime } = req.body;
 
     try {
         if (isNaN(secondsLeft) || secondsLeft <= 0) {
@@ -48,7 +52,7 @@ const createTask = async (req, res) => {
         const pauseStartTime = null;
 
         const user_id = req.user._id;
-        const task = await Task.create({ title, desc, timer, secondsLeft, type, dueDate, paused, pauseStartTime, user_id, lastUpdateTime });
+        const task = await Task.create({ title, desc, timer, secondsLeft, dueDate, paused, pauseStartTime, user_id, lastUpdateTime });
         res.status(200).json(task);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -74,22 +78,22 @@ const deleteTask = async (req, res) => {
 
 // Update a event
 const updateTask = async (req, res) => {
-    const { id } = req.params
-
+    const { id } = req.params;
+  
     if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'Invalid task' })
+      return res.status(404).json({ error: 'Invalid task' });
     }
-
+  
     const task = await Task.findOneAndUpdate({ _id: id }, {
-        ...req.body
-    })
-
+      ...req.body
+    }, { new: true }); // { new: true } will return the updated document
+  
     if (!task) {
-        return res.status(404).json({ error: 'No task found' })
+      return res.status(404).json({ error: 'No task found' });
     }
-
-    res.status(200).json(task)
-}
+  
+    res.status(200).json(task);
+  };
 
 const resumeTask = async (req, res) => {
     const { taskId } = req.params;
