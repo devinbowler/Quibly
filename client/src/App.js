@@ -126,6 +126,13 @@ function App() {
   const contentClassName = isPublicPage() ? 'public-content' : (isSidebarOpen ? 'content' : 'content content-expanded');
 
   useEffect(() => {
+    const storedDarkMode = localStorage.getItem('darkMode') === 'true';
+    setDarkMode(storedDarkMode);
+  }, []);
+
+  // Update localStorage and body class on dark mode change
+  useEffect(() => {
+    localStorage.setItem('darkMode', darkMode);
     if (darkMode) {
       document.body.classList.add('dark-mode');
     } else {
@@ -149,9 +156,12 @@ function App() {
                     <div className="dark-light-toggle">
                       <span className="mode-text">Dark Mode</span>
                       <label>
-                        <input
+                      <input
                           type="checkbox"
-                          onChange={(e) => setDarkMode(e.target.checked)}
+                          onChange={(e) => {
+                            setDarkMode(e.target.checked);
+                            localStorage.setItem('darkMode', e.target.checked);
+                          }}
                           checked={darkMode}
                         />
                         <span className="slider"></span>
