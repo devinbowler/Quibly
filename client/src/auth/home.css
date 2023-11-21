@@ -10,18 +10,11 @@ body {
   font-family: 'Noto Sans KR', 'Arial', sans-serif;
 }
 
-
-/*
- ANIMATIONS
-*/
-
-
-
-/* END ANIMATION */
-
 .home-page {
   display: flex;
   flex-direction: column;
+  background-color: white !important;
+  color: black !important;
 }
 
 .navbar {
@@ -41,7 +34,13 @@ body {
   font-size: 1.5rem;
   margin-right: auto; /* Aligns title to the left */
   padding: 0.6rem 0.8rem;
+  padding-top: 1.2rem;
   font-family: 'Pacifico', cursive;
+}
+
+.quantumix-nav-title img {
+  height: 100px; 
+  width: auto;
 }
 
 .navbar ul {
@@ -164,7 +163,7 @@ body {
   list-style: none;
   color: #394ae4;
   top: 0;
-  animation: slide 8s steps(1) infinite;
+  animation: slide 6s steps(1) infinite;
 }
 @keyframes slide {
   0%, 33.33% { top: 0; }
@@ -181,7 +180,7 @@ body {
   width: 10px;
   border-left: 6px solid #181b38; /* Cursor as a border */
   background-color: white; /* Covering color */
-  animation: typing 8s steps(25) infinite;
+  animation: typing 6s steps(25) infinite;
 }
 
 @keyframes typing {
@@ -224,11 +223,15 @@ body {
   margin-bottom: 2.5rem;
 }
 
+/* About Section */
+
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .content-section {
     text-align: center;
-    margin-left: 0;
+    margin-right: 0;
   }
 
   .main-title {
@@ -236,8 +239,43 @@ body {
     text-align: center;
   }
 
+  .quantumix-nav-title {
+    display: none;
+  }
+
   .main-title, .main-description {
     text-align: center;
+  }
+
+
+  .dynamic-text {
+    /* Override styles for smaller screens */
+    color: #394ae4;
+    height: auto; /* Adjust as necessary */
+    font-size: 3.8rem; /* Maintain font size or adjust as needed */
+    margin-left: 0;
+    margin-top: -10px;
+    padding-right: 0;
+    /* Remove animation and display static text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dynamic-text li {
+    /* Stop the animation */
+    animation: none;
+  }
+
+  .dynamic-text li span::after {
+    /* Remove the typing cursor effect */
+    content: none;
+  }
+
+  .dynamic-text li span.type-animation {
+    /* Display static text */
+    content: 'Quantumix';
+    display: block;
   }
 
   .navbar {
