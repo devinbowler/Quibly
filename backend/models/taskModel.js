@@ -3,6 +3,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const scheduleSchema = new Schema({
+  status: {
+    type: String,
+    enum: ['inProgress', 'working', 'completed'],
+    default: 'inProgress'
+  },
     title: {
         type: String,
         required: true
@@ -22,10 +27,6 @@ const scheduleSchema = new Schema({
         type: Number,
         required: true,
         min: 0
-    },
-    type: {
-        type: String,
-        required: true
     },
     dueDate: {
         type: Date,
