@@ -17,7 +17,8 @@ const EventForm = ({ event, selectedDayIndex, closeForm, events, setEvents, isEd
   const [startTime, setStartTime] = useState(isEdit ? extractTimeFromISOString(event.startT) : '');
   const [endTime, setEndTime] = useState(isEdit ? extractTimeFromISOString(event.endT) : '');
   const [description, setDescription] = useState(isEdit ? event.desc : '');
-  const [color, setColor] = useState("#c0392b");
+  const [color, setColor] = useState(isEdit ? event.color : "#c0392b");
+
 
   const [error, setError] = useState(null)
   const { user } = useAuthContext()
