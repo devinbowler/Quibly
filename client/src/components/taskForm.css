@@ -100,17 +100,6 @@ input:focus {
   border-image-slice: 1;
 }
 
-button[type="submit"] {
-  background-color: #495BFA;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
 button[type="submit"]:hover {
   background-color: #3a4bd8;
 }
@@ -152,15 +141,122 @@ input:focus {
   justify-content: space-between;
 }
 
-.delete-button {
+.delete-button:hover {
+  transform: scale(1.1);
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.update-button, .delete-button {
   border: none;
-  border-radius: 20px;
+  padding: 15px 60px;
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: all .3s;
+  transition: background-color 0.3s;
 }
 
-.delete-button:hover {
-  transform: scale(1.1);
+.rounded-full {
+  border: none;
+  background-color: #495BFA;
+  border-radius: 5px;
+  width: 100%;
+  padding: 15px 60px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.rounded-left {
+  border: none;
+  background-color: #495BFA;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  padding: 15px 60px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-button {
+  border: none;
+  background-color: rgb(179, 16, 16);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 15px 60px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Styles for the Add Tag button */
+.tags-section button {
+  display: block;
+  width: 100%;
+  background-color: transparent; /* Transparent background */
+  color: black; /* Text color */
+  border: 2px solid #b6b6b6; /* Border color */
+  border-radius: 10px; /* Rounded corners */
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tags-section button:hover {
+  background-color: #495BFA; /* Background color on hover */
+  color: white; /* Text color on hover */
+}
+
+
+/* Styles for the tags section */
+.tags-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Space between tags */
+}
+
+/* Individual tag styles */
+.tag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+}
+
+.tag input[type="text"] {
+  border: none;
+  background: none;
+  outline: none;
+  width: 70%; /* Adjust as needed */
+  margin-right: 0.5rem; /* Space between text input and color input */
+}
+
+.tag input[type="color"] {
+  border: none;
+  background: none;
+  outline: none;
+  width: 20%; /* Adjust as needed */
+}
+
+/* Style for the remove button inside tags */
+.tag button {
+  background-color: #FF4136;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  width: 50%;
+  cursor: pointer;
+}
+
+.tag button:hover {
+  background-color: #E82C0C;
 }
