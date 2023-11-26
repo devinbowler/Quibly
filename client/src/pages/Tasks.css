@@ -1,4 +1,57 @@
 /* Task.css */
+
+/* Add these to your existing CSS styles */
+
+.dark-mode {
+  background-color: #333; /* Dark background color */
+  color: #fff; /* Light text color */
+}
+
+.dark-mode-text {
+  color: #fff; /* Light text color */
+}
+
+.dark-mode-card {
+  background-color: #454545 !important; /* Darker shade for card */
+  color: #fff; /* Light text color */
+}
+
+.dark-mode .task-header h3 {
+  color: #fff; /* Light text color for task header */
+}
+
+.dark-mode .timer {
+  background-color: transparent; /* Dark background for timer and due date */
+  color: #fff; /* Light text color */
+}
+
+.dark-mode .time-left {
+  background-color: #555; /* Dark background for timer and due date */
+  color: #fff; /* Light text color */
+}
+
+.dark-mode .due-date {
+  background-color: #555; /* Dark background for timer and due date */
+  color: #fff; /* Light text color */
+}
+
+.dark-mode .timer-icon {
+  color: white;
+  background: transparent;
+}
+
+.dark-mode .pause-play-btn {
+  /* Adjust button styles for dark mode if necessary */
+}
+
+.dark-mode .task-tags span {
+  /* Adjust tag styles for dark mode if necessary */
+}
+
+.dark-mode .task-desc {
+  color: #ccc; /* Lighter text color for description */
+}
+
 .task-page {
     display: flex;
     flex-direction: column;
@@ -11,6 +64,7 @@
     justify-content: space-between; /* Space out the columns */
     width: 100%; /* Columns should fill the parent */
     margin-top: 20px; /* Provide some spacing from the top */
+    padding-left: 25px;
   }
   
   .column {
@@ -18,6 +72,10 @@
     flex-direction: column;
     width: calc(33.333% - 10px); /* Subtract margin from total width */
     margin: 0 5px; /* Provide spacing between columns */
+  }
+
+  .column h2 {
+    font-size: 20px;
   }
   
   .column:first-child h2 {
@@ -30,9 +88,10 @@
   }
   
   .task-card {
-    background-color: #292929;
+    background-color: #f1f1f1;
     margin: 0.5rem 0;
     padding: 1rem;
+    padding-top: 0;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     width: 75%; /* Make the card 25% less wide */
@@ -43,18 +102,121 @@
     justify-content: space-between;
     align-items: center;
   }
+
+  .timer {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0; /* Background color for the timer */
+    border-radius: 5px;
+    padding: 5px;
+    position: relative; /* Allows absolute positioning inside */
+    padding-left: 0;
+  }
+
+  .task-timer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+
+  .time-left {
+    background-color: #ddd; /* Adjust as needed */
+    font-size: 15px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    flex-grow: 1;
+    padding-right: 50px;
+    padding-left: 30px;
+    position: relative; /* Allows for absolute positioning of the icon inside */
+}
+
+.due-date-icon {
+  padding-right: 7px;
+}
+
+.timer-icon {
+    position: absolute; /* Position icon inside the timer */
+    left: 8px; /* Adjust distance from the left edge */
+    top: 50%;
+    transform: translateY(-50%); /* Vertically center */
+    color: #555; /* Adjust color as needed */
+    font-size: 1rem; /* Adjust icon size */
+    z-index: 1;
+}
+
+.task-tags {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.task-tag {
+  background-color: #ccc; /* default color */
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.8em;
+}
+  
+  .pause-play-btn {
+    background-color: transparent;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    position: absolute; /* Position inside the timer */
+    right: 12%; /* Adjust padding from right */
+    top: 50%;
+    transform: translateY(-50%); /* Vertically center */
+    padding: 5px 10px; /* Adjust as needed */
+  }
+
+  .pause-play-btn.pause {
+    background-color: rgba(228, 23, 23, 0.993); /* Red for pause */
+  }
+  
+  .pause-play-btn.play {
+    background-color: rgba(0, 128, 0, 0.8); /* Green for play */
+  }
+
+  .pause-play-btn .fa-pause, .pause-play-btn .fa-play {
+    width: 10px; /* Adjust the width */
+    height: auto;
+  }
+
+  .pause-play-btn .fa-pause {
+    width: 10px; /* Adjust the width */
+    height: auto;
+    display: block;
+  }
+  
+  .pause-play-btn svg {
+    font-size: .6rem; /* Adjust icon size */
+    color: white;
+  }
+  
+  .due-date {
+    background-color: #ddd; /* Adjust as needed */
+    font-size: 15px;
+    border-radius: 5px;
+    padding: 5px 10px;
+  }
+
+  .task-desc {
+    font-size: 15px;
+  }
   
   .add-task-btn {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
+    bottom: 50px;
+    right: 50px;
+    width: 75px;
+    height: 75px;
     border-radius: 50%;
     background-color: #495BFA;
     color: white;
     border: none;
-    font-size: 24px;
+    font-size: 30px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -73,7 +235,6 @@
 
   .edit-icon {
     cursor: pointer;
-    /* additional styling for the edit icon */
   }
   
   /* Styles for droppable area */
