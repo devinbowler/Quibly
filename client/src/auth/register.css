@@ -37,7 +37,7 @@
   
   .register-form button {
     padding: 1rem;
-    background-color: #1C406D;
+    background-color: #3a4ae2;
     color: #fff;
     font-size: 15px;
     border: none;
@@ -48,7 +48,7 @@
   }
   
   .register-form button:hover {
-    background-color: #285388;
+    background-color: #495BFA;
   }
   
   .login-with-google {
