@@ -5,6 +5,7 @@ import Project from './components/Project';
 import { useLogout } from './hooks/useLogout';
 import { useAuthContext } from './hooks/useAuthContext';
 import { useTheme } from './ThemeContext';
+import QuantumixLogo from './images/Quantumix-B9.png'; // Adjust the path as necessary
 
 import {
   BrowserRouter as Router,
@@ -41,7 +42,7 @@ const tabs = [
   { id: 1, title: "Home", icon: <FaHome /> },
   { id: 2, title: "Schedule", icon: <FaCalendar /> },
   { id: 3, title: "Tasks", icon: <FaTasks /> },
-  { id: 4, title: "Visionboard (Coming Soon!)", icon: <FaBullseye /> },
+  { id: 4, title: "Visionboard", icon: <FaBullseye /> },
 ];
 
 function App() {
@@ -55,10 +56,6 @@ function App() {
 
 
   const handleClick = (tabId) => {
-    if (tabId === 4) {
-      // Do nothing if Visionboard tab is clicked
-      return;
-    }
     setActiveTab(tabId);
     switch (tabId) {
       case 1:
@@ -70,11 +67,14 @@ function App() {
       case 3:
         navigate('/app/tasks');
         break;
-      // Remove case 4 as it's now non-clickable
+      case 4:
+        navigate('/app/visionboard');
+        break;
       default:
         break;
     }
   };
+  
 
 
 
@@ -177,11 +177,14 @@ function App() {
             </div>
           </div>
           <div className={`sidebar ${isSidebarOpen ? "" : "sidebar-collapsed"} ${darkMode ? "dark-sidebar" : ""}`}>
+            <div className="sidebar-logo">
+              <img src={QuantumixLogo} alt="Quantumix Logo" />
+            </div>
             <div className="tabs">
               {tabs.map((tab) => (
                 <div
                   key={tab.id}
-                  className={`tab ${activeTab === tab.id ? "active" : ""} ${tab.id === 4 ? "disabled" : ""}`}
+                  className={`tab ${activeTab === tab.id ? "active" : ""}`}
                   onClick={() => handleClick(tab.id)}
                 >
                   <span className="tab-icon">{tab.icon}</span>
