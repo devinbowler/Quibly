@@ -52,21 +52,43 @@ body.dark-mode {
   color: white;
 }*/
 
-.dark-sidebar .tab.active {
-  background-color: #555;
-  /* Dark highlight color */
-  color: white;
-  /* White text */
-  /* Other styling as needed */
+.tab.active {
+  position: relative;
+  font-weight: bold;
+  color: #ffffff;
+  border-right: 5px solid #495BFA;
 }
 
-.dark-sidebar .tab:hover {
-  background-color: #666;
-  /* Slightly darker background for hover */
-  color: white;
-  /* White text, if needed */
-  /* Other styling as needed */
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 250px; /* Width of the thick right border */
+  background: linear-gradient(to left, #495bfa48, rgba(216, 182, 182, 0)); /* Gradient color */
+  z-index: -1;
 }
+
+.sidebar-logo {
+  position: relative;
+  margin-top: -60px;
+  margin-bottom: -40px;
+  padding: 10px;
+  text-align: center;
+  z-index: -1;
+}
+
+.tab:hover {
+  background-color: #495bfa3f;
+}
+
+.sidebar-logo img {
+  max-width: 100%; /* Ensures the logo fits within the sidebar */
+  height: auto; /* Keeps the logo aspect ratio */
+}
+
 
 .dark-toggle-sidebar-button {
   color: white !important;
@@ -175,6 +197,8 @@ body.dark-mode {
   display: flex;
   flex-direction: column;
   padding: 15px;
+  padding-right: 0;
+  padding-left: 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
   height: calc(100% - 50px);
@@ -240,11 +264,6 @@ body.dark-mode {
   display: flex;
   font-size: 13px;
   align-items: center;
-  border-radius: 15px;
-}
-
-.tab:hover {
-  background-color: #f3f3f3;
 }
 
 .tab-icon {
@@ -253,10 +272,6 @@ body.dark-mode {
   /* Decrease icon size */
 }
 
-.tab.active {
-  font-weight: bold;
-  background-color: #f3f3f3;
-}
 
 .settings-dropdown {
   position: relative;
