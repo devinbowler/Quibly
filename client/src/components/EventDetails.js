@@ -5,6 +5,7 @@ import { parseTime } from "../pages/Schedule";
 import Draggable from 'react-draggable';
 import EventForm from './EventForm';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useTheme } from '../ThemeContext'; // Adjust the path as necessary
 
 const EventDetails = ({ event, closeDetails, events, setEvents }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -12,12 +13,13 @@ const EventDetails = ({ event, closeDetails, events, setEvents }) => {
   const [deleting, setDeleting] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(event); 
   const { user } = useAuthContext()
+  const { darkMode } = useTheme();
 
   const handleDelete = async () => {
     if (!user) {
       return
     }
-    const response = await fetch(`/api/schedule/${event._id}`, {
+    const response = await fetch(`https://quantumix.onrender.com/api/schedule/${event._id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${user.token}`
@@ -51,18 +53,18 @@ const EventDetails = ({ event, closeDetails, events, setEvents }) => {
       <Draggable handle=".event-details-header">
         <div className="event-details-container" onClick={closeDetails}>
           <div className="event-details" onClick={(e) => e.stopPropagation()}>
-            <div className="event-details-header">
+            <div className={`event-details-header ${darkMode ? 'event-details-header' : ''}`}>
               <button className="icon-button delete-button" onClick={() => setShowDeleteModal(true)}>
                 🗑️
               </button>
               <button className="icon-button edit-button" onClick={() => setShowEditForm(true)}>
                 ✏️
               </button>
-              <button className="icon-button close-button" onClick={closeDetails}>
+              <button className={`icon-button close-button ${darkMode ? 'icon-button close-button' : ''}`} onClick={closeDetails}>
                 &times;
               </button>
             </div>
-            <div className="event-details-text">
+            <div className={`event-details-text ${darkMode ? 'event-details-text' : ''}`}>
               <h2>{event.title}</h2>
               <p>
                 <strong>Date:</strong> {new Date(event.startT).toLocaleDateString()}
@@ -78,7 +80,7 @@ const EventDetails = ({ event, closeDetails, events, setEvents }) => {
         </div>
       </Draggable>
       {showDeleteModal && (
-        <div className="delete-modal">
+        <div className={`delete-modal ${darkMode ? 'delete-modal' : ''}`}>
           <div className="delete-modal-content">
             <h2>Are you sure you want to delete this event?</h2>
             <div className="delete-modal-buttons">
