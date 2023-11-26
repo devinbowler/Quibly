@@ -41,7 +41,7 @@ const getTask = async (req, res) => {
 // Create a new task
 const createTask = async (req, res) => {
     console.log("Incoming request body:", req.body);  // Debug print
-    const { title, desc, timer, secondsLeft, dueDate, paused, pauseStartTime, user_id, lastUpdateTime } = req.body;
+    const { title, desc, timer, secondsLeft, dueDate, paused, pauseStartTime, user_id, lastUpdateTime, tags } = req.body;
 
     try {
         if (isNaN(secondsLeft) || secondsLeft <= 0) {
@@ -52,7 +52,8 @@ const createTask = async (req, res) => {
         const pauseStartTime = null;
 
         const user_id = req.user._id;
-        const task = await Task.create({ title, desc, timer, secondsLeft, dueDate, paused, pauseStartTime, user_id, lastUpdateTime });
+        const tags = req.body.tags || [];
+        const task = await Task.create({ title, desc, timer, secondsLeft, dueDate, paused, pauseStartTime, user_id, lastUpdateTime, tags });
         res.status(200).json(task);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -95,6 +96,24 @@ const updateTask = async (req, res) => {
     res.status(200).json(task);
   };
 
+  const updateTaskType = async (req, res) => {
+    const { id } = req.params;
+    const { type } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({ error: 'Invalid task' });
+    }
+
+    const task = await Task.findOneAndUpdate({ _id: id }, { type }, { new: true });
+
+    if (!task) {
+        return res.status(404).json({ error: 'No task found' });
+    }
+
+    res.status(200).json(task);
+};
+
+
 const resumeTask = async (req, res) => {
     const { taskId } = req.params;
     const task = await Task.findById(taskId);
@@ -136,6 +155,7 @@ module.exports = {
     createTask,
     deleteTask,
     updateTask,
+    updateTaskType,
     resumeTask,
     pauseTask
 }
