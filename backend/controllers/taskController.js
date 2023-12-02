@@ -4,21 +4,22 @@ const mongoose = require('mongoose')
 // Get all tasks
 const getTasks = async (req, res) => {
     const user_id = req.user._id;
-  
     try {
-      const tasks = await Task.find({ user_id });
-      const categorizedTasks = tasks.reduce((acc, task) => {
-        acc[task.status] = acc[task.status] || [];
-        acc[task.status].push(task);
-        return acc;
-      }, {});
-  
-      res.status(200).json(categorizedTasks);
+        const tasks = await Task.find({ user_id });
+        const categorizedTasks = {
+            inProgress: [],
+            working: [],
+            completed: []
+        };
+        tasks.forEach(task => {
+            categorizedTasks[task.status].push(task);
+        });
+        res.status(200).json(categorizedTasks);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
-      res.status(500).send("Internal Server Error");
+        console.error("Error fetching tasks:", error);
+        res.status(500).send("Internal Server Error");
     }
-  };
+};
   
 
 // Get one event
