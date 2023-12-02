@@ -30,11 +30,11 @@
 .dark-task-form input,
 .dark-task-form textarea,
 .dark-task-form button {
-  background-color: #555;
+  background-color: #383838;
   /* Dark background for input fields and buttons */
   color: white !important;
   /* White text for input fields and buttons */
-  border-color: #666;
+  border-color: #414141;
   /* Dark border for input fields and buttons */
 }
 
@@ -150,6 +150,10 @@ input:focus {
   justify-content: space-evenly;
 }
 
+.dark-mode .delete-modal-content {
+  background-color: #3b3b3b !important;
+}
+
 .update-button, .delete-button {
   border: none;
   padding: 15px 60px;
@@ -230,6 +234,10 @@ input:focus {
   background-color: #f0f0f0;
   padding: 0.25rem 0.5rem;
   border-radius: 5px;
+}
+
+.dark-mode .tag {
+  background-color: #383838;
 }
 
 .tag input[type="text"] {
