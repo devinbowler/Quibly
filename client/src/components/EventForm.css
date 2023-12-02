@@ -7,6 +7,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 
 form {
@@ -88,11 +89,26 @@ form {
   cursor: pointer;
 }
 
+.event-form button[type="submit"] {
+  border: none;
+  background-color: #495BFA;
+  border-radius: 5px;
+  width: 100%;
+  padding: 15px 60px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
 
 input,
 textarea {
   padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  background: none;
+  outline: none;
   font-size: 1rem;
+  transition: border-color 0.3s;
 }
