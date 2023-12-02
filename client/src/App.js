@@ -5,7 +5,8 @@ import Project from './components/Project';
 import { useLogout } from './hooks/useLogout';
 import { useAuthContext } from './hooks/useAuthContext';
 import { useTheme } from './ThemeContext';
-import QuantumixLogo from './images/Quantumix-B9.png'; // Adjust the path as necessary
+import QuantumixLogoDark from './images/Quantumix-B9.png'; // Adjust the path as necessary
+import QuantumixLogoLight from './images/Quantumix-B6.png'
 
 import {
   BrowserRouter as Router,
@@ -177,9 +178,9 @@ function App() {
             </div>
           </div>
           <div className={`sidebar ${isSidebarOpen ? "" : "sidebar-collapsed"} ${darkMode ? "dark-sidebar" : ""}`}>
-            <div className="sidebar-logo">
-              <img src={QuantumixLogo} alt="Quantumix Logo" />
-            </div>
+          <div className="sidebar-logo">
+            <img src={darkMode ? QuantumixLogoDark : QuantumixLogoLight} alt="Quantumix Logo" />
+          </div>
             <div className="tabs">
               {tabs.map((tab) => (
                 <div
