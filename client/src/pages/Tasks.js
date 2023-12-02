@@ -122,7 +122,6 @@ import './Tasks.css';
             console.log("Response:", response);
     
             if (response.ok) {
-              console.log('Fetched tasks:', json); // Log to see the structure
     
               // Ensure each task has a 'tags' array
               const formattedTasks = {
@@ -132,6 +131,7 @@ import './Tasks.css';
               };
 
               setTasks(formattedTasks);
+              console.log('Fetched tasks:', json); // Log to see the structure
             } else {
               console.error('Error fetching tasks:', json); // Error from server
             }
@@ -270,7 +270,7 @@ return (
                         </div>
                         <div className="task-tags">
                         {task.tags.map((tag, index) => (
-                          <span key={index} style={{ backgroundColor: tag.color, color: tag.color }}>
+                          <span key={index} style={{ backgroundColor: `${tag.color}4D`, color: tag.color }}>
                             {tag.name}
                           </span>
                         ))}
