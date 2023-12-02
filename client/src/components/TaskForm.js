@@ -73,7 +73,7 @@ const TaskForm = ({ task, onAddTask, onUpdateTask, onDeleteTask, closeForm, isEd
       paused: task?.paused || false,
       pauseStartTime: task?.pauseStartTime || null,
       secondsLeft,
-      user_id: user.token,
+      user_id: user.id,
       tags
     };
 
@@ -95,6 +95,7 @@ const TaskForm = ({ task, onAddTask, onUpdateTask, onDeleteTask, closeForm, isEd
       if (response.ok) {
         isEditing ? onUpdateTask(responseData) : onAddTask(responseData);
         closeForm();
+        console.log(responseData);
       } else {
         console.error('Failed to create or update task:', responseData);
         alert('Failed to create or update task. Please try again.');
@@ -106,6 +107,7 @@ const TaskForm = ({ task, onAddTask, onUpdateTask, onDeleteTask, closeForm, isEd
   };
 
   return (
+    <Draggable handle=".task-form-header">
     <div className={`task-form-container ${darkMode ? 'dark-task-container' : ''}`}>
       <div className={`task-form ${darkMode ? 'dark-task-form' : ''}`}>
         <div className={`task-form-header ${darkMode ? 'dark-task-form-header' : ''}`}>
@@ -180,6 +182,7 @@ const TaskForm = ({ task, onAddTask, onUpdateTask, onDeleteTask, closeForm, isEd
         </div>
       )}
     </div>
+    </Draggable>
   );
 };
 
