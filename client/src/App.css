@@ -41,7 +41,7 @@ body {
 }
 
 body.dark-mode {
-  background-color: #333;
+  background-color: #212528;
   /* Dark background for the app */
   color: white;
   /* White text */
@@ -55,8 +55,12 @@ body.dark-mode {
 .tab.active {
   position: relative;
   font-weight: bold;
-  color: #ffffff;
+  color: #2d3748;
   border-right: 5px solid #495BFA;
+}
+
+.dark-mode .tab.active {
+  color: #ffffff;
 }
 
 
@@ -104,7 +108,7 @@ body.dark-mode {
 }
 
 .dark-sidebar {
-  background-color: #3b3b3b !important;
+  background-color: #383838 !important;
   /* Darker grey background for sidebar */
   color: white;
   /* White text for sidebar */
