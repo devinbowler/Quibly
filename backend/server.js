@@ -7,6 +7,7 @@ const Task = require('./models/taskModel');
 const scheduleRoutes = require('./routes/schedule');
 const taskRoutes = require('./routes/task');
 const userRoutes = require('./routes/user');
+const projectRoutes = require('./routes/project');
 
 // Express app
 const app = express();
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 app.use('/api/schedule', scheduleRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/projects', projectRoutes);
 
 // Connect to DB and start server
 mongoose.connect(process.env.MONG_URI)
