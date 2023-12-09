@@ -112,28 +112,28 @@ const EventForm = ({ event, selectedDayIndex, closeForm, events, setEvents, isEd
             </button>
           </div>
           <form onSubmit={handleSubmit}>
-            <label htmlFor="title">Title</label>
             <input
               type="text"
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              placeholder="Title"
               required
             />
-            <label htmlFor="description">Description</label>
             <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              placeholder="Description"
             />
-            <label htmlFor="color">Color</label>
+            <label htmlFor="color">Color :</label>
             <input
               type="color"
               id="color"
               value={color}
               onChange={(e) => setColor(e.target.value)}
             />
-            <label htmlFor="startTime">Start Time</label>
+            <label htmlFor="startTime">Start Time :</label>
             <input
               type="time"
               id="startTime"
@@ -141,7 +141,7 @@ const EventForm = ({ event, selectedDayIndex, closeForm, events, setEvents, isEd
               onChange={(e) => setStartTime(e.target.value)}
               required
             />
-            <label htmlFor="endTime">End Time</label>
+            <label htmlFor="endTime">End Time :</label>
             <input
               type="time"
               id="endTime"
