@@ -166,7 +166,7 @@ body {
     font-size: 3.8rem;
     margin-left: 256px;
     font-family: 'Inter', sans-serif;
-    color: #181b38;
+    color: #394ae4;
     font-weight: 700;
     margin-top: -85px;
     padding-right: 20px;
@@ -692,6 +692,8 @@ width: 100%;
 }
 
 #cs-footer-274 .cs-container {
+  position: relative;
+  bottom: -20px;
   display: flex;
   flex-direction: column;
   align-items: center; /* Center align items vertically */
@@ -721,7 +723,7 @@ width: 100%;
   height: auto; /* Height adjusts automatically to maintain aspect ratio */
   display: inline-block; /* Inline-block for center alignment with text-align */
   margin: 0 auto; /* Center the image horizontally */
-  margin-bottom: -75px;
+  margin-bottom: -115px;
   /* If you have a specific size in mind, set either width or height, not both */
   width: 250px; /* Example: setting a specific width */
   /* height: 100px; */ /* Uncomment if you want to set height instead */
@@ -805,9 +807,8 @@ width: 100%;
 
 
 
-
-@media (max-width: 48em) {
-  /*-- -------------------------- -->
+@media (max-width: 1200px) {
+/*-- -------------------------- -->
 <---         Landing            -->
 <--- -------------------------- -*/
 .content-section {
@@ -815,9 +816,18 @@ width: 100%;
   margin-right: 0;
 }
 
+.landing-container{
+  min-width: 100%;
+}
+
 .main-title {
   font-size: 3rem; /* Adjust for smaller screens */
-  text-align: center;
+  text-align: center !important;
+  display: block;
+}
+
+.dynamic-text {
+  font-size: 3.5rem !important; /* Adjust for smaller screens */
 }
 
 .quantumix-nav-title {
@@ -919,6 +929,10 @@ width: 100%;
 
 .navbar-logo {
   display: none;
+}
+
+.landing-image{
+  display: none!important;
 }
 }
 
