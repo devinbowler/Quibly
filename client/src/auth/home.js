@@ -24,11 +24,9 @@ const AuthHome = () => {
   };
 
   const renderDynamicText = () => {
-    if (windowWidth <= 768) {
-      // If the screen size is 768px or less, display "Quantumix"
+    if (windowWidth <= 1350) {
       return <span className="type-animation">Quantumix</span>;
     } else {
-      // Otherwise, display the animated text
       return (
         <>
           <li><span className="type-animation">scheduling.</span></li>
@@ -38,6 +36,7 @@ const AuthHome = () => {
       );
     }
   };
+  
 
   return (
     <div className="home-page" id="home">
