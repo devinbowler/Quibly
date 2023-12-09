@@ -41,7 +41,7 @@ body {
 }
 
 body.dark-mode {
-  background-color: #212528;
+  background-color: #333;
   /* Dark background for the app */
   color: white;
   /* White text */
@@ -324,7 +324,7 @@ body.dark-mode {
   background-color: transparent;
   border: none;
   width: 100%;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
 }
 
@@ -332,8 +332,29 @@ body.dark-mode {
   color: white;
 }
 
+.logout-button {
+  background-color: darkred; /* Dark red background */
+  color: white; /* White text */
+  border-radius: 5px;
+}
+
+/* Optionally, add hover effect */
+.logout-button:hover {
+  background-color: #9c0000 !important; /* Slightly lighter red on hover */
+}
+
+.settings-dropdown .settings-menu .logout-button {
+  background-color: darkred;
+  color: white;
+}
+
+
 .settings-option:hover {
   background-color: #e2e8f0;
+}
+
+.dark-mode .settings-option:hover {
+  background-color: #383838;
 }
 
 .dark-light-toggle label {
