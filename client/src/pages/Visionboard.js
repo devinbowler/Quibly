@@ -1,57 +1,125 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './VisionBoard.css';
-import AddButton from '../components/AddButton';
-import Note from '../components/Note';
+import ProjectForm from '../components/ProjectForm';
+import { FaEllipsisH, FaTrashAlt } from 'react-icons/fa';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 function Visionboard() {
-  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
-  const [notes, setNotes] = useState([]);
+  const [showProjectForm, setShowProjectForm] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+  const { user } = useAuthContext();
 
-  const handleAddProject = () => {
-    const newProject = {
-      id: Math.random(),
-      title: 'Untitled',
-      notes: [],
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('https://quantumix.onrender.com/api/projects', {
+          headers: {
+            'Authorization': `Bearer ${user.token}`
+          }
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setProjects(data);
+        } else {
+          console.error('Error fetching projects:', data);
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
     };
-    setProjects([newProject, ...projects]);
+
+    fetchProjects();
+  }, [user]);
+
+  const deleteProject = async (projectId) => {
+    try {
+      const response = await fetch(`https://quantumix.onrender.com/api/projects/${projectId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+      if (response.ok) {
+        setProjects(projects.filter(project => project._id !== projectId));
+      } else {
+        // Handle errors
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
+  };
+  const addProject = (project) => {
+    setProjects([...projects, project]);
+    setShowProjectForm(false);
   };
 
-  const handleAddNote = () => {
-    const newNote = {
-      id: Math.random(),
-      title: '',
-      text: '',
-    };
-    setNotes([newNote, ...notes]);
+  const updateProject = async (project) => {
+    try {
+        const response = await fetch(`https://quantumix.onrender.com/api/projects/${project._id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}` // Assuming user has a token property
+            },
+            body: JSON.stringify(project)
+        });
+        console.log('Updating project', project);
+        if (!response.ok) {
+            throw new Error('Failed to update project');
+        }
+        // Update local state if needed
+    } catch (error) {
+        console.error('Error updating project:', error);
+    }
+};
+
+  const handleEditProject = (project) => {
+    setEditingProject(project);
+    setShowProjectForm(true);
   };
 
-  const handleDeleteNote = (id) => {
-    setNotes(notes.filter((note) => note.id !== id));
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+    const year = date.getFullYear();
+    return `${month} . ${day} . ${year}`;
   };
-
-  const handleProjectClick = (project) => {
-    navigate(`/app/project/${project.id}`, { state: { project } });
-  };
+  
   
 
   return (
     <div className="vision-board">
       <h2 className="header">Visionboard</h2>
       <div className="projects">
-        <AddButton onAddProject={handleAddProject} onAddNote={handleAddNote} />
-        {projects.map((project) => (
-          <div key={project.id} className="project-card" onClick={() => handleProjectClick(project)}>
-            {project.title}
+        {projects.map((project, index) => (
+          <div key={index} className="project-card">
+            <div className="project-header">
+              <h3>{project.title}</h3>
+              <FaEllipsisH className="edit-icon" onClick={() => handleEditProject(project)} />
+            </div>
+            <p className='line'></p>
+            <p className="desc">{project.description}</p>
+            <p className="date">{formatDate(project.dateCreated)}</p>
           </div>
         ))}
       </div>
-      <div className="notes">
-        {notes.map((note) => (
-          <Note key={note.id} note={note} onDelete={handleDeleteNote} />
-        ))}
-      </div>
+      {showProjectForm && (
+        <ProjectForm
+          project={editingProject}
+          onAddProject={addProject}
+          onUpdateProject={updateProject}
+          onDeleteProject={deleteProject}
+          closeForm={() => setShowProjectForm(false)}
+          isEditing={!!editingProject}
+        />
+      )}
+      <button className="add-button" onClick={() => {
+        setShowProjectForm(true);
+        setEditingProject(null);
+      }}>
+        +</button>
     </div>
   );
 }

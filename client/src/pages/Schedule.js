@@ -4,6 +4,7 @@ import EventForm from "../components/EventForm";
 import EventDetails from "../components/EventDetails";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useTheme } from '../ThemeContext';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const parseTime = (dateString) => {
   // Convert spaces to "T" to handle both formats
@@ -13,22 +14,25 @@ const parseTime = (dateString) => {
   let minutes = date.getMinutes();  // Use getMinutes instead of getUTCMinutes
   hours = hours < 10 ? '0' + hours : hours;
   minutes = minutes < 10 ? '0' + minutes : minutes;
-  return `${hours}:${minutes}`;
+  console.log(`Parsed Time: ${hours}:${minutes}`); // Add this line
+  return `${hours}:${minutes}`;  
 };
 
 
 
 const getEventStyle = (event) => {
   const { startTime, endTime } = event;
-  const MINUTES_IN_DAY = 24 * 60;
 
-  const startMinutes = parseInt(startTime.split(':')[0]) * 60 + parseInt(startTime.split(':')[1]);
-  const endMinutes = parseInt(endTime.split(':')[0]) * 60 + parseInt(endTime.split(':')[1]);
+  const startHours = parseInt(startTime.split(':')[0]);
+  const startMinutes = parseInt(startTime.split(':')[1]);
+  const endHours = parseInt(endTime.split(':')[0]);
+  const endMinutes = parseInt(endTime.split(':')[1]);
 
-  const PIXELS_PER_HOUR = 40; // This value should match the height of the .time-series-label class in the CSS file
-  const EVENT_PADDING = 5; // This value should match the padding of the .event class in the CSS file
-  const top = (startMinutes / 60) * PIXELS_PER_HOUR;
-  const height = ((endMinutes - startMinutes) / 60) * PIXELS_PER_HOUR - 2 * EVENT_PADDING;
+  const PIXELS_PER_HOUR = 40;
+  const EVENT_PADDING = 5;
+  const DAY_HEADER_HEIGHT = 44;
+  const top = (startHours * 60 + startMinutes) / 60 * PIXELS_PER_HOUR + DAY_HEADER_HEIGHT;
+  const height = ((endHours * 60 + endMinutes) - (startHours * 60 + startMinutes)) / 60 * PIXELS_PER_HOUR - 2 * EVENT_PADDING;
 
   return {
     top: `${top}px`,
@@ -36,12 +40,19 @@ const getEventStyle = (event) => {
   };
 };
 
+
 const initialDate = new Date();
 
 const Schedule = ({ currentDate, setCurrentDate }) => {
   const { darkMode } = useTheme();
   const [events, setEvents] = useState([]);
   const { user } = useAuthContext()
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+  }
 
   useEffect(() => {
     // console.log("Running fetchEvents effect."); 
@@ -228,11 +239,14 @@ const Schedule = ({ currentDate, setCurrentDate }) => {
                 .map((event) => {
                   const startTime = parseTime(event.startT);
                   const endTime = parseTime(event.endT);
+                  const style = getEventStyle({ startTime, endTime });
+                  
+                  console.log(`Rendering event: ${event.title}, Start: ${event.startT}, End: ${event.endT}`);
                   return (
                     <div
-                      key={event._id}
-                      className="event"
-                      style={{ backgroundColor: event.color, ...getEventStyle({ startTime, endTime }) }}
+                    key={event._id}
+                    className="event"
+                    style={{ backgroundColor: event.color, ...getEventStyle({ startTime, endTime }) }}
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedEvent(event);

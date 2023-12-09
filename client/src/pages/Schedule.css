@@ -65,6 +65,7 @@
 
 
 .day {
+  position: relative;
   flex-grow: 1;
   border-left: 1px solid #ccc;
   position: relative;
@@ -92,13 +93,13 @@
 }
 
 .schedule .event {
-  position: relative;
+  position: absolute;
   padding: 5px;
   /* Adjust this value based on your requirements */
   border-radius: 8px;
   color: #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  width: 75%;
+  width: 85%;
   display: flex;
   flex-direction: column;
 }
@@ -221,6 +222,8 @@
   }
 
   .day {
+    min-height: 960px; 
+    position: relative;
     min-width: 100%;
     max-width: none;
     border-left: none;
