@@ -171,7 +171,7 @@ function App() {
                     <hr />
                     <button className={`settings-option ${darkMode ? "dark-settings-option" : ""}`}>Profile</button>
                     <button className={`settings-option ${darkMode ? "dark-settings-option" : ""}`}>Settings</button>
-                    <button className={`settings-option ${darkMode ? "dark-settings-option" : ""}`} onClick={handleLogout}>Logout</button>
+                    <button className="settings-option logout-button" onClick={handleLogout}>Logout</button>
                   </div>
                 </div>
               </div>
