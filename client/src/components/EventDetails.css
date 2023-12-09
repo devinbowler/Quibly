@@ -46,6 +46,7 @@
   border-top-left-radius: 5px; /* Add border-radius for the top left corner */
   border-top-right-radius: 5px; /* Add border-radius for the top right corner */
   z-index: 100;
+  max-height: 20px;
 }
 
 .dark-mode .event-details-header {
