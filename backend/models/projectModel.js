@@ -16,6 +16,11 @@ const projectSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  text: {
+    type: String,
+    required: false,
+    trim: true
+  },
   user_id: {
     type: String,
     required: true
