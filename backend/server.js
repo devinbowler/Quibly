@@ -14,7 +14,7 @@ const app = express();
 
 // Allowed origins for CORS
 const allowedOrigins = [
-  'https://quantumix.net', // Your Netlify domain
+  'https://quibly.net/', // Your Netlify domain
   'http://localhost:3000', // Your local development domain
   // You can add any other domains you want to whitelist here
 ];
