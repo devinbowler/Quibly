@@ -205,6 +205,7 @@ function App() {
             <Route path="/app/home" element={user ? <Home /> : <Navigate to="/login" />} />
             <Route path="/app/schedule" element={user ? <Schedule currentDate={currentDate} setCurrentDate={setCurrentDate} /> : <Navigate to="/login" />} />
             <Route path="/app/tasks" element={user ? <Tasks /> : <Navigate to="/login" />} />
+            <Route path="/app/project" element={user ? <Project /> : <Navigate to="/login" />} />
             <Route path="/app/visionboard" element={user ? <Visionboard /> : <Navigate to="/login" />} />
             <Route path="/app/project/:id" element={user ? <Project /> : <Navigate to="/login" />} />
           </Routes>
