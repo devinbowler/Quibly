@@ -4,6 +4,7 @@ import './login.css';
 import { useLogin } from '../hooks/useLogin'
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from 'react-google-login';
+import QuantumixLogo from '../images/Quantumix-B6.png'; // Adjust the path as necessary
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -40,7 +41,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <form className="login-form" onSubmit={handleSubmit}>
-        <img src={process.env.PUBLIC_URL + "/assets/logoTansp.png"} alt="Logo" className="login-logo" />
+        <img src={QuantumixLogo} alt="Logo" className="login-logo" />
         <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
         <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
         <button type="submit" disabled={isLoading}>Log In</button>

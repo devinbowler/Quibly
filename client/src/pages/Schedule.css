@@ -96,7 +96,7 @@
   position: absolute;
   padding: 5px;
   /* Adjust this value based on your requirements */
-  border-radius: 8px;
+  border-radius: 5px;
   color: #ffffff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   width: 85%;
@@ -123,8 +123,8 @@
 
 .event-title {
   font-weight: bold;
-  font-size: .8rem;
-  margin-bottom: 6px;
+  font-size: .8rem !important;
+  margin-bottom: 6px !important;
 }
 
 .event-time {

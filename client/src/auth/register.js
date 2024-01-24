@@ -4,6 +4,7 @@ import './register.css';
 import { useSignup } from "../hooks/useSignup"
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from 'react-google-login';
+import QuantumixLogo from '../images/Quantumix-B6.png'; // Adjust the path as necessary
 
 const Register = () => {
   const [email, setEmail] = useState('')
@@ -58,7 +59,7 @@ className="login-with-google"
     return (
         <div className="register-container">
           <form className="register-form" onSubmit={handleSubmit}>
-            <img src={process.env.PUBLIC_URL + "/assets/logoTansp.png"} alt="Logo" className="register-logo" />
+            <img src={QuantumixLogo} alt="Logo" className="register-logo" />
             <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
             <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
             <input type="password" placeholder="Confirm Password" />

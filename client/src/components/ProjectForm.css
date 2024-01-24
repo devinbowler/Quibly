@@ -140,7 +140,7 @@
     transition: background-color 0.3s;
   }
   
-  .delete-button {
+  .project-form .delete-button {
     border: none;
     width: 200px;
     background-color: rgb(179, 16, 16);

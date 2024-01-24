@@ -28,6 +28,7 @@ const getEventStyle = (event) => {
   const endHours = parseInt(endTime.split(':')[0]);
   const endMinutes = parseInt(endTime.split(':')[1]);
 
+
   const PIXELS_PER_HOUR = 40;
   const EVENT_PADDING = 5;
   const DAY_HEADER_HEIGHT = 44;

@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    width: 80%;
+    width: 100%;
     height: 350px;
     margin-top: 20px;
     padding: 10px;
@@ -30,7 +30,27 @@
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     padding-bottom: 20px;
     margin-bottom: 20px;
+    align-items: center;
+    display: flex;
 }
+
+.header .save-button {
+    position: relative;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 1px solid black !important;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+
+  .header save-button:hover {
+    border: 1px solid rgb(73, 73, 73);
+  }
 
 .project-title {
     border: none;

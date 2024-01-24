@@ -3,12 +3,17 @@ import './VisionBoard.css';
 import ProjectForm from '../components/ProjectForm';
 import { FaEllipsisH, FaTrashAlt } from 'react-icons/fa';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useTheme } from '../ThemeContext';
+import {Navigate, useNavigate} from "react-router-dom";
 
 function Visionboard() {
   const [projects, setProjects] = useState([]);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const navigate = useNavigate();
   const { user } = useAuthContext();
+  const { darkMode } = useTheme();
+  
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -30,7 +35,7 @@ function Visionboard() {
     };
 
     fetchProjects();
-  }, [user]);
+  }, [user, navigate]);
 
   const deleteProject = async (projectId) => {
     try {
@@ -87,21 +92,28 @@ function Visionboard() {
     return `${month} . ${day} . ${year}`;
   };
   
+  // Function to handle open button click
+  const openProjectPage = (project) => {
+    navigate('/app/project', { state: { project } });
+  };
   
 
   return (
-    <div className="vision-board">
+    <div className={`vision-board ${darkMode ? "dark-mode" : ""}`}>
       <h2 className="header">Visionboard</h2>
-      <div className="projects">
+      <div className={`projects ${darkMode ? "dark-mode" : ""}`}>
         {projects.map((project, index) => (
-          <div key={index} className="project-card">
+          <div key={index} className={`project-card ${darkMode ? "dark-mode" : ""}`}>
             <div className="project-header">
               <h3>{project.title}</h3>
               <FaEllipsisH className="edit-icon" onClick={() => handleEditProject(project)} />
             </div>
             <p className='line'></p>
             <p className="desc">{project.description}</p>
-            <p className="date">{formatDate(project.dateCreated)}</p>
+            <div className={`project-footer ${darkMode ? "dark-mode" : ""}`}>
+              <p className="date">{formatDate(project.dateCreated)}</p>
+              <button onClick={() => openProjectPage(project)} className="open-project">Open</button>
+          </div>
           </div>
         ))}
       </div>
