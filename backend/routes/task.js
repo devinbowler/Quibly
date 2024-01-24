@@ -5,6 +5,7 @@ const {
     createTask,
     deleteTask,
     updateTask,
+    updateTaskType,
     resumeTask,
     pauseTask
 } = require('../controllers/taskController')
@@ -29,7 +30,10 @@ router.post('/', createTask)
 router.delete('/:id', deleteTask)
 
 // Update a task
-router.patch('/:id', updateTask)
+router.patch('/:id', updateTask);
+
+// Update task type
+router.put('/:id/updateType', updateTaskType);
 
 router.patch('/:id', pauseTask);
 

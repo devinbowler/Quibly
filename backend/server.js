@@ -12,12 +12,12 @@ const projectRoutes = require('./routes/project');
 // Express app
 const app = express();
 
-// Allowed origins for CORS
 const allowedOrigins = [
   'https://quibly.net', // No trailing slash
   'http://localhost:3000',
   // other domains...
 ];
+
 
 // CORS configuration
 app.use(cors({
