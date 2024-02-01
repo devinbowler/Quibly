@@ -19,6 +19,30 @@ function Home() {
     working: []
   });
 
+  // Add state for the current month and year
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+
+  // Function to navigate months
+  const navigateMonth = (offset) => {
+    const newMonth = currentMonth + offset;
+    setCurrentMonth(newMonth % 12);
+    setCurrentYear(currentYear + Math.floor(newMonth / 12));
+  };
+  
+
+
     // Utility function for date formatting
     const formatDate = (dateString) => {
       const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
@@ -38,18 +62,26 @@ function Home() {
       : due.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   };
 
-  const generateCalendarDays = () => {
-    const today = new Date();
-    const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  const generateCalendarDays = (year, month) => {
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 0);
     const days = [];
-    for (let i = 1; i <= endOfMonth.getDate(); i++) {
-      days.push(new Date(today.getFullYear(), today.getMonth(), i));
+    // Start from the first day of the week in the current month
+    for (let i = startDate.getDay(); i > 0; i--) {
+      days.unshift(new Date(year, month, -i + 1));
+    }
+    // Fill the days of the current month
+    for (let i = 1; i <= endDate.getDate(); i++) {
+      days.push(new Date(year, month, i));
+    }
+    // Fill the remaining days to complete the week
+    for (let i = 1; days.length % 7 !== 0; i++) {
+      days.push(new Date(year, month + 1, i));
     }
     return days;
   };
 
-  const calendarDays = generateCalendarDays();
+    const calendarDays = generateCalendarDays(currentYear, currentMonth);
 
     // Function to count events for a specific day
     const countEventsForDay = (day) => {
@@ -61,10 +93,13 @@ function Home() {
 
   // Add a utility function to check if an event is in the future
   const isFutureEvent = (eventDateStr) => {
-    const eventDate = new Date(eventDateStr);
+    const eventDate = new Date(eventDateStr.replace(' ', 'T')); // Adjust the date string if needed
     const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set time to start of today
+    eventDate.setHours(0, 0, 0, 0); // Set time to start of the event date
     return eventDate >= today;
   };
+  
 
   useEffect(() => {
     // When the component mounts
@@ -86,21 +121,33 @@ function Home() {
               'Authorization': `Bearer ${user.token}`
             }
           });
-  
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
-
           const json = await response.json();
-          const upcomingEvents = json.filter(event => isFutureEvent(event.date));
+  
+          // Log the raw data
+          console.log('Fetched events:', json);
+  
+          // Assuming the backend sends dates in ISO format
+          const upcomingEvents = json.filter(event => 
+            new Date(event.startT) >= new Date()
+          );
+  
+          // Log the filtered events
+          console.log('Upcoming events:', upcomingEvents);
+  
           setEvents(upcomingEvents);
         } catch (error) {
           console.error('Failed to fetch:', error);
         }
       }
     };
+    
     fetchEvents();
   }, [user]);
+  
+
 
     // Fetch Projects
     useEffect(() => {
@@ -203,14 +250,28 @@ if (displayedTasks.length < 4) {
   }
 }
 
+const placeholdersCount = 4 - events.length;
+
+const displayedEvents = events.length >= 4
+  ? events.slice(0, 4)
+  : [
+      ...events,
+      ...Array.from({ length: 4 - events.length }, (_, index) => ({
+        _id: `placeholder-${index}`, // Unique key for each placeholder
+        placeholder: true, // A flag to indicate this is a placeholder
+      })),
+    ];
+
   const handleSeeAllClick = () => {
     navigate('/app/tasks');
   };
 
+  const handleViewEvent  = () => {
+    navigate('/app/schedule');
+  };
+
   const taskCount = tasks.inProgress.length + tasks.working.length; // Updated task count
   const eventCount = events.length;
-  
-
 
     return (
       <div className={`dashboard ${useTheme().darkMode ? "dark-mode" : ""}`}>
@@ -231,28 +292,79 @@ if (displayedTasks.length < 4) {
       </div>
       </div>
 
-      {/* Calendar and Events Section */}
-      <div className="calendar-events-section">
-        <div className="mini-calendar-home">
-          {calendarDays.map(day => (
-            <div key={day.getDate()} className="calendar-day">
-              <span>{day.getDate()}</span>
-              {countEventsForDay(day) > 0 && <span className="event-dot"></span>}
-            </div>
+    {/* Calendar and Events Section */}
+    <div className={`calendar-events-section ${useTheme().darkMode ? "dark-mode" : ""}`}>
+      {/* Mini Calendar */}
+      <div className="mini-calendar-home">
+        {/* Calendar Header */}
+        <div className="mini-calendar-header-home">
+          <button className="month-nav" onClick={() => navigateMonth(-1)}>&lt;</button>
+          <h3>{new Date(currentYear, currentMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h3>
+          <button className="month-nav" onClick={() => navigateMonth(1)}>&gt;</button>
+        </div>
+        {/* Weekday Labels */}
+        <div className="weekday-labels">
+          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
+            <div key={index} className="weekday">{day}</div>
           ))}
         </div>
-        <div className="events-list">
-          {events.slice(0, 4).map(event => (
-            <div key={event.id} className="event-card">
-              <p>{event.title}</p>
-              <p>{new Date(event.date).toLocaleDateString()}</p>
+        {/* Calendar Grid */}
+        <div className="mini-calendar-grid">
+          {calendarDays.map(day => (
+            <div key={day.toISOString()} className={`calendar-day${day.getMonth() === currentMonth ? "" : " not-current-month"}`}>
+              <span className="date-number">{day.getDate()}</span>
+              <div className="dots-container">
+                {/* Logic to display up to 3 dots for events */}
+                {Array.from({ length: Math.min(countEventsForDay(day), 3) }, (_, i) => <span key={i} className="event-dot"></span>)}
+                {countEventsForDay(day) > 3 && <span className="event-dot more-events">+{countEventsForDay(day) - 3}</span>}
+              </div>
             </div>
           ))}
-          {events.length < 4 && <p>No More Events</p>}
         </div>
       </div>
 
-          <div className="tasks-section">
+
+  {/* Events List */}
+  <div className="events-list">
+    {/* First, render all available events */}
+    {events.slice(0, 4).map((event, index) => (
+      <div key={event._id || index} className="event-card">
+        <div className="event-date">
+          <span className="weekday">
+            {new Date(event.startT).toLocaleDateString('en-US', { weekday: 'short' })}
+          </span>
+          <span className="day-number">
+            {new Date(event.startT).getDate()}
+          </span>
+        </div>
+        <div className="event-details-home">
+          <p className="event-title">{event.title}</p>
+          <p className="event-time">
+            {new Date(event.startT).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} - 
+            {new Date(event.endT).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+          </p>
+        </div>
+        <div className="event-extra">
+        <button 
+        className="event-action" 
+        onClick={() => handleViewEvent(event._id)}
+      >
+        View
+      </button>
+        </div>
+      </div>
+    ))}
+    {/* Then, render placeholders if necessary */}
+    {Array.from({ length: placeholdersCount }, (_, index) => (
+      <div key={`placeholder-${index}`} className="event-card placeholder">
+        <div className="event-date-placeholder">No Events</div>
+        <div className="event-details-placeholder" />
+      </div>
+    ))}
+  </div>
+      </div>
+
+      <div className={`tasks-section ${useTheme().darkMode ? "dark-mode" : ""}`}>
       <div className="tasks-header">
         <h2>Tasks</h2>
         <button className="see-all" onClick={handleSeeAllClick}>see all</button>
@@ -277,23 +389,26 @@ if (displayedTasks.length < 4) {
       </div>
 
       {/* Projects Section */}
-      <div className="projects-section">
-      <div className="projects-header">
-        <h2>Projects</h2>
-      </div>
-      <div className="projects-container">
-        {projects.slice(0, 3).map((project) => (
-          <div key={project._id} className="project-card-home">
-            <div className="project-details">
-              <h3 className="project-title">{project.title}</h3>
-              <p className="project-desc">{project.description}</p>
-              <p className="project-date">{formatDate(project.dateCreated)}</p>
+      <div className={`projects-section ${useTheme().darkMode ? "dark-mode" : ""}`}>
+        <div className="projects-header">
+          <h2>Projects</h2>
+        </div>
+        <div className="projects-container">
+          {projects.slice(0, 3).map((project) => (
+            <div key={project._id} className="project-card-home" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+              <div className="project-header">
+                <h3 className="project-title">{project.title}</h3>
+                <button className="view-project-arrow" onClick={() => openProjectPage(project)}>
+                  →
+                </button>
+              </div>
+              <div className="project-details">
+                <p className="project-desc">{project.description}</p>
+              </div>
             </div>
-            <button onClick={() => openProjectPage(project)} className="view-project-btn">View</button>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   );
 }
