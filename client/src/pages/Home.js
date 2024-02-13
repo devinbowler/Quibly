@@ -13,6 +13,7 @@ function Home() {
   const { user } = useAuthContext();
 
   const [projects, setProjects] = useState([]);
+  const [noteToDelete, setNoteToDelete] = useState(null);
   const [rerender, setRerender] = useState(false);
   const [tasks, setTasks] = useState({
     inProgress: [],
@@ -54,29 +55,102 @@ function Home() {
       }
     }, [user]);
 
-  // Function to handle adding a new note correctly
-  const handleAddNote = async (e) => {
+    const handleConfirmDelete = async (noteId) => {
+      try {
+        const response = await fetch(`https://quantumix.onrender.com/api/notes/${noteId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${user.token}`,
+          },
+        });
+    
+        if (response.ok) {
+          setNotes(notes.filter(note => note._id !== noteId)); // Remove the note from the state
+          setNoteToDelete(null); // Reset the noteToDelete state
+        } else {
+          const result = await response.json();
+          throw new Error(result.message); // Handle errors
+        }
+      } catch (error) {
+        console.error('Failed to delete note:', error);
+      }
+    };
+
+    useEffect(() => {
+      // Function to reset noteToDelete when clicking outside
+      const handleClickOutside = (event) => {
+        if (!event.target.matches('.delete-mark') && !event.target.matches('.check-mark')) {
+          setNoteToDelete(null);
+        }
+      };
+    
+      if (noteToDelete !== null) {
+        // Add when noteToDelete is set
+        window.addEventListener('click', handleClickOutside);
+      }
+    
+      // Cleanup
+      return () => window.removeEventListener('click', handleClickOutside);
+    }, [noteToDelete]);
+
+  // Function to add a new note
+  const handleNewNoteAdd = async (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      if (newNote.trim()) {
+      e.preventDefault(); // Prevent the default Enter key action
+      const noteText = newNote.trim();
+      if (noteText) {
         try {
+          // POST request to the server to add a new note
           const response = await fetch('https://quantumix.onrender.com/api/notes', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${user.token}`,
+              'Authorization': `Bearer ${user.token}`, // Assuming you have a token-based auth
             },
-            body: JSON.stringify({ text: newNote.trim() }),
+            body: JSON.stringify({ text: noteText }),
           });
-          const addedNote = await response.json();
-          if (!response.ok) {
-            throw new Error(addedNote.error);
+
+          const result = await response.json();
+
+          if (response.ok) {
+            setNotes([...notes, result]); // Add the new note to the state
+            setNewNote(""); // Clear the textarea
+          } else {
+            throw new Error(result.message); // Handle errors
           }
-          setNotes([...notes, addedNote]);
-          setNewNote(""); // Clear the textarea
         } catch (error) {
           console.error('Failed to add note:', error);
         }
+      }
+    }
+  };
+
+  // Function to finish editing a note
+  const handleNoteEditFinish = async (noteId) => {
+    const noteText = newNote.trim();
+    if (noteText && noteId) {
+      try {
+        // PATCH request to the server to update an existing note
+        const response = await fetch(`https://quantumix.onrender.com/api/notes/${noteId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`, // Assuming you have a token-based auth
+          },
+          body: JSON.stringify({ text: noteText }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          setNotes(notes.map(note => note._id === noteId ? { ...note, text: noteText } : note)); // Update the note in the state
+          setEditingNoteId(null); // Reset editing ID
+          setNewNote(""); // Clear the textarea
+        } else {
+          throw new Error(result.message); // Handle errors
+        }
+      } catch (error) {
+        console.error('Failed to update note:', error);
       }
     }
   };
@@ -128,10 +202,36 @@ function Home() {
       };
 
       // Handler when editing is done (on blur or Enter key press)
-      const handleFinishEditing = (noteId) => {
-        handleUpdateNote(noteId, newNote);
-        setEditingNoteId(null);
-        setNewNote("");
+      const handleFinishEditing = async (id) => {
+        if (!newNote.trim()) {
+          alert("Note cannot be empty");
+          setNewNote(""); // Reset newNote
+          setEditingNoteId(null); // Exit editing mode
+          return;
+        }
+      
+        try {
+          const response = await fetch(`https://quantumix.onrender.com/api/notes/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({ text: newNote.trim() }),
+          });
+      
+          if (!response.ok) {
+            throw new Error('Could not update note');
+          }
+      
+          const updatedNote = await response.json();
+          setNotes(notes.map(note => note._id === id ? updatedNote : note));
+        } catch (error) {
+          console.error('Error updating note:', error);
+        }
+      
+        setEditingNoteId(null); // Exit editing mode
+        setNewNote(""); // Reset newNote
       };
 
 
@@ -163,26 +263,6 @@ function Home() {
       ? 'Today' 
       : due.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   };
-
-  const generateCalendarDays = (year, month) => {
-    const startDate = new Date(year, month, 1);
-    const endDate = new Date(year, month + 1, 0);
-    const days = [];
-    // Start from the first day of the week in the current month
-    for (let i = startDate.getDay(); i > 0; i--) {
-      days.unshift(new Date(year, month, -i + 1));
-    }
-    // Fill the days of the current month
-    for (let i = 1; i <= endDate.getDate(); i++) {
-      days.push(new Date(year, month, i));
-    }
-    // Fill the remaining days to complete the week
-    for (let i = 1; days.length % 7 !== 0; i++) {
-      days.push(new Date(year, month + 1, i));
-    }
-    return days;
-  };
-  
 
   useEffect(() => {
     // When the component mounts
@@ -378,52 +458,47 @@ const displayedEvents = events.length >= 4
     {/* Calendar and Events Section */}
     <div className={`calendar-events-section ${useTheme().darkMode ? "dark-mode" : ""}`}>
     <div className="notepad-container">
-      {notes.map((note) => (
-        <div key={note.id} className="note">
-          {editingNoteId === note.id ? (
-            <textarea
-              value={newNote}
-              onChange={handleNoteChange}
-              onBlur={() => handleFinishEditing(note.id)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault(); // Prevents newline on Enter key
-                  handleFinishEditing(note.id);
-                }
-              }}
-            />
-          ) : (
-            <div
-              className="note-text"
-              onClick={() => {
-                setEditingNoteId(note.id);
-                setNewNote(note.text);
-              }}
-            >
-              {note.text}
+    {notes.map((note) => (
+  <div key={note._id} className="note">
+    {editingNoteId === note._id ? (
+      <textarea
+        value={editingNoteId === note._id ? newNote : note.text}
+        onChange={(e) => setNewNote(e.target.value)}
+        onBlur={() => handleNoteEditFinish(note._id)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleNoteEditFinish(note._id);
+          }
+        }}
+      />
+    ) : (
+      <div
+        className="note-text"
+        onClick={() => {
+          setEditingNoteId(note._id);
+          setNewNote(note.text);
+        }}
+      >
+        {note.text}
             </div>
           )}
           <div className="note-controls">
-            <span className="dot-menu">...</span>
-            <div className="dropdown-content">
-              <button onClick={() => {
-                setEditingNoteId(note.id);
-                setNewNote(note.text);
-              }}>Edit</button>
-              <button className="delete" onClick={() => handleDeleteNote(note.id)}>Delete</button>
-            </div>
+            {noteToDelete === note._id ? (
+              <>
+                <span className="check-mark" onClick={() => handleConfirmDelete(note._id)}>✓</span>
+              </>
+            ) : (
+              <span className="delete-mark" onClick={() => setNoteToDelete(note._id)}>X</span>
+            )}
           </div>
         </div>
       ))}
       <textarea
         placeholder="Start typing to add a new note..."
         value={newNote}
-        onChange={handleNoteChange}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            handleAddNote(e);
-          }
-        }}
+        onChange={(e) => setNewNote(e.target.value)}
+        onKeyDown={handleNewNoteAdd}
       />
 </div>
 
