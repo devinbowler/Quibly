@@ -25,6 +25,116 @@ function Home() {
 
   const [isHovered, setIsHovered] = useState(false);
 
+  // State for notes
+  const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState("");
+  const [editingNoteId, setEditingNoteId] = useState(null);
+
+    // Fetch notes on component mount
+    useEffect(() => {
+      const fetchNotes = async () => {
+        try {
+          const response = await fetch('https://quantumix.onrender.com/api/notes', {
+            headers: {
+              'Authorization': `Bearer ${user.token}`,
+            },
+          });
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const notesData = await response.json();
+          setNotes(notesData);
+        } catch (error) {
+          console.error('Failed to fetch notes:', error);
+        }
+      };
+  
+      if (user) {
+        fetchNotes();
+      }
+    }, [user]);
+
+  // Function to handle adding a new note correctly
+  const handleAddNote = async (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (newNote.trim()) {
+        try {
+          const response = await fetch('https://quantumix.onrender.com/api/notes', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${user.token}`,
+            },
+            body: JSON.stringify({ text: newNote.trim() }),
+          });
+          const addedNote = await response.json();
+          if (!response.ok) {
+            throw new Error(addedNote.error);
+          }
+          setNotes([...notes, addedNote]);
+          setNewNote(""); // Clear the textarea
+        } catch (error) {
+          console.error('Failed to add note:', error);
+        }
+      }
+    }
+  };
+
+
+
+  // Function to delete a note
+  const handleDeleteNote = async (noteId) => {
+    try {
+      const response = await fetch(`https://quantumix.onrender.com/api/notes/${noteId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete note');
+      }
+      setNotes(notes.filter(note => note._id !== noteId));
+    } catch (error) {
+      console.error('Failed to delete note:', error);
+    }
+  };
+
+    // Function to update a note's text
+    const handleUpdateNote = async (noteId, newText) => {
+      try {
+        const response = await fetch(`https://quantumix.onrender.com/api/notes/${noteId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({ text: newText }),
+        });
+        const updatedNote = await response.json();
+        if (!response.ok) {
+          throw new Error(updatedNote.error);
+        }
+        setNotes(notes.map(note => note.id === noteId ? updatedNote : note));
+      } catch (error) {
+        console.error('Failed to update note:', error);
+      }
+    };
+
+      // Handler when the note text area changes
+      const handleNoteChange = (e) => {
+        setNewNote(e.target.value);
+      };
+
+      // Handler when editing is done (on blur or Enter key press)
+      const handleFinishEditing = (noteId) => {
+        handleUpdateNote(noteId, newNote);
+        setEditingNoteId(null);
+        setNewNote("");
+      };
+
+
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -40,14 +150,6 @@ function Home() {
     setCurrentMonth(newMonth % 12);
     setCurrentYear(currentYear + Math.floor(newMonth / 12));
   };
-  
-
-
-    // Utility function for date formatting
-    const formatDate = (dateString) => {
-      const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-      return new Date(dateString).toLocaleDateString('en-US', options);
-    };
 
     // Function to navigate to project page
     const openProjectPage = (project) => {
@@ -79,25 +181,6 @@ function Home() {
       days.push(new Date(year, month + 1, i));
     }
     return days;
-  };
-
-    const calendarDays = generateCalendarDays(currentYear, currentMonth);
-
-    // Function to count events for a specific day
-    const countEventsForDay = (day) => {
-      return events.filter(event => {
-        const eventDate = new Date(event.date); // Assuming 'date' is a property of your event
-        return eventDate.toDateString() === day.toDateString();
-      }).length;
-    };
-
-  // Add a utility function to check if an event is in the future
-  const isFutureEvent = (eventDateStr) => {
-    const eventDate = new Date(eventDateStr.replace(' ', 'T')); // Adjust the date string if needed
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Set time to start of today
-    eventDate.setHours(0, 0, 0, 0); // Set time to start of the event date
-    return eventDate >= today;
   };
   
 
@@ -281,7 +364,7 @@ const displayedEvents = events.length >= 4
             <p>{getFormattedDate()}</p>
             <div className="summary-bubbles">
                 <div className="summary-bubble">
-                    <p className="summary-desc">You have {taskCount} tasks due today, and {eventCount} events for today. Let's have a great day!</p>
+                You have {taskCount} {taskCount === 1 ? 'task' : 'tasks'} due, and {eventCount} upcoming {eventCount === 1 ? 'event' : 'events'}. Let's have a great day!
                 </div>
             </div>
         </div>
@@ -294,35 +377,55 @@ const displayedEvents = events.length >= 4
 
     {/* Calendar and Events Section */}
     <div className={`calendar-events-section ${useTheme().darkMode ? "dark-mode" : ""}`}>
-      {/* Mini Calendar */}
-      <div className="mini-calendar-home">
-        {/* Calendar Header */}
-        <div className="mini-calendar-header-home">
-          <button className="month-nav" onClick={() => navigateMonth(-1)}>&lt;</button>
-          <h3>{new Date(currentYear, currentMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</h3>
-          <button className="month-nav" onClick={() => navigateMonth(1)}>&gt;</button>
-        </div>
-        {/* Weekday Labels */}
-        <div className="weekday-labels">
-          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, index) => (
-            <div key={index} className="weekday">{day}</div>
-          ))}
-        </div>
-        {/* Calendar Grid */}
-        <div className="mini-calendar-grid">
-          {calendarDays.map(day => (
-            <div key={day.toISOString()} className={`calendar-day${day.getMonth() === currentMonth ? "" : " not-current-month"}`}>
-              <span className="date-number">{day.getDate()}</span>
-              <div className="dots-container">
-                {/* Logic to display up to 3 dots for events */}
-                {Array.from({ length: Math.min(countEventsForDay(day), 3) }, (_, i) => <span key={i} className="event-dot"></span>)}
-                {countEventsForDay(day) > 3 && <span className="event-dot more-events">+{countEventsForDay(day) - 3}</span>}
-              </div>
+    <div className="notepad-container">
+      {notes.map((note) => (
+        <div key={note.id} className="note">
+          {editingNoteId === note.id ? (
+            <textarea
+              value={newNote}
+              onChange={handleNoteChange}
+              onBlur={() => handleFinishEditing(note.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault(); // Prevents newline on Enter key
+                  handleFinishEditing(note.id);
+                }
+              }}
+            />
+          ) : (
+            <div
+              className="note-text"
+              onClick={() => {
+                setEditingNoteId(note.id);
+                setNewNote(note.text);
+              }}
+            >
+              {note.text}
             </div>
-          ))}
+          )}
+          <div className="note-controls">
+            <span className="dot-menu">...</span>
+            <div className="dropdown-content">
+              <button onClick={() => {
+                setEditingNoteId(note.id);
+                setNewNote(note.text);
+              }}>Edit</button>
+              <button className="delete" onClick={() => handleDeleteNote(note.id)}>Delete</button>
+            </div>
+          </div>
         </div>
-      </div>
-
+      ))}
+      <textarea
+        placeholder="Start typing to add a new note..."
+        value={newNote}
+        onChange={handleNoteChange}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            handleAddNote(e);
+          }
+        }}
+      />
+</div>
 
   {/* Events List */}
   <div className="events-list">
