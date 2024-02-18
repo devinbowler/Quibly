@@ -1,11 +1,9 @@
 .project {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
     width: 100%;
-    height: 350px;
-    margin-top: 20px;
-    padding: 10px;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 .back-button {
@@ -18,6 +16,15 @@
     cursor: pointer;
     font-size: 1.5rem;
     transition: transform 0.3s;
+}
+
+.static-head {
+    position: static;
+    width: 100%;
+}
+
+.project.dark-mode .back-button {
+    color: white;
 }
 
 .back-button:hover {
@@ -34,10 +41,14 @@
     display: flex;
 }
 
+.project.dark-mode .header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+}
+
 .header .save-button {
     position: relative;
     top: 20px;
-    right: 20px;
+    left: 70%;
     padding: 10px 20px;
     background-color: transparent;
     border: 1px solid black !important;
@@ -46,6 +57,11 @@
     border-radius: 5px;
     cursor: pointer;
     margin-bottom: 20px;
+  }
+
+  .project.dark-mode .save-button {
+    color: white;
+    border: 1px solid rgb(221, 221, 221) !important;
   }
 
   .header save-button:hover {
@@ -61,15 +77,29 @@
     resize: none;
     font-size: 1.2em;
     font-weight: bold;
+    margin-top: 40px;
+}
+
+.project.dark-mode .project-title {
+    color: white;
 }
   
 .project-text {
-    flex-grow: 1;
-    font-size: 1em;
+    width: 100%; /* Full width */
+    height: 65vh; /* Adjust height based on the header's height */
+    padding: 0 200px; /* Indents text 200px from both sides */
+    margin-top: 60px; /* Space for the static header */
+    background: transparent;
     border: none;
-    width: 100%;
     outline: none;
-    padding: 0;
-    margin: 0;
-    resize: none;
+    box-sizing: border-box;
+    overflow-y: scroll; /* Only scroll vertically */
+    font-size: 16px; /* Adjust as needed */
+    color: #333; /* Text color */
+    resize: none; /* Disable resizing */
+}
+
+
+.project.dark-mode .project-text {
+    color: white;
 }
