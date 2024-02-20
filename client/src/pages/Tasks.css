@@ -3,7 +3,7 @@
 /* Add these to your existing CSS styles */
 
 .dark-mode {
-  background-color: #333; /* Dark background color */
+  background-color: #1b1b1b; /* Dark background color */
   color: #fff; /* Light text color */
 }
 
@@ -12,7 +12,7 @@
 }
 
 .dark-mode-card {
-  background-color: #3a3a3a !important; /* Darker shade for card */
+  background-color: #272727 !important; /* Darker shade for card */
   color: #fff; /* Light text color */
 }
 
