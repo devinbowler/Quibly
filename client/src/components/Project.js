@@ -143,6 +143,7 @@ const handleTextChange = (e) => {
       <textarea
         value={text}
         onChange={handleTextChange}
+        onKeyDown={handleKeyDown}
         className="project-text"
         placeholder="Start typing here..."
       />
