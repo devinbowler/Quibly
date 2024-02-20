@@ -8,20 +8,26 @@
 
 .back-button {
     align-self: flex-start;
-    margin-bottom: 20px;
-    margin-top: -10px; /* move the arrow a bit up */
+    position: relative;
     margin-left: -5px;
     border: none;
     background: none;
     cursor: pointer;
     font-size: 1.5rem;
     transition: transform 0.3s;
+    top: 5px;
 }
 
 .static-head {
-    position: static;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-}
+  }
+
+  .back-button, .project-title, .save-status {
+    margin: 0 10px; /* Adjust spacing between elements */
+  }
+  
 
 .project.dark-mode .back-button {
     color: white;
@@ -68,17 +74,22 @@
     border: 1px solid rgb(73, 73, 73);
   }
 
-.project-title {
+  .project-title {
     border: none;
-    width: 100%;
     outline: none;
     padding: 0;
-    margin: 0;
-    resize: none;
     font-size: 1.2em;
     font-weight: bold;
-    margin-top: 40px;
-}
+    flex-grow: 1; /* Allows the title input to expand */
+    text-align: center; /* Centers the text inside the input */
+  }
+  
+
+  .save-status {
+    position: absolute;
+    right: 75px; /* Keeps save status aligned to the right */
+    top: 95px;
+  }
 
 .project.dark-mode .project-title {
     color: white;
@@ -86,8 +97,8 @@
   
 .project-text {
     width: 100%; /* Full width */
-    height: 65vh; /* Adjust height based on the header's height */
-    padding: 0 200px; /* Indents text 200px from both sides */
+    height: 75vh; /* Adjust height based on the header's height */
+    padding: 0 400px; /* Indents text 200px from both sides */
     margin-top: 60px; /* Space for the static header */
     background: transparent;
     border: none;
@@ -102,4 +113,23 @@
 
 .project.dark-mode .project-text {
     color: white;
+}
+
+.text-block, .code-block {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Additional styling for MonacoEditor may be needed to ensure it fits well within its container */
+.monaco-editor .editor {
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+
+/* Ensure that your textarea (if still used) and MonacoEditor have consistent styling */
+.project textarea.project-text {
+  width: 100%;
+  margin-bottom: 20px;
+  /* Your existing textarea styles */
 }
