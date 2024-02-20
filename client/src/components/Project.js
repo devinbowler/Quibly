@@ -156,9 +156,6 @@ function Project() {
         className="project-text"
         placeholder="Start typing here..."
       />
-      <div className="code-block-container">
-        <pre className="code-block"><code>{`console.log('Hello, world!');`}</code></pre>
-      </div>
     </div>
   );
 }
