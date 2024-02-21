@@ -1,36 +1,30 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useTheme } from '../ThemeContext';
 import { debounce } from 'lodash';
-import MonacoEditor from 'react-monaco-editor';
 import './Project.css';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css';
 
 function Project() {
-  const location = useLocation();
-  const project = location.state?.project || {};
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const project = state?.project || {};
   const { user } = useAuthContext();
   const { darkMode } = useTheme();
   const [title, setTitle] = useState(project.title || '');
-  // Initialize content with a single text block containing the backend text
-  const [content, setContent] = useState([{ type: 'text', value: project.text || '' }]);
-  const [text, setText] = useState(project.text || '');
+  const [text, setText] = useState(() => {
+    return project.text || '';
+  });
   const [saveStatus, setSaveStatus] = useState("All changes saved");
 
   useEffect(() => {
-    // Apply syntax highlighting for code blocks
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });
-  }, [content]);
-
-  const handleTextChange = (e) => {
-    setText(e.target.value);
-  };
+  }, [text]); // Note: changed from [content] to [text] to ensure highlighting updates when text changes
 
 
   function handleKeyDown(event) {
@@ -84,23 +78,10 @@ function Project() {
     }
   }
 
-
-
-  // Function to update the value of a content block and maintain the rest of the content
-  function updateContentValue(index, newValue) {
-    const updatedContent = content.map((item, idx) => idx === index ? { ...item, value: newValue } : item);
-    setContent(updatedContent);
-  }
-
-  const saveChanges = async () => {
+  const saveChanges = useCallback(async () => {
     setSaveStatus("Saving...");
     try {
-      // Construct payload from content
-      const payload = {
-        title,
-        text: content.map(item => item.value).join('\n'), // Combine all content into a single string for saving
-      };
-      // Simulate a save operation with a PATCH request
+      const payload = { title, text }; // Adjusted to use direct text state
       const response = await fetch(`https://quantumix.onrender.com/api/projects/${project._id}`, {
         method: 'PATCH',
         headers: {
@@ -109,29 +90,31 @@ function Project() {
         },
         body: JSON.stringify(payload),
       });
-
       if (response.ok) {
         setSaveStatus("All changes saved");
       } else {
-        setSaveStatus("Error saving changes");
+        throw new Error('Failed to save');
       }
     } catch (error) {
       console.error("Failed to save changes:", error);
       setSaveStatus("Error saving changes");
     }
-  };
+  }, [title, text, user.token, project._id]); // Ensure dependencies are correctly listed
 
-  const debouncedSaveChanges = useCallback(debounce(saveChanges, 2000), [title, content]);
+  // Debounced version of saveChanges to limit frequency of calls
+  const debouncedSaveChanges = useCallback(debounce(() => saveChanges(), 2000), [saveChanges]);
 
   useEffect(() => {
-    if (content.length > 0) {
-      debouncedSaveChanges();
-    }
-    // Cleanup function to cancel any pending save when the component unmounts or content changes
+    debouncedSaveChanges();
+
     return () => {
       debouncedSaveChanges.cancel();
     };
-  }, [content, debouncedSaveChanges]);
+  }, [debouncedSaveChanges, text]); // Trigger auto-saving on text changes
+
+  const handleTextChange = (e) => {
+    setText(e.target.value);
+  };
 
 
   return (
