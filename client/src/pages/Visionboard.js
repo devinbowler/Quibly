@@ -4,7 +4,7 @@ import ProjectForm from '../components/ProjectForm';
 import { FaEllipsisH, FaTrashAlt } from 'react-icons/fa';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { useTheme } from '../ThemeContext';
-import {Navigate, useNavigate} from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function Visionboard() {
   const [projects, setProjects] = useState([]);
@@ -13,30 +13,34 @@ function Visionboard() {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const { darkMode } = useTheme();
-  
+
+
+  // Fetch projects
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch('https://quantumix.onrender.com/api/projects', {
+        headers: {
+          'Authorization': `Bearer ${user.token}`
+        }
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setProjects(data);
+      } else {
+        console.error('Error fetching projects:', data);
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch('https://quantumix.onrender.com/api/projects', {
-          headers: {
-            'Authorization': `Bearer ${user.token}`
-          }
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setProjects(data);
-        } else {
-          console.error('Error fetching projects:', data);
-        }
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    };
+    if (user.token) {
+      fetchProjects();
+    }
+  }, [user.token]); // Ensure fetchProjects is called whenever the user token changes
 
-    fetchProjects();
-  }, [user, navigate]);
-
+  // Delete project
   const deleteProject = async (projectId) => {
     try {
       const response = await fetch(`https://quantumix.onrender.com/api/projects/${projectId}`, {
@@ -47,37 +51,43 @@ function Visionboard() {
       });
       if (response.ok) {
         setProjects(projects.filter(project => project._id !== projectId));
+        setShowProjectForm(false); // Ensure form is closed after deletion
       } else {
-        // Handle errors
+        console.error('Failed to delete project');
       }
     } catch (error) {
       console.error("Error deleting project:", error);
     }
+    fetchProjects();
   };
+
   const addProject = (project) => {
     setProjects([...projects, project]);
     setShowProjectForm(false);
   };
 
+
+
   const updateProject = async (project) => {
     try {
-        const response = await fetch(`https://quantumix.onrender.com/api/projects/${project._id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${user.token}` // Assuming user has a token property
-            },
-            body: JSON.stringify(project)
-        });
-        console.log('Updating project', project);
-        if (!response.ok) {
-            throw new Error('Failed to update project');
-        }
-        // Update local state if needed
+      const response = await fetch(`https://quantumix.onrender.com/api/projects/${project._id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}` // Assuming user has a token property
+        },
+        body: JSON.stringify(project)
+      });
+      if (response.ok) {
+        fetchProjects(); // Ensure list is refreshed with updated data
+        setShowProjectForm(false); // Close the form after successful update
+      } else {
+        console.error('Failed to update project');
+      }
     } catch (error) {
-        console.error('Error updating project:', error);
+      console.error('Error updating project:', error);
     }
-};
+  };
 
   const handleEditProject = (project) => {
     setEditingProject(project);
@@ -91,12 +101,12 @@ function Visionboard() {
     const year = date.getFullYear();
     return `${month} . ${day} . ${year}`;
   };
-  
+
   // Function to handle open button click
   const openProjectPage = (project) => {
     navigate('/app/project', { state: { project } });
   };
-  
+
 
   return (
     <div className={`vision-board ${darkMode ? "dark-mode" : ""}`}>
@@ -113,16 +123,16 @@ function Visionboard() {
             <div className={`project-footer ${darkMode ? "dark-mode" : ""}`}>
               <p className="date">{formatDate(project.dateCreated)}</p>
               <button onClick={() => openProjectPage(project)} className="open-project">Open</button>
-          </div>
+            </div>
           </div>
         ))}
       </div>
       {showProjectForm && (
         <ProjectForm
           project={editingProject}
-          onAddProject={addProject}
-          onUpdateProject={updateProject}
-          onDeleteProject={deleteProject}
+          addProject={addProject}
+          updateProject={updateProject}
+          deleteProject={deleteProject}
           closeForm={() => setShowProjectForm(false)}
           isEditing={!!editingProject}
         />
