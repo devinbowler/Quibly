@@ -72,6 +72,14 @@ const ProjectForm = ({ project, addProject, updateProject, deleteProject, closeF
     }
   };
 
+  const confirmDeletion = () => {
+    setShowDeleteModal(true);
+  };
+
+  const cancelDeletion = () => {
+    setShowDeleteModal(false);
+  };
+
   return (
     <Draggable handle=".project-form-header">
       <div className={`project-form-container ${darkMode ? 'dark-event-form' : ''}`}>
@@ -105,16 +113,16 @@ const ProjectForm = ({ project, addProject, updateProject, deleteProject, closeF
           </form>
         </div>
         {showDeleteModal && (
-          <div className="delete-modal">
-            <div className="delete-modal-content">
-              <h2>Are you sure you want to delete this task?</h2>
-              <div className="delete-modal-buttons">
-                <button onClick={handleDelete}>Yes</button>
-                <button onClick={() => setShowDeleteModal(false)}>No</button>
-              </div>
+        <div className="delete-modal">
+          <div className="delete-modal-content">
+            <h2>Are you sure you want to delete this task?</h2>
+            <div className="delete-modal-buttons">
+              <button onClick={handleDelete}>Yes</button>
+              <button onClick={() => setShowDeleteModal(false)}>No</button>
             </div>
           </div>
-        )}
+        </div>
+      )}
       </div>
     </Draggable>
   );
