@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './App.css';
 import { FaBars } from 'react-icons/fa';
-import Project from './components/Project';
 import { useLogout } from './hooks/useLogout';
 import { useAuthContext } from './hooks/useAuthContext';
 import { useTheme } from './ThemeContext';
@@ -31,19 +30,20 @@ import "./App.css";
 import AuthHome from "./auth/home";
 import AuthLogin from "./auth/login";
 import AuthRegister from "./auth/register";
+import PrivacyPolicy from "./auth/privacypolicy";
 
 import PublicLayout from "./PublicLayout";
 
 import Home from "./pages/Home";
 import Schedule from "./pages/Schedule";
 import Tasks from "./pages/Tasks";
-import Visionboard from "./pages/Visionboard";
+import Planner from "./pages/planner";
 
 const tabs = [
   { id: 1, title: "Home", icon: <FaHome /> },
   { id: 2, title: "Schedule", icon: <FaCalendar /> },
   { id: 3, title: "Tasks", icon: <FaTasks /> },
-  { id: 4, title: "Visionboard", icon: <FaBullseye /> },
+  { id: 4, title: "Planner", icon: <FaBullseye /> },
 ];
 
 function App() {
@@ -69,7 +69,7 @@ function App() {
         navigate('/app/tasks');
         break;
       case 4:
-        navigate('/app/visionboard');
+        navigate('/app/planner');
         break;
       default:
         break;
@@ -120,7 +120,7 @@ function App() {
   };
 
   const isPublicPage = () => {
-    const publicPaths = ["/", "/login", "/register"];
+    const publicPaths = ["/", "/login", "/register", "/privacypolicy"];
     return publicPaths.includes(location.pathname);
   };
 
@@ -141,6 +141,9 @@ function App() {
     }
   }, [darkMode]);
 
+
+
+  //  <Route path="/app/planner" element={user ? <planner /> : <Navigate to="/login" />} />
   return (
     <div className={`app ${darkMode ? "dark-mode" : ""}`}>
       {!isPublicPage() && (
@@ -198,17 +201,15 @@ function App() {
       )}
       <div className={`${contentClassName} ${darkMode ? "dark-content" : ""}`}>
         <ContentWrapper>
-          <Routes>
-            <Route path="/" element={<PublicLayout><AuthHome /></PublicLayout>} exact />
-            <Route path="/login" element={!user ? <PublicLayout><AuthLogin /></PublicLayout> : <Navigate to="/app/home" />} />
-            <Route path="/register" element={<PublicLayout><AuthRegister /></PublicLayout>} />
-            <Route path="/app/home" element={user ? <Home /> : <Navigate to="/login" />} />
-            <Route path="/app/schedule" element={user ? <Schedule currentDate={currentDate} setCurrentDate={setCurrentDate} /> : <Navigate to="/login" />} />
-            <Route path="/app/tasks" element={user ? <Tasks /> : <Navigate to="/login" />} />
-            <Route path="/app/project" element={user ? <Project /> : <Navigate to="/login" />} />
-            <Route path="/app/visionboard" element={user ? <Visionboard /> : <Navigate to="/login" />} />
-            <Route path="/app/project/:id" element={user ? <Project /> : <Navigate to="/login" />} />
-          </Routes>
+        <Routes>
+          <Route path="/" element={<PublicLayout><AuthHome /></PublicLayout>} exact />
+          <Route path="/login" element={!user ? <PublicLayout><AuthLogin /></PublicLayout> : <Navigate to="/app/home" />} />
+          <Route path="/register" element={<PublicLayout><AuthRegister /></PublicLayout>} />
+          <Route path="/app/home" element={user ? <Home /> : <Navigate to="/login" />} />
+          <Route path="/app/schedule" element={user ? <Schedule currentDate={currentDate} setCurrentDate={setCurrentDate} /> : <Navigate to="/login" />} />
+          <Route path="/app/tasks" element={user ? <Tasks /> : <Navigate to="/login" />} />
+          <Route path="/privacypolicy" element={<PublicLayout><PrivacyPolicy /></PublicLayout>} />  // Add this line
+        </Routes>
         </ContentWrapper>
       </div>
     </div>
