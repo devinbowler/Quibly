@@ -1,7 +1,7 @@
 const express = require('express')
 
 // controller functions 
-const { signupUser, loginUser, googleLogin } = require('../controllers/userController')
+const { signupUser, loginUser, googleLogin, saveGoogleUser } = require('../controllers/userController');
 
 const router = express.Router()
 
@@ -13,6 +13,8 @@ router.post('/signup', signupUser)
 
 // In your userRoutes.js
 router.post('/google-login', googleLogin);
+
+router.post('/save-google-user', saveGoogleUser);
 
 
 module.exports = router
