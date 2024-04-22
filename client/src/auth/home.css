@@ -780,6 +780,9 @@ width: 100%;
         position: relative;
         display: block;
     }
+    #cs-footer-274 .cs-nav-li:last-child .cs-nav-link {
+      color: #495BFA; /* Light purple color for the text */
+  }
     #cs-footer-274 .cs-nav-link {
         font-size: 1rem;
         text-decoration: none;

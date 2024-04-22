@@ -5,6 +5,7 @@ import cloud from "../images/icons8-cloud-100.png";
 import ui from "../images/icons8-ui-64.png";
 import money from "../images/icons8-money-bag-100.png";
 import homepic from "../images/undraw_real_time_sync_re_nky7.svg";
+import { Link } from 'react-router-dom';
 
 const AuthHome = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -50,7 +51,7 @@ const AuthHome = () => {
         <span className="hamburger-menu mobile-only" onClick={handleMenuClick}>&#9776;</span>
         <ul className={`nav-menu${showMenu ? " show" : ""}`}>
           <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
+          <li><a href="#why-choose">About</a></li>
           <li className="right-float"><a href="./register" className="start-for-free">Get Started for Free</a></li>
         </ul>
       </nav>
@@ -260,6 +261,9 @@ const AuthHome = () => {
             </li>
             <li className="cs-nav-li">
                 <a className="cs-nav-link" href="mailto:quiblycontact@gmail.com">quiblycontact@gmail.com</a>
+            </li>
+            <li className="cs-nav-li">
+                <Link to="/privacypolicy" className="cs-nav-link">Privacy Policy</Link>
             </li>
         </ul>
     
