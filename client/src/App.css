@@ -41,7 +41,7 @@ body {
 }
 
 body.dark-mode {
-  background-color: #353535;
+  background-color: #1b1b1b;
   /* Dark background for the app */
   color: white;
   /* White text */
