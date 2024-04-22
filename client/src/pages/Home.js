@@ -12,7 +12,6 @@ function Home() {
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
-  const [projects, setProjects] = useState([]);
   const [noteToDelete, setNoteToDelete] = useState(null);
   const [rerender, setRerender] = useState(false);
   const [tasks, setTasks] = useState({
@@ -251,11 +250,6 @@ function Home() {
     setCurrentYear(currentYear + Math.floor(newMonth / 12));
   };
 
-    // Function to navigate to project page
-    const openProjectPage = (project) => {
-      navigate('/app/project', { state: { project } });
-    };
-
   const getDueDateText = (dueDate) => {
     const today = new Date();
     const due = new Date(dueDate);
@@ -310,33 +304,6 @@ function Home() {
     fetchEvents();
   }, [user]);
   
-
-
-    // Fetch Projects
-    useEffect(() => {
-      const fetchProjects = async () => {
-        if (user && user.token) {
-          try {
-            const response = await fetch('https://quantumix.onrender.com/api/projects', {
-              headers: {
-                'Authorization': `Bearer ${user.token}`
-              }
-            });
-            const data = await response.json();
-            if (response.ok) {
-              setProjects(data);
-            } else {
-              console.error('Error fetching projects:', data);
-            }
-          } catch (error) {
-            console.error("Error fetching projects:", error);
-          }
-        }
-      };
-  
-      fetchProjects();
-    }, [user]);
-  
 useEffect(() => {
   const fetchTasks = async () => {
     if (user && user.token) {
@@ -357,7 +324,7 @@ useEffect(() => {
           setRerender(prev => !prev); // Toggle rerender state to force rerender
           console.log("Updated tasks state:", json); // This should log the tasks state after it's set
         } else {
-          console.error('Error fetching projects:', json);
+          console.error('Error fetching tasks:', json);
         }
 
       } catch (error) {
@@ -504,6 +471,9 @@ const displayedEvents = events.length >= 4
 
   {/* Events List */}
   <div className="events-list">
+  <div className="events-header">
+          <h2>Events</h2>
+        </div>
     {/* First, render all available events */}
     {events.slice(0, 4).map((event, index) => (
       <div key={event._id || index} className="event-card">
@@ -561,28 +531,6 @@ const displayedEvents = events.length >= 4
                   </div>
                 </>
               )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Projects Section */}
-      <div className={`projects-section ${useTheme().darkMode ? "dark-mode" : ""}`}>
-        <div className="projects-header">
-          <h2>Projects</h2>
-        </div>
-        <div className="projects-container">
-          {projects.slice(0, 3).map((project) => (
-            <div key={project._id} className="project-card-home" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-              <div className="project-header">
-                <h3 className="project-title">{project.title}</h3>
-                <button className="view-project-arrow" onClick={() => openProjectPage(project)}>
-                  →
-                </button>
-              </div>
-              <div className="project-details">
-                <p className="project-desc">{project.description}</p>
-              </div>
             </div>
           ))}
         </div>

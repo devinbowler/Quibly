@@ -24,6 +24,109 @@
   flex-grow: 1;
 }
 
+.search-and-filters {
+  margin-top: 20px; /* Space from the calendar dates */
+  padding: 10px;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+}
+
+.dark-mode .search-bar {
+  color: white !important;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 1fr; /* 2 columns for filters */
+  gap: 13px;
+}
+
+.filters .header-filter {
+  border-bottom: 1px solid #ccc;
+  margin-top: 30px;
+  padding: 5px;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.filter-option input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.custom-view-toggle {
+  position: relative;
+  margin: 20px 0; /* Adjust the margin as needed for proper spacing */
+  text-align: center;
+}
+
+.custom-toggle-switch {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+.custom-toggle-label {
+  position: relative;
+  display: block;
+  width: 200px; /* Adjusted for larger width */
+  height: 50px; /* Adjusted for larger height */
+  cursor: pointer;
+  color: black;
+}
+
+.custom-toggle-background {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+  border: 2px solid grey;
+  border-radius: 25px; /* Rounded corners */
+  padding: 2px;
+  transition: background-color 0.2s;
+}
+
+.custom-toggle-handle {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(50% - 4px); /* Width adjusted to fit perfectly */
+  height: calc(53% - 4px); /* Height adjusted to fit perfectly */
+  background-color: rgba(255, 255, 255, 0.493); /* Semi-transparent white handle */
+  border-radius: 23px; /* Slightly less than the container's radius */
+  transition: transform 0.3s ease-in-out;
+}
+
+.custom-toggle-switch:checked + .custom-toggle-label .custom-toggle-handle {
+  transform: translateX(calc(100% + 4px)); /* Adjust transform to properly slide the handle */
+}
+
+.custom-toggle-text {
+  color: grey;
+  font-size: 16px; /* Increased font size */
+  user-select: none;
+  z-index: 1;
+}
+
+.custom-toggle-text-left {
+  padding-left: 20px;
+}
+
+.custom-toggle-text-right {
+  padding-right: 20px;
+}
+
+
+
 .time-series {
   display: flex;
   flex-direction: column;
@@ -55,7 +158,7 @@
 
 .dark-mode .time-series-label::after {
   background-color: #464646 !important;
-  /* Darker color for dark mode */
+  z-index: 1;
 }
 
 .days {

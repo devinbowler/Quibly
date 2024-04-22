@@ -101,6 +101,8 @@ const Schedule = ({ currentDate, setCurrentDate }) => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventForm, setShowEventForm] = useState(false);
+  const [viewMode, setViewMode] = useState(false);  // false for 7-day view, true for mini-calendar view
+
 
   const formatHour = (hour) => {
     if (hour === 0) return "12 AM";
@@ -203,7 +205,33 @@ const Schedule = ({ currentDate, setCurrentDate }) => {
             </div>
           ))}
         </div>
+        <div className="search-and-filters">
+        <div className="custom-view-toggle">
+          <input id="customToggleSwitch" className="custom-toggle-switch" type="checkbox" checked={viewMode} onChange={() => setViewMode(!viewMode)} />
+          <label htmlFor="customToggleSwitch" className="custom-toggle-label">
+            <div className="custom-toggle-background">
+              <span className="custom-toggle-text custom-toggle-text-left">Weekly</span>
+              <span className="custom-toggle-text custom-toggle-text-right">Monthly</span>
+              <span className="custom-toggle-handle"></span>
+            </div>
+          </label>
+        </div>
+
+
+          <input type="text" placeholder="Search events..." className="search-bar"/>
+
+          <div className="filters">
+            <div className="header-filter">Filter</div>
+            <label className="filter-option"><input type="checkbox"/> Events</label>
+            <label className="filter-option"><input type="checkbox"/> Tasks</label>
+            <label className="filter-option"><input type="checkbox"/> Meetings</label>
+            <label className="filter-option"><input type="checkbox"/> Personal</label>
+            <label className="filter-option"><input type="checkbox"/> Work</label>
+            <label className="filter-option"><input type="checkbox"/> Holidays</label>
+          </div>
+        </div>
       </div>
+      
       <div className="schedule">
         <div className="time-series">
           {Array.from({ length: 24 }).map((_, index) => (
