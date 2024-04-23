@@ -37,17 +37,30 @@ const googleLogin = async (req, res) => {
             idToken: token,
             audience: process.env.CLIENT_ID,
         });
-        const payload = ticket.getPayload();
-        let user = await User.findOne({ email: payload.email });
+        const { sub: googleId, email, name } = ticket.getPayload();
+
+        let user = await User.findOne({ googleId });
         if (!user) {
-            user = await User.create({ email: payload.email, password: null });
+            user = new User({
+                email,
+                googleId,
+                name
+            });
+            await user.save();
+        } else {
+            // Optionally update the user record if needed
+            user.email = email;
+            user.name = name;
+            await user.save();
         }
+
         const userToken = createToken(user._id);
         res.status(200).json({ user, token: userToken });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
+
 
 // New function to save/update Google user
 const saveGoogleUser = async (req, res) => {
