@@ -53,14 +53,18 @@ const googleLogin = async (req, res) => {
 const saveGoogleUser = async (req, res) => {
     const { googleId, email, token } = req.body;
     try {
-        // Using upsert option to update/create user in one go
-        const user = await User.findOneAndUpdate({ googleId }, { email, googleId }, { new: true, upsert: true, setDefaultsOnInsert: true });
+        let user = await User.findOne({ googleId });
+        if (!user) {
+            user = new User({ googleId, email });
+            await user.save();
+        }
         res.status(200).json({ message: "User saved/updated successfully", user });
     } catch (error) {
         console.error("Database operation failed", error);
-        res.status(500).json({ error: "Failed to save/update user" });
+        res.status(500).json({ error: "Failed to save/update user", details: error.message });
     }
 };
+
 
 
 module.exports = { signupUser, loginUser, googleLogin, saveGoogleUser };
