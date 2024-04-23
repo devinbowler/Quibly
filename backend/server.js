@@ -21,15 +21,8 @@ const allowedOrigins = [
 
 // CORS configuration
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // Allow requests with no origin (like mobile apps, curl, etc.)
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true, // Allow sending credentials like cookies and HTTP authentication
+  origin: '*', // Allow all origins
+  credentials: true, // Allow credentials
 }));
 
 // Middleware
