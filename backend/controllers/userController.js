@@ -31,53 +31,27 @@ const signupUser = async (req, res) => {
 };
 
 const googleLogin = async (req, res) => {
-    const { token } = req.body;
+    const { token }  = req.body;
     try {
         const ticket = await client.verifyIdToken({
             idToken: token,
-            audience: process.env.CLIENT_ID,
+            audience: process.env.GOOGLE_CLIENT_ID,
         });
-        const { sub: googleId, email, name } = ticket.getPayload();
+        const { sub, email, name, picture } = ticket.getPayload();
 
-        let user = await User.findOne({ googleId });
+        let user = await User.findOne({ googleId: sub });
+
         if (!user) {
-            user = new User({
-                email,
-                googleId,
-                name
-            });
-            await user.save();
-        } else {
-            // Optionally update the user record if needed
-            user.email = email;
-            user.name = name;
-            await user.save();
+            user = await User.create({ email, password: null, googleId: sub });
+            // handle the null password or set a random one
         }
 
-        const userToken = createToken(user._id);
-        res.status(200).json({ user, token: userToken });
+        // Continue with creating a token for the user, etc.
+        res.status(200).json({ user, token: createToken(user._id) });
+
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({error: error.message});
     }
 };
 
-
-// New function to save/update Google user
-const saveGoogleUser = async (req, res) => {
-    const { googleId, email, token } = req.body;
-    try {
-        let user = await User.findOne({ googleId });
-        if (!user) {
-            user = new User({ googleId, email });
-            await user.save();
-        }
-        res.status(200).json({ message: "User saved/updated successfully", user });
-    } catch (error) {
-        console.error("Database operation failed", error);
-        res.status(500).json({ error: "Failed to save/update user", details: error.message });
-    }
-};
-
-
-
-module.exports = { signupUser, loginUser, googleLogin, saveGoogleUser };
+module.exports = { signupUser, loginUser, googleLogin };
