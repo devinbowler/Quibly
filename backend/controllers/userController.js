@@ -54,4 +54,33 @@ const googleLogin = async (req, res) => {
     }
 };
 
-module.exports = { signupUser, loginUser, googleLogin };
+const googleSignup = async (req, res) => {
+    const { token }  = req.body;
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const { sub, email, name, picture } = ticket.getPayload();
+
+        let user = await User.findOne({ googleId: sub });
+
+        if (!user) {
+            // Your signup-specific logic here, for example:
+            // - Check if the email is already associated with a non-Google account
+            // - Send a welcome email to the user
+            // - Create the user with additional signup information if needed
+            user = await User.create({ email, googleId: sub, /* other fields */ });
+            // Proceed to create a token and send back the response
+        } else {
+            // If the user already exists, you might want to return an error or log them in
+            throw new Error('User already exists with this Google ID');
+        }
+
+        res.status(200).json({ user, token: createToken(user._id) });
+    } catch (error) {
+        res.status(400).json({error: error.message});
+    }
+};
+
+module.exports = { signupUser, loginUser, googleLogin, googleSignup };
