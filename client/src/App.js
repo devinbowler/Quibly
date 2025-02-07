@@ -12,6 +12,8 @@ import AuthLogin from "./auth/login";
 import AuthRegister from "./auth/register";
 import PublicLayout from "./PublicLayout";
 import Tasks from "./pages/task";
+import PrivacyPolicy from './auth/privacypolicy';
+import TermsandConditions from './auth/termsandconditions';
 
 function App() {
   const location = useLocation();
@@ -61,6 +63,8 @@ function App() {
           <Route path="/login" element={<AuthLogin />} />
           <Route path="/register" element={<AuthRegister />} />
           <Route path="/app/tasks" element={user ? <Tasks /> : <Navigate to="/login" />} />
+          <Route path="/privacypolicy" element={<PublicLayout><PrivacyPolicy /></PublicLayout>} /> 
+          <Route path="/termsandconditions" element={<PublicLayout><TermsandConditions /></PublicLayout>} /> 
         </Routes>
       </div>
     </div>

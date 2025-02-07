@@ -1,0 +1,54 @@
+/* PrivacyPolicy.css */
+.termsandconditions {
+    padding: 50px 0;  /* Top and bottom padding */
+    width: 80%;       /* Control width to prevent stretching on larger screens */
+    max-width: 960px; /* Maximum width */
+    margin: 0 auto;   /* Centering the container */
+  }
+  
+  /* Styling the headings */
+  .termsandconditions h1,
+  .termsandconditions h2 {
+    color: #dddddd; /* Dark grey color for headings */
+  }
+  
+  /* Styling the paragraphs and list items */
+  .termsandconditions p,
+  .termsandconditions li {
+    color: #a8a8a8; /* Lighter text color for readability */
+    line-height: 1.6; /* Increased line-height for better readability */
+  }
+  
+  /* Styling links for better visibility */
+  .termsandconditions a {
+    color: #0066cc; /* Blue color for links */
+    text-decoration: none; /* No underline */
+  }
+  
+  .termsandconditions a:hover,
+  .termsandconditions a:focus {
+    text-decoration: underline; /* Underline on hover/focus for better accessibility */
+  }
+
+  .termsandconditions h3 {
+    color: white;
+  }
+
+  .back-button {
+    margin-bottom: 20px;  /* Space below the button */
+    cursor: pointer;  /* Makes the element clickable */
+    display: flex;  /* Aligns the icon and text in a row */
+    align-items: center;  /* Centers the items vertically */
+    gap: 15px;
+    font-size: 14px;  /* Font size for the text */
+    color: #bbbbbb;  /* Text color */
+  }
+  
+  .back-icon {
+    transition: transform 0.3s ease;  /* Smooth transformation for the icon */
+  }
+  
+  .back-button:hover .back-icon {
+    transform: translateX(-3px);  /* Moves the icon 5 pixels to the left on hover */
+  }
+  

@@ -1,6 +1,8 @@
 import React from 'react';
 import './home.css';
 import logo from '../images/Quantumix-B6.png'; // Adjust the path as necessary
+import privacypolicy from './privacypolicy.js';
+import { Link } from 'react-router-dom';
 
 function Home() {
   return (
@@ -24,7 +26,7 @@ function Home() {
         <div className="cs-container">
           <div className="cs-logo-group">
             <a aria-label="go back to home" className="cs-logo" href="">
-              <img className="cs-logo-img" aria-hidden="true" loading="lazy" decoding="async" src={logo} alt="logo" width="240" height="32" />
+              <img className="cs-logo-img" aria-hidden="true" loading="lazy" decoding="async" src={logo} alt="logo" width="140" height="140" />
             </a>
           </div>
           <ul className="cs-nav">
@@ -32,10 +34,10 @@ function Home() {
               <a className="cs-nav-link" href="mailto:quiblycontact@gmail.com">quiblycontact@gmail.com</a>
             </li>
             <li className="cs-nav-li">
-              <a className="cs-nav-link" href="/privacy">Privacy Policy</a>
+              <Link className="cs-nav-link" to="/privacypolicy">Privacy Policy</Link>
             </li>
             <li className="cs-nav-li">
-              <a className="cs-nav-link" href="/terms">Terms and Conditions</a>
+              <Link className="cs-nav-link" to="/termsandconditions">Terms and Conditions</Link>
             </li>
           </ul>
         </div>

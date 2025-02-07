@@ -132,7 +132,6 @@
   }
 
   .support-logo {
-    height: 50px;
     display: block;
     margin: 0 auto 1rem;
   }
@@ -150,7 +149,8 @@
   }
 
   .cs-logo-group {
-    margin-bottom: 1rem;
+    margin-top: 50px;
+    margin-bottom: .1rem;
   }
 
   .cs-nav {
@@ -171,8 +171,6 @@
 
   .cs-logo-img {
     position: relative;
-    height: 10%;
-    margin-bottom: -85px;
   }
 }
 
