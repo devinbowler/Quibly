@@ -3,7 +3,6 @@ import './login.css';
 import { useLogin } from '../hooks/useLogin';
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { GoogleLogin } from 'react-google-login';
 import QuantumixLogo from '../images/Quantumix-B6.png';
 
 const Login = () => {

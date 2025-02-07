@@ -4,7 +4,6 @@ import './register.css';
 import { useSignup } from "../hooks/useSignup"
 import { useAuthContext } from "../hooks/useAuthContext";  // Adjust the path as needed
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from 'react-google-login';
 import QuantumixLogo from '../images/Quantumix-B6.png'; // Adjust the path as necessary
 
 const Register = () => {
