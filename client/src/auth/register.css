@@ -52,32 +52,6 @@
     background-color: #495BFA;
   }
   
-  .login-with-google {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    background-color: #fff; /* White background */
-    color: #495BFA; /* Text color */
-    font-weight: bold;
-    padding: 1rem;
-    border: 2px solid #495BFA; /* Blue border */
-    border-radius: 25px; /* Rounded corners */
-    cursor: pointer;
-    text-decoration: none;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for depth */
-  }
-  
-  .login-with-google:hover {
-    background-color: #f3f3f3; /* Slightly darker white on hover */
-    border-color: #3a4ae2; /* Darker border on hover */
-  }
-  
-  .login-with-google:focus {
-    outline: none; /* Removes the default focus outline */
-    box-shadow: 0 0 0 3px rgba(73, 91, 250, 0.5); /* Optional: Adds a focus ring for accessibility */
-  }
-  
   .login-text {
     color: grey;
     text-align: center;

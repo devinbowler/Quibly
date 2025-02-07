@@ -10,7 +10,7 @@ const Register = () => {
   const { dispatch } = useAuthContext();  // This extracts `dispatch` from your auth context
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { signup, signupWithGoogle, error, setError, isLoading } = useSignup();
+  const { signup, error, setError, isLoading } = useSignup();
   const navigate = useNavigate();
   const clientId = "29168999303-vmtaaefror3d4938htsitj3cufrstenm.apps.googleusercontent.com";
 
