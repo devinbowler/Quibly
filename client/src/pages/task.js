@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import "./task.css";
-import '@fortawesome/fontawesome-free/css/all.min.css';
 import {
   fetchAllItems,
   createTask,
