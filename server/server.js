@@ -27,12 +27,14 @@ app.use(cors({
 
 // Explicitly handle all OPTIONS requests
 app.options('*', (req, res) => {
+    console.log('Received OPTIONS request:', req.path);
     res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.sendStatus(200);
   });
+  
   
 
 // Middleware
