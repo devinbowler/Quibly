@@ -12,7 +12,6 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const { signup, error, setError, isLoading } = useSignup();
   const navigate = useNavigate();
-  const clientId = "29168999303-vmtaaefror3d4938htsitj3cufrstenm.apps.googleusercontent.com";
 
   const handleSubmit = async (e) => {
     e.preventDefault();

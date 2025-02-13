@@ -25,11 +25,15 @@ app.use(cors({
     credentials: true,   // Allow credentials
 }));
 
-// Handle preflight OPTIONS requests explicitly
-app.options('*', cors({
-    origin: true,
-    credentials: true,
-}));
+// Explicitly handle all OPTIONS requests
+app.options('*', (req, res) => {
+    res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.sendStatus(200);
+  });
+  
 
 // Middleware
 app.use(express.json());
