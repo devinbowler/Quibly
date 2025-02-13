@@ -10,30 +10,26 @@ const userRoutes = require('./routes/user');
 // Express app
 const app = express();
 
-const allowedOrigins = [
+/*const allowedOrigins = [
   'https://quibly.net', // No trailing slash
+  'https://quibly.net/register',
+  'https://quibly.net/login',
   'http://localhost:3000',
   // other domains...
-];
-
+];*/
 
 // CORS configuration
-// Use CORS with a dynamic origin check when credentials are needed
+// CORS configuration: allow all origins by reflecting the request's origin
 app.use(cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like Postman or curl)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, origin);
-      } else {
-        return callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true,
-  }));
-  
+    origin: true,        // Reflect the request's origin
+    credentials: true,   // Allow credentials
+}));
+
 // Handle preflight OPTIONS requests explicitly
-app.options('*', cors());
+app.options('*', cors({
+    origin: true,
+    credentials: true,
+}));
 
 // Middleware
 app.use(express.json());
