@@ -8,6 +8,12 @@ body {
   color: #333;
 }
 
+.unselectable {
+    user-select: none;             /* Standard syntax */
+    -webkit-user-select: none;     /* Chrome, Safari */
+    -moz-user-select: none;        /* Firefox */
+    -ms-user-select: none;         /* Internet Explorer/Edge */
+}
 
 .app-container {
     display: flex;
