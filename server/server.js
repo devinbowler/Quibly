@@ -18,9 +18,10 @@ const allowedOrigins = [
 
 
 // CORS configuration
+// Use CORS with a dynamic origin check when credentials are needed
 app.use(cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl requests)
+      // Allow requests with no origin (like Postman or curl)
       if (!origin) return callback(null, true);
       if (allowedOrigins.includes(origin)) {
         return callback(null, origin);
@@ -30,6 +31,9 @@ app.use(cors({
     },
     credentials: true,
   }));
+  
+// Handle preflight OPTIONS requests explicitly
+app.options('*', cors());
 
 // Middleware
 app.use(express.json());
