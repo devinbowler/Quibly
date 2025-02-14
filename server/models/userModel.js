@@ -6,9 +6,8 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema({
     email: { type: String, required: true, unique: true },
-    password: { type: String },
-    googleId: { type: String, unique: true, sparse: true },  // Adding googleId
-    token: { type: String }  // Optional: Store Google access token if needed
+    password: { type: String, required: true },
+    verified: { type: Boolean }
 });
 
 // static signup method

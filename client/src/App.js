@@ -9,6 +9,7 @@ import QuantumixLogoLight from './images/Quantumix-B6.png';
 
 import AuthHome from "./auth/home";
 import AuthLogin from "./auth/login";
+import AuthVerify from "./auth/Verify";
 import AuthRegister from "./auth/register";
 import PublicLayout from "./PublicLayout";
 import Tasks from "./pages/task";
@@ -62,6 +63,7 @@ function App() {
           <Route path="/" element={<PublicLayout><AuthHome /></PublicLayout>} exact />
           <Route path="/login" element={<AuthLogin />} />
           <Route path="/register" element={<AuthRegister />} />
+          <Route path="/verify" element={<AuthVerify />} />
           <Route path="/app/tasks" element={user ? <Tasks /> : <Navigate to="/login" />} />
           <Route path="/privacypolicy" element={<PublicLayout><PrivacyPolicy /></PublicLayout>} /> 
           <Route path="/termsandconditions" element={<PublicLayout><TermsandConditions /></PublicLayout>} /> 
