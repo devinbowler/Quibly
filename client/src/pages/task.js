@@ -5,21 +5,22 @@ import {
   createTask,
   createNote,
   createFolder,
+  updateFolder,
   saveNote,
   deleteItem,
   fetchNoteDetails,
-  updateTask // Ensure this function is defined in your api.js
+  updateTask
 } from '../api/api';
 import { debounce } from 'lodash';
 import { useLogout } from '../hooks/useLogout';
 import { useNavigate } from 'react-router-dom';
+import { useUpdate } from '../hooks/useUpdate';
 
 function Task() {
   // State for settings modal
   const [showSettings, setShowSettings] = useState(false);
-
-  // Get logout function and navigate hook so we can log out from here too.
   const { logout } = useLogout();
+  const { update, error } = useUpdate();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -31,9 +32,10 @@ function Task() {
   const [greeting, setGreeting] = useState('');
   const [currentDate, setCurrentDate] = useState('');
   const [viewType, setViewType] = useState('task'); // 'task', 'note', 'code', 'grid', 'taskDetails'
+  const [noteBack, setNoteBack] = useState(''); 
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPath, setCurrentPath] = useState('system:/user/');
-  const [selectedIndex, setSelectedIndex] = useState(null); // Changed from 0 to null for better handling
+  const [selectedIndex, setSelectedIndex] = useState(null);
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [isEditingTask, setIsEditingTask] = useState(false);
   const [newTask, setNewTask] = useState({ name: '', dueDate: '', details: '' });
@@ -41,35 +43,37 @@ function Task() {
   const [files, setFiles] = useState([]);
   const [filteredFiles, setFilteredFiles] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [selectedNote, setSelectedNote] = useState({ _id: '', title: '', body: '' }); // Added _id for notes
-  const [isSaving, setIsSaving] = useState(false); // For auto-saving
+  const [selectedNote, setSelectedNote] = useState({ _id: '', title: '', body: '' });
+  const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null); // For displaying errors
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  // Fetch all items (tasks, folders, notes) from the backend
+  // New state for folder modal (used for both adding and editing)
+  const [showFolderModal, setShowFolderModal] = useState(false);
+  const [folderModalMode, setFolderModalMode] = useState(""); // "add" or "edit"
+  const [folderName, setFolderName] = useState("");
+
+  // Function to load items from the backend
+  const loadItems = async () => {
+    try {
+      const data = await fetchAllItems();
+      setTasks(data.tasks);
+      const notesWithType = data.notes.map(note => ({
+        ...note,
+        type: 'file'
+      }));
+      const combinedFiles = [...data.folders, ...notesWithType];
+      setFiles(combinedFiles);
+      setFilteredFiles(combinedFiles);
+    } catch (error) {
+      console.error('Error loading items:', error);
+      setErrorMessage('Failed to load items.');
+    }
+  };
+
   useEffect(() => {
-    const loadItems = async () => {
-      console.log('Fetching all items...');
-      try {
-        const data = await fetchAllItems();
-        setTasks(data.tasks);
-        
-        // Add a type property to notes
-        const notesWithType = data.notes.map(note => ({
-          ...note,
-          type: 'file'  // This distinguishes notes from folders
-        }));
-        
-        // Combine folders and notes
-        const combinedFiles = [...data.folders, ...notesWithType];
-        setFiles(combinedFiles);
-        setFilteredFiles(combinedFiles);
-        console.log('Items loaded:', data);
-      } catch (error) {
-        console.error('Error loading items:', error);
-        setErrorMessage('Failed to load items.');
-      }
-    };
     loadItems();
   }, []);
 
@@ -81,6 +85,83 @@ function Task() {
     setCurrentDate(`${now.toLocaleString('default', { month: 'long' })} ${now.getDate()}, ${now.getFullYear()}`);
   }, []);
 
+  // Determine the current folder object (if not at root)
+  let currentFolderObj = null;
+  if (currentPath !== "system:/user/") {
+    const segments = currentPath.split('/').filter(s => s !== '');
+    const currentFolderName = segments[segments.length - 1];
+    currentFolderObj = files.find(file => file.type === 'folder' && file.name === currentFolderName);
+  }
+
+  // --- Folder Modal Functions ---
+  const openFolderModal = (mode) => {
+    setFolderModalMode(mode);
+    if (mode === "edit" && currentFolderObj) {
+      setFolderName(currentFolderObj.name);
+    } else {
+      setFolderName("");
+    }
+    setShowFolderModal(true);
+  };
+
+  const closeFolderModal = () => {
+    setShowFolderModal(false);
+    setFolderModalMode("");
+    setFolderName("");
+  };
+
+  const handleSaveFolder = async () => {
+    if (folderModalMode === "add") {
+      // Create a new folder with the entered name
+      try {
+        const newFolder = await createFolder({ name: folderName, parentFolder: currentPath });
+        setFiles([...files, newFolder]);
+        setFilteredFiles([...filteredFiles, newFolder]);
+        closeFolderModal();
+      } catch (error) {
+        alert("Failed to create folder.");
+      }
+    } else if (folderModalMode === "edit") {
+      // Update the current folder's name
+      try {
+        const updatedFolder = await updateFolder(currentFolderObj._id, { name: folderName });
+        // Update currentPath: replace the old folder name with the new name
+        const segments = currentPath.split('/');
+        segments[segments.length - 1] = folderName;
+        const newPath = segments.join('/');
+        setCurrentPath(newPath);
+        // Refresh items list
+        await loadItems();
+        closeFolderModal();
+      } catch (error) {
+        alert("Failed to update folder.");
+      }
+    }
+  };
+  // --- End Folder Modal Functions ---
+
+  // Delete folder (and all nested content)
+  const handleDeleteFolder = async () => {
+    if (!currentFolderObj) {
+      alert("No folder to delete.");
+      return;
+    }
+    if (!window.confirm("Are you sure you want to delete this folder and all its contents?")) {
+      return;
+    }
+    try {
+      await deleteItem(currentFolderObj._id, 'folder');
+      let newPath = currentPath.replace(/\/[^/]+\/?$/, '');
+      if (newPath === '' || newPath === 'system:/user') {
+        newPath = 'system:/user/';
+      }
+      setCurrentPath(newPath);
+      await loadItems();
+    } catch (error) {
+      alert("Failed to delete folder.");
+    }
+  };
+
   const debouncedSaveNote = useCallback(
     debounce(async (note) => {
       if (!note._id) return;
@@ -91,10 +172,7 @@ function Task() {
           title: note.title,
           body: note.body,
         });
-        console.log("Note auto-saved!");
         setErrorMessage(null);
-        
-        // Update the files list with the latest note data
         setFiles(prevFiles =>
           prevFiles.map(file =>
             file._id === note._id ? { ...file, title: note.title, body: note.body } : file
@@ -105,8 +183,6 @@ function Task() {
             file._id === note._id ? { ...file, title: note.title, body: note.body } : file
           )
         );
-        
-        // Display "Saved." for a short period after saving
         setTimeout(() => {
           setSaveMessage("Saved.");
         }, 1000);
@@ -121,30 +197,23 @@ function Task() {
     []
   );
 
-  // Handle changes in note fields with auto-save
   const handleNoteChange = (field, value) => {
     const updatedNote = { ...selectedNote, [field]: value };
     setSelectedNote(updatedNote);
     debouncedSaveNote(updatedNote);
   };
 
-  // Navigate into a folder
   const navigateIntoFolder = (folderName) => {
-    console.log('Navigating into folder:', folderName);
     setCurrentPath(`${currentPath}${currentPath.endsWith('/') ? '' : '/'}${folderName}`);
     setSelectedIndex(null);
   };
 
-  // Handle clicking on a file (folder or note)
   const handleFileClick = async (file) => {
     if (file.type === 'folder') {
-      console.log('Folder clicked:', file.name);
       navigateIntoFolder(file.name);
-    } else if (file.type === 'file') { // For notes
-      console.log('File clicked:', file.title);
+    } else if (file.type === 'file') {
       try {
         const note = await fetchNoteDetails(file._id);
-        console.log('Note loaded:', note);
         setSelectedNote(note);
         setViewType('note');
         setErrorMessage(null);
@@ -155,32 +224,17 @@ function Task() {
     }
   };
 
-  // Handle creating a new folder or note
   const handleCreate = async (type) => {
-    console.log(`Creating a new ${type}...`);
     if (type === 'folder') {
-      const newItem = { name: "New Folder", parentFolder: currentPath };
-      try {
-        const createdFolder = await createFolder(newItem);
-        console.log('Folder created:', createdFolder);
-        setFiles([...files, createdFolder]);
-        setFilteredFiles([...filteredFiles, createdFolder]);
-      } catch (error) {
-        console.error(`Error creating folder:`, error);
-        setErrorMessage(`Failed to create ${type}.`);
-      }
-    } else { // for note creation (type === 'file')
+      // Instead of auto-creating a folder with default name, prompt for a name
+      openFolderModal("add");
+    } else {
       const newItem = { title: "New Note", body: "", parentFolder: currentPath, type: "file" };
       try {
         const createdNote = await createNote(newItem);
-        // Patch the returned note with a type property
         createdNote.type = "file";
-        console.log('Note created:', createdNote);
-        
-        // Add the note to the files list so it shows in the UI
         setFiles(prevFiles => [...prevFiles, createdNote]);
         setFilteredFiles(prevFiles => [...prevFiles, createdNote]);
-        
         setSelectedNote(createdNote);
         setViewType('note');
         setErrorMessage(null);
@@ -191,7 +245,6 @@ function Task() {
     }
   };
 
-  // Handle creating a new task
   const handleCreateTask = async () => {
     const newTaskData = {
       title: newTask.name,
@@ -199,12 +252,8 @@ function Task() {
       dueDate: newTask.dueDate,
       parentFolder: currentPath,
     };
-    
-    console.log('Creating task with data:', newTaskData);
-    
     try {
       const createdTask = await createTask(newTaskData);
-      console.log('Task created:', createdTask);
       setTasks([...tasks, createdTask]);
       setIsAddingTask(false);
       setIsEditingTask(false);
@@ -216,17 +265,14 @@ function Task() {
     }
   };
 
-  // Handle updating a task
   const handleUpdateTask = async () => {
     if (!selectedTask) return;
-    console.log('Updating task:', selectedTask);
     try {
       const updatedTask = await updateTask(selectedTask._id, {
         title: selectedTask.title,
         dueDate: selectedTask.dueDate,
         details: selectedTask.details,
       });
-      console.log('Task updated:', updatedTask);
       setTasks(tasks.map(task => task._id === updatedTask._id ? updatedTask : task));
       setSelectedTask(null);
       setViewType('task');
@@ -237,14 +283,11 @@ function Task() {
     }
   };
 
-  // Handle deleting a task or note
   const handleDelete = async () => {
-    console.log('Deleting item...');
     const itemToDelete = viewType === 'taskDetails' ? selectedTask : selectedNote;
     const itemType = viewType === 'taskDetails' ? 'task' : 'note';
     try {
       await deleteItem(itemToDelete._id, itemType);
-      console.log('Item deleted:', itemToDelete);
       if (viewType === 'taskDetails') {
         setTasks(tasks.filter(task => task._id !== selectedTask._id));
         setSelectedTask(null);
@@ -262,15 +305,11 @@ function Task() {
     }
   };
 
-  // Open modal to add a new task
   const openAddTaskModal = () => {
-    console.log('Opening task modal...');
     setIsAddingTask(true);
   };
 
-  // Open modal to view/edit task details
   const openTaskDetailsModal = (task) => {
-    console.log('Opening task details modal for task:', task);
     setSelectedTask(task);
     setViewType('taskDetails');
   };
@@ -279,19 +318,16 @@ function Task() {
     setIsEditingTask(true);
   };
 
-  // Handle textarea formatting for bullet points
   const handleTextareaFormatting = (e) => {
     const value = e.target.value;
     const lastTwoChars = value.slice(-2);
     if (lastTwoChars === "* ") {
-      console.log('Formatting bullet point...');
       e.target.value = value.slice(0, -2) + "• ";
     }
   };
+  
 
-  // Handle navigating back in the folder path
   const handlePathBackspace = () => {
-    console.log('Backspacing through path:', currentPath);
     let newPath = currentPath.replace(/\/[^/]+\/?$/, '');
     if (newPath === 'system:/user' || newPath === 'system:/user/') {
       setCurrentPath('system:/user/');
@@ -300,47 +336,57 @@ function Task() {
     }
   };
 
-  // Handle keydown events for shortcuts and navigation
   const handleKeyDown = (e) => {
-    const searchInput = document.getElementById('search-input');
-    if (e.key === 'Escape' && (isAddingTask || selectedTask)) {
-      setIsAddingTask(false);
-      setSelectedTask(null);
-      setViewType('task');
-      setErrorMessage(null);
-    } else if (e.key === 'Escape' && searchInput === document.activeElement) {
-      e.preventDefault();
-      searchInput.blur();
+    // If a modal (e.g. folder edit) is open, ignore global key events.
+    if (showFolderModal) return;
+  
+    const activeEl = document.activeElement;
+    const tag = activeEl ? activeEl.tagName.toUpperCase() : '';
+  
+    // Handle Escape key
+    if (e.key === 'Escape') {
+      if (isAddingTask || selectedTask) {
+        setIsAddingTask(false);
+        setSelectedTask(null);
+        setViewType('task');
+        setErrorMessage(null);
+        return;
+      } else if (activeEl && activeEl.id === 'search-input') {
+        e.preventDefault();
+        activeEl.blur();
+        return;
+      }
     }
-    if (e.key === 'Backspace' && !searchQuery && currentPath !== 'system:/user/') {
+  
+    // Handle Backspace key
+    if (e.key === 'Backspace') {
+      // If the focused element is the search input...
+      if (activeEl && activeEl.id === 'search-input') {
+        // If the search input is empty, allow global backspace behavior
+        if (activeEl.value === '' && currentPath !== 'system:/user/') {
+          e.preventDefault();
+          handlePathBackspace();
+        }
+        // Otherwise (search input has text) let it work normally.
+        return;
+      }
+      // If the focused element is any other input or textarea, allow normal editing.
+      if (tag === 'INPUT' || tag === 'TEXTAREA') {
+        return;
+      }
+      // Otherwise, prevent backspace default.
       e.preventDefault();
-      handlePathBackspace();
+      if (!searchQuery && currentPath !== 'system:/user/') {
+        handlePathBackspace();
+      }
     }
   };
-
-  const handleSaveNote = async () => {
-    if (!selectedNote?._id) {
-      alert("Note has not been saved yet.");
-      return;
-    }
-    try {
-      const savedNote = await saveNote(selectedNote._id, {
-        title: selectedNote.title,
-        body: selectedNote.body,
-      });
-      console.log("Note saved manually:", savedNote);
-      setErrorMessage(null);
-    } catch (error) {
-      console.error("Error saving note:", error);
-      setErrorMessage("Failed to save note.");
-    }
-  };
-
-  // Attach keydown event listener
+  
+  
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isAddingTask, selectedTask, currentPath, searchQuery]);
+  }, [isAddingTask, selectedTask, currentPath, searchQuery, showFolderModal]);  
 
   return (
     <div className="app-container">
@@ -350,49 +396,87 @@ function Task() {
           <span className="greeting">{greeting}</span>
           <span className="statistics-date">{currentDate}</span>
         </div>
-        {/* Clicking the gear now toggles the settings modal */}
-        <span className="settings-gear" onClick={() => setShowSettings(true)}>
-          ⚙️
-        </span>
+        <div className="top-bar-right">
+          {/* No folder buttons here */}
+          <span className="settings-gear" onClick={() => setShowSettings(true)}>
+            <i className="fa fa-gear"></i>
+          </span>
+        </div>
       </div>
-
+  
+      {/* Folder Modal */}
+      {showFolderModal && (
+        <div className="modal-overlay" onClick={closeFolderModal}>
+          <div className="modal folder" onClick={(e) => e.stopPropagation()}>
+            <h3>{folderModalMode === "add" ? "Add Folder" : "Edit Folder"}</h3>
+            <input
+              type="text"
+              value={folderName}
+              onChange={(e) => setFolderName(e.target.value)}
+              placeholder="Enter folder name"
+              required
+            />
+            <div className="modal-buttons">
+              <button onClick={handleSaveFolder}>Save</button>
+              <button onClick={closeFolderModal}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+  
       {/* Settings Modal */}
       {showSettings && (
         <div className="modal-overlay settings-modal-overlay" onClick={() => setShowSettings(false)}>
           <div className="modal settings-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="user-settings">
+              <form
+                className="update-form"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  update(email, password);
+                }}
+              >
+                <input
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email"
+                  required
+                />
+                <input
+                  type="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password"
+                  required
+                />
+                <button type="submit">Update</button>
+                {error && <div className="error">{error}</div>}
+              </form>
+            </div>
             <button className="logout-button" onClick={handleLogout}>
               Logout
+            </button>
+            <button className="deleteAcc-button" onClick={() => alert("Account Delete not Implemented Yet.")}>
+              Delete Account
             </button>
           </div>
         </div>
       )}
-
+  
       {/* Filter Buttons */}
       <div className="filter-buttons">
         <div className="left-buttons">
           {viewType !== 'note' && (
-            <>
-              <button
-                onClick={() => setViewType('task')}
-                className={viewType === 'task' ? 'active' : ''}
-              >
-                <i className="fas fa-tasks"></i>
-              </button>
-            </>
+            <button onClick={() => setViewType('task')} className={viewType === 'task' ? 'active' : ''}>
+              <i className="fas fa-tasks"></i>
+            </button>
           )}
           {viewType !== 'note' && (
             <>
-              <button
-                onClick={() => setViewType('code')}
-                className={viewType === 'code' ? 'active' : ''}
-              >
-                <i className="fas fa-code"></i>
-              </button>
-              <button
-                onClick={() => setViewType('grid')}
-                className={viewType === 'grid' ? 'active' : ''}
-              >
+               <button onClick={() => { setViewType('grid'); setNoteBack('grid'); }} className={viewType === 'grid' ? 'active' : ''}>
                 <i className="fas fa-th-large"></i>
+              </button>
+              <button onClick={() => { setViewType('code'); setNoteBack('code'); }} className={viewType === 'code' ? 'active' : ''}>
+                <i className="fas fa-code"></i>
               </button>
             </>
           )}
@@ -406,11 +490,21 @@ function Task() {
             <>
               <button onClick={() => handleCreate('folder')}>Add Folder</button>
               <button onClick={() => handleCreate('file')}>Add Note</button>
+              {currentPath !== "system:/user/" && (
+                <>
+                  <button className="edit-folder-button" onClick={() => openFolderModal("edit")}>
+                    Edit Folder
+                  </button>
+                  <button className="delete-folder-button" onClick={handleDeleteFolder}>
+                    Delete Folder
+                  </button>
+                </>
+              )}
             </>
           )}
         </div>
       </div>
-
+  
       {/* Search Bar */}
       {viewType !== 'task' && viewType !== 'note' && viewType !== 'taskDetails' && (
         <div className="search-bar">
@@ -426,10 +520,10 @@ function Task() {
           />
         </div>
       )}
-
+  
       {/* Error Message */}
       {errorMessage && <div className="error-message">{errorMessage}</div>}
-
+  
       {/* Task View */}
       {viewType === 'task' && (
         <div className="file-system-viewer">
@@ -456,7 +550,7 @@ function Task() {
           ))}
         </div>
       )}
-
+  
       {/* Code View and Grid View */}
       {(viewType === 'code' || viewType === 'grid') && (
         <div className={viewType === 'code' ? "file-system-viewer" : "grid-view"}>
@@ -465,7 +559,9 @@ function Task() {
             .map((file) => (
               <div
                 key={file._id}
-                className={`${viewType === 'code' ? 'file-item' : 'grid-item'} ${file.type} ${selectedIndex === file._id ? 'selected' : ''}`}
+                className={`${viewType === 'code' ? 'file-item' : 'grid-item'} ${file.type} ${
+                  selectedIndex === file._id ? 'selected' : ''
+                }`}
                 onClick={() => handleFileClick(file)}
               >
                 {viewType === 'code' ? (
@@ -495,12 +591,12 @@ function Task() {
             ))}
         </div>
       )}
-
-      {/* Note View */}
+  
+      {/* Note View (Editable with Auto-save and Delete) */}
       {viewType === 'note' && selectedNote && (
         <div className="note-view">
           <div className="note-view-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <button className="back-button" onClick={() => setViewType('code')}>
+            <button className="back-button" onClick={() => setViewType(noteBack)}>
               ← Back
             </button>
             <div className="note-status-controls" style={{ display: 'flex', alignItems: 'center' }}>
@@ -525,7 +621,7 @@ function Task() {
           />
         </div>
       )}
-
+  
       {/* Modal for Adding Task */}
       {isAddingTask && (
         <div className="modal-overlay">
@@ -550,59 +646,35 @@ function Task() {
               value={newTask.details}
               onChange={(e) => setNewTask({ ...newTask, details: e.target.value })}
             />
-            <button className="create-button" onClick={handleCreateTask}>
-              Create Task
-            </button>
-            <button className="close-button" onClick={() => setIsAddingTask(false)}>
-              Cancel
-            </button>
+            <button className="create-button" onClick={handleCreateTask}>Create Task</button>
+            <button className="close-button" onClick={() => setIsAddingTask(false)}>Cancel</button>
           </div>
         </div>
       )}
-
+  
       {/* Viewing a Task */}
-      {selectedTask && (
+      {selectedTask && !isEditingTask && (
         <div className="modal-overlay">
           <div className="modal-view">
-            <textarea readOnly
-              className="modal-title unselectable"
-              type="text"
-              value={selectedTask.title}
-            />
-            <textarea readOnly
-              className="modal-date unselectable"
-              value={
-                selectedTask.dueDate
-                  ? new Date(selectedTask.dueDate).toISOString().slice(0, 10)
-                  : ''
-              }
-            />
-            <textarea readOnly
-              className="modal-details unselectable"
-              value={selectedTask.details}
-              onChange={(e) =>
-                setSelectedTask({ ...selectedTask, details: e.target.value })
-              }
-              required
-            />
+            <p className="modal-title unselectable">{selectedTask.title}</p>
+            <p className="modal-date unselectable">
+              {selectedTask.dueDate ? new Date(selectedTask.dueDate).toLocaleDateString() : ''}
+            </p>
+            <p className="modal-details unselectable">{selectedTask.details}</p>
             <div className="modal-buttons">
-              <button className="update-button" onClick={handleEditTask}>
-                Edit
-              </button>
-              <button
-                className="close-button"
-                onClick={() => {
-                  setSelectedTask(null);
-                  setViewType('task');
-                }}
-              >
+              <button className="update-button" onClick={handleEditTask}>Edit</button>
+              <button className="close-button" onClick={() => { setSelectedTask(null); setViewType('task'); }}>
                 Close
+              </button>
+              <button className="deleteTask-button" onClick={() => { handleDelete(); setViewType('task'); }}>
+                Delete
               </button>
             </div>
           </div>
         </div>
       )}
 
+  
       {/* Editing a Task */}
       {selectedTask && isEditingTask && (
         <div className="modal-overlay">
@@ -611,39 +683,30 @@ function Task() {
               className="modal-input"
               type="text"
               value={selectedTask.title}
-              onChange={(e) =>
-                setSelectedTask({ ...selectedTask, title: e.target.value })
-              }
+              onChange={(e) => setSelectedTask({ ...selectedTask, title: e.target.value })}
               required
             />
             <input
               className="modal-input"
               type="date"
-              value={
-                selectedTask.dueDate
-                  ? new Date(selectedTask.dueDate).toISOString().slice(0, 10)
-                  : ''
-              }
-              onChange={(e) =>
-                setSelectedTask({ ...selectedTask, dueDate: e.target.value })
-              }
+              value={selectedTask.dueDate ? new Date(selectedTask.dueDate).toLocaleDateString() : ''}
+              onChange={(e) => setSelectedTask({ ...selectedTask, dueDate: e.target.value })}
               required
             />
             <textarea
               className="modal-textarea"
               value={selectedTask.details}
-              onChange={(e) =>
-                setSelectedTask({ ...selectedTask, details: e.target.value })
-              }
+              onChange={(e) => setSelectedTask({ ...selectedTask, details: e.target.value })}
               required
             />
             <div className="modal-buttons">
-              <button 
-                className="update-button" 
+              <button
+                className="update-button"
                 onClick={() => {
                   handleUpdateTask();
                   setIsEditingTask(false);
-                }}>
+                }}
+              >
                 Update
               </button>
               <button
@@ -661,7 +724,7 @@ function Task() {
         </div>
       )}
     </div>
-  );
+  );  
 }
 
 export default Task;

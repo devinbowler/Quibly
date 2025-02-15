@@ -27,7 +27,7 @@ app.use(cors({
 
 // Explicitly handle all OPTIONS requests
 app.options('*', (req, res) => {
-    console.log('Received OPTIONS request:', req.path);
+    // console.log('Received OPTIONS request:', req.path);
     res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
     res.header("Access-Control-Allow-Credentials", "true");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS");
@@ -42,7 +42,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
     // console.log(`Incoming request: ${req.method} ${req.path}`);
-    console.log(`Incoming request: ${req.method} ${req.path}, Body:`, req.body);
+    // console.log(`Incoming request: ${req.method} ${req.path}, Body:`, req.body);
     next();
 });
 // Routes
@@ -53,9 +53,9 @@ app.use('/api/user', userRoutes);
 // Connect to DB and start server
 mongoose.connect(process.env.MONG_URI)
     .then(() => {
-        console.log('Connected to MongoDB');
+        // console.log('Connected to MongoDB');
         app.listen(process.env.PORT, () => {
-            console.log(`Server running on port ${process.env.PORT}`);
+            // console.log(`Server running on port ${process.env.PORT}`);
         });
     })
     .catch((error) => {

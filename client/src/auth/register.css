@@ -30,7 +30,7 @@
     color: white;
     background-color: #121111;
     padding: 1rem;
-    border: 1px solid #a19f9f;
+    border: 1px solid #3a3a3a;
     border-radius: 25px;
     outline: none;
     margin-bottom: 1rem;
@@ -38,7 +38,7 @@
   
   .register-form button {
     padding: 1rem;
-    background-color: #3a4ae2;
+    background-color: #221170;
     color: #fff;
     font-size: 13px;
     border: none;
@@ -49,7 +49,7 @@
   }
   
   .register-form button:hover {
-    background-color: #495BFA;
+    background-color: #331c99;
   }
   
   .login-text {
@@ -69,8 +69,8 @@
   }
 
   .error {
-    background-color: rgba(255, 0, 0, 0.582); /* Transparent red background */
-    border: red solid 2px;
+    background-color: rgba(156, 0, 0, 0.582); /* Transparent red background */
+    border: rgb(184, 0, 0) solid 2px;
     color: white;
     padding: 1rem;
     border-radius: 5px;

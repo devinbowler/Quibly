@@ -36,12 +36,12 @@ const createTask = async (req, res) => {
     const user_id = req.user._id;
 
     // Add logs to check the incoming data
-    console.log('Create Task Request Body:', req.body);
-    console.log('Authenticated User:', req.user);
+    // console.log('Create Task Request Body:', req.body);
+    // console.log('Authenticated User:', req.user);
 
     try {
         const task = await Task.create({ title, details, dueDate, user_id, parentFolder });
-        console.log('Task created in MongoDB:', task);  // Ensure task is created correctly
+        // console.log('Task created in MongoDB:', task);  // Ensure task is created correctly
         res.status(201).json(task);
     } catch (error) {
         console.error('Error creating task:', error.message);
@@ -146,8 +146,39 @@ const getNoteDetails = async (req, res) => {
     }
 };
 
-// Export the new controller function
-module.exports = {
+// Update a folder
+const updateFolder = async (req, res) => {
+    const { id } = req.params;
+    const { name: newName } = req.body;  // the new folder name
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ error: 'Invalid ID' });
+    }
+    try {
+      // Find the folder to update
+      const folder = await Folder.findById(id);
+      if (!folder) return res.status(404).json({ error: 'Folder not found' });
+  
+      // Compute the old full path and the new full path
+      // For example, if folder.parentFolder === "system:/user/" and folder.name is "OldFolder"
+      const oldFullPath = folder.parentFolder + folder.name;
+      const newFullPath = folder.parentFolder + newName;
+  
+      // Update the folder's name
+      folder.name = newName;
+      const updatedFolder = await folder.save();
+  
+      // Cascade update: update tasks, notes, and subfolders whose parentFolder equals the old full path
+      await Task.updateMany({ parentFolder: oldFullPath }, { parentFolder: newFullPath });
+      await Note.updateMany({ parentFolder: oldFullPath }, { parentFolder: newFullPath });
+      await Folder.updateMany({ parentFolder: oldFullPath }, { parentFolder: newFullPath });
+  
+      res.status(200).json(updatedFolder);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  };
+  
+  module.exports = {
     getAllItems,
     createFolder,
     createTask,
@@ -155,5 +186,6 @@ module.exports = {
     deleteItem,
     updateTask,
     updateNote,
-    getNoteDetails, // Export here
-};
+    getNoteDetails,
+    updateFolder,
+  };

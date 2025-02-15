@@ -1,13 +1,15 @@
+// routes/task.js
 const express = require('express');
 const {
-    getAllItems,
-    createFolder,
-    createTask,
-    createNote,
-    deleteItem,
-    updateTask,
-    updateNote,
-    getNoteDetails, // Import the new controller function
+  getAllItems,
+  createFolder,
+  createTask,
+  createNote,
+  deleteItem,
+  updateTask,
+  updateNote,
+  getNoteDetails,
+  updateFolder, // Import updateFolder
 } = require('../controllers/taskController');
 const requireAuth = require('../middleware/requireAuth');
 
@@ -17,7 +19,7 @@ router.use(requireAuth);
 // Get all items (tasks, notes, folders)
 router.get('/', getAllItems);
 
-// Add this route to fetch note details by ID
+// Fetch note details by ID
 router.get('/note/:id', getNoteDetails);
 
 // Create a folder, task, or note
@@ -25,11 +27,14 @@ router.post('/folder', createFolder);
 router.post('/task', createTask);
 router.post('/note', createNote);
 
-// Delete an item
-router.delete('/:id/:type', deleteItem);  // :type can be 'folder', 'task', or 'note'
+// Delete an item (folder, task, or note)
+router.delete('/:id/:type', deleteItem);
 
 // Update a task or note
 router.patch('/task/:id', updateTask);
 router.patch('/note/:id', updateNote);
+
+// Update a folder
+router.patch('/folder/:id', updateFolder);
 
 module.exports = router;

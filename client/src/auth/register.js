@@ -15,7 +15,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Submitting with Email:', email, 'Password:', password);
+    // console.log('Submitting with Email:', email, 'Password:', password);
     const response = await signup(email, password);
     // Check if the signup returned a PENDING status
     if (response && response.status === "PENDING") {

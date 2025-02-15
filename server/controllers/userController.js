@@ -1,4 +1,3 @@
-// controllers/userController.js
 const User = require('../models/userModel');
 const userOTPVerification = require('../models/userOTPVerification');
 const jwt = require('jsonwebtoken');
@@ -62,7 +61,7 @@ const signupUser = async (req, res) => {
     const savedOTPRecord = await newOTPVerification.save();
 
     // For testing purposes, log the OTP (remove before production)
-    console.log(`OTP for ${email}: ${otp}`);
+    // console.log(`OTP for ${email}: ${otp}`);
 
     // Send the OTP via email
     await sendOTPVerificationEmail({ email, otp });
@@ -74,7 +73,6 @@ const signupUser = async (req, res) => {
       data: { 
         userId: savedOTPRecord._id,
         email,
-        otp // Remove this in production!
       },
     });
   } catch (error) {
@@ -101,7 +99,7 @@ const sendOTPVerificationEmail = async ({ email, otp }) => {
 };
 
 // ========================
-// Login (unchanged)
+// Login
 // ========================
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -113,6 +111,30 @@ const loginUser = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+// ========================
+// Update
+// ========================
+const updateUser = async (req, res) => {
+    const { email, password } = req.body;
+    const userId = req.user._id; // assuming authentication middleware sets req.user
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Neither field may be empty' });
+    }
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { email, password: hashedPassword },
+        { new: true }
+      );
+      if (!updatedUser) throw new Error("User not found");
+      res.status(200).json({ email: updatedUser.email });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
 
 // ========================
 // Verify OTP and Create Permanent User
@@ -184,7 +206,7 @@ const resendOTP = async (req, res) => {
     await record.save();
 
     // For testing, log the new OTP (remove before production)
-    console.log(`Resent OTP for ${email}: ${otp}`);
+    // console.log(`Resent OTP for ${email}: ${otp}`);
 
     // Send the new OTP via email
     await sendOTPVerificationEmail({ email, otp });
@@ -202,5 +224,24 @@ const resendOTP = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
-module.exports = { signupUser, loginUser, verifyOTP, resendOTP };
+  
+  // Delete Account – deletes the authenticated user's account
+  const deleteAccount = async (req, res) => {
+    const userId = req.user._id; // assuming authentication middleware sets req.user
+    try {
+      const deletedUser = await User.findByIdAndDelete(userId);
+      if (!deletedUser) throw new Error("User not found");
+      res.status(200).json({ message: "Account deleted successfully" });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
+    }
+  };
+  
+  module.exports = {
+    signupUser,
+    loginUser,
+    verifyOTP,
+    resendOTP,
+    updateUser,  
+    deleteAccount
+  };

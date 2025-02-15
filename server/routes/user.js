@@ -1,6 +1,6 @@
 // routes/user.js
 const express = require('express');
-const { signupUser, loginUser, verifyOTP, resendOTP } = require('../controllers/userController');
+const { signupUser, loginUser, verifyOTP, resendOTP, updateUser, deleteAccount } = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -10,10 +10,16 @@ router.post('/login', loginUser);
 // Signup route – sends OTP and returns "PENDING" status
 router.post('/signup', signupUser);
 
+// Update user info route (for updating email and password)
+router.post('/update', updateUser);
+
+// Delete account route
+router.delete('/delete', deleteAccount);
+
 // OTP verification route – client posts email and otp to verify
 router.post('/verify-otp', verifyOTP);
 
-// POST /api/user/resend-otp
+// Resend OTP route – resend the OTP code
 router.post('/resend-otp', resendOTP);
 
 module.exports = router;
