@@ -32,7 +32,7 @@ const createFolder = async (req, res) => {
 
 // Create a task
 const createTask = async (req, res) => {
-    const { title, details, dueDate, parentFolder } = req.body;
+    const { title, dueDate, color, details, parentFolder } = req.body;
     const user_id = req.user._id;
 
     // Add logs to check the incoming data
@@ -40,7 +40,7 @@ const createTask = async (req, res) => {
     // console.log('Authenticated User:', req.user);
 
     try {
-        const task = await Task.create({ title, details, dueDate, user_id, parentFolder });
+        const task = await Task.create({ title, dueDate, color, details, user_id, parentFolder });
         // console.log('Task created in MongoDB:', task);  // Ensure task is created correctly
         res.status(201).json(task);
     } catch (error) {

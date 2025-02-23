@@ -38,7 +38,7 @@ function Task() {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [isEditingTask, setIsEditingTask] = useState(false);
-  const [newTask, setNewTask] = useState({ name: '', dueDate: '', details: '' });
+  const [newTask, setNewTask] = useState({ name: '', dueDate: '', color: '', details: '' });
   const [tasks, setTasks] = useState([]);
   const [files, setFiles] = useState([]);
   const [filteredFiles, setFilteredFiles] = useState([]);
@@ -246,10 +246,13 @@ function Task() {
   };
 
   const handleCreateTask = async () => {
+    // Convert the input date string to a local Date object.
+    const localDueDate = new Date(newTask.dueDate + 'T00:00:00');
     const newTaskData = {
       title: newTask.name,
+      dueDate: localDueDate, // use the local date
+      color: newTask.color,
       details: newTask.details,
-      dueDate: newTask.dueDate,
       parentFolder: currentPath,
     };
     try {
@@ -257,7 +260,7 @@ function Task() {
       setTasks([...tasks, createdTask]);
       setIsAddingTask(false);
       setIsEditingTask(false);
-      setNewTask({ name: '', dueDate: '', details: '' });
+      setNewTask({ name: '', dueDate: '', color: '', details: '' });
       setErrorMessage(null);
     } catch (error) {
       console.error('Error creating task:', error);
@@ -265,12 +268,14 @@ function Task() {
     }
   };
 
+
   const handleUpdateTask = async () => {
     if (!selectedTask) return;
     try {
       const updatedTask = await updateTask(selectedTask._id, {
         title: selectedTask.title,
         dueDate: selectedTask.dueDate,
+        color: selectedTask.color,
         details: selectedTask.details,
       });
       setTasks(tasks.map(task => task._id === updatedTask._id ? updatedTask : task));
@@ -380,6 +385,24 @@ function Task() {
         handlePathBackspace();
       }
     }
+  };
+
+
+  const hexToRGBA = (hex, alpha) => {
+    // Remove '#' if present
+    hex = hex.replace(/^#/, '');
+
+    // Convert shorthand hex (e.g., #abc to #aabbcc)
+    if (hex.length === 3) {
+      hex = hex.split('').map(char => char + char).join('');
+    }
+
+    // Parse r, g, b values
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
   
   
@@ -533,7 +556,12 @@ function Task() {
               className={`file-item task-item ${selectedTask?._id === task._id ? 'selected' : ''}`}
               onClick={() => openTaskDetailsModal(task)}
             >
-              <span className="task-title">{task.title}</span>
+              <span 
+                className="task-title" 
+                style={{ backgroundColor: task.color ? hexToRGBA(task.color, 0.2) : "transparent" }}
+              >
+                {task.title}
+              </span>
               <span className="task-details">
                 {task.details && task.details.length > 100
                   ? task.details.slice(0, 100) + '...'
@@ -640,6 +668,12 @@ function Task() {
               value={newTask.dueDate}
               onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
             />
+            <input
+              className="modal-input"
+              type="color"
+              value={newTask.color}
+              onChange={(e) => setNewTask({ ...newTask, color: e.target.value })}
+            />
             <textarea
               className="modal-textarea"
               placeholder="Details"
@@ -647,7 +681,7 @@ function Task() {
               onChange={(e) => setNewTask({ ...newTask, details: e.target.value })}
             />
             <button className="create-button" onClick={handleCreateTask}>Create Task</button>
-            <button className="close-button" onClick={() => setIsAddingTask(false)}>Cancel</button>
+            <button className="editing close-button" onClick={() => setIsAddingTask(false)}>Cancel</button>
           </div>
         </div>
       )}
@@ -656,20 +690,25 @@ function Task() {
       {selectedTask && !isEditingTask && (
         <div className="modal-overlay">
           <div className="modal-view">
-            <p className="modal-title unselectable">{selectedTask.title}</p>
+            <div className="modal-header">
+              <p className="modal-title unselectable">{selectedTask.title}</p>
+              <div className="viewing modal-buttons">
+                <button className="viewing deleteTask-button" onClick={() => { handleDelete(); setViewType('task'); }}>
+                  <i className="fa-solid fa-trash"></i>
+                </button>
+                <button className="viewing update-button" onClick={handleEditTask}>
+                  <i className="fa-solid fa-pencil"></i> 
+                </button>
+                <button className="viewing close-button" onClick={() => { setSelectedTask(null); setViewType('task'); }}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+
             <p className="modal-date unselectable">
               {selectedTask.dueDate ? new Date(selectedTask.dueDate).toLocaleDateString() : ''}
             </p>
             <p className="modal-details unselectable">{selectedTask.details}</p>
-            <div className="modal-buttons">
-              <button className="update-button" onClick={handleEditTask}>Edit</button>
-              <button className="close-button" onClick={() => { setSelectedTask(null); setViewType('task'); }}>
-                Close
-              </button>
-              <button className="deleteTask-button" onClick={() => { handleDelete(); setViewType('task'); }}>
-                Delete
-              </button>
-            </div>
           </div>
         </div>
       )}
@@ -689,9 +728,15 @@ function Task() {
             <input
               className="modal-input"
               type="date"
-              value={selectedTask.dueDate ? new Date(selectedTask.dueDate).toLocaleDateString() : ''}
+              value={selectedTask.dueDate ? new Date(selectedTask.dueDate).toISOString().split('T')[0] : ''}
               onChange={(e) => setSelectedTask({ ...selectedTask, dueDate: e.target.value })}
               required
+            />
+            <input
+              className="modal-input"
+              type="color"
+              value={selectedTask.color}
+              onChange={(e) => setSelectedTask({ ...selectedTask, color: e.target.value })}
             />
             <textarea
               className="modal-textarea"
@@ -699,9 +744,9 @@ function Task() {
               onChange={(e) => setSelectedTask({ ...selectedTask, details: e.target.value })}
               required
             />
-            <div className="modal-buttons">
+            <div className="editing modal-buttons">
               <button
-                className="update-button"
+                className="editing update-button"
                 onClick={() => {
                   handleUpdateTask();
                   setIsEditingTask(false);
@@ -710,7 +755,7 @@ function Task() {
                 Update
               </button>
               <button
-                className="close-button"
+                className="editing close-button"
                 onClick={() => {
                   setIsEditingTask(false);
                   setSelectedTask(null);

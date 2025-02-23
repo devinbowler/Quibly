@@ -253,6 +253,9 @@ body {
 
 .task-title {
   font-size: 16px;
+  padding: 5px 10px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 /* Task details styling with text truncation */
@@ -282,7 +285,7 @@ body {
 }
 
 .modal-view {
-  width: 800px;
+  width: 600px;
   height: 400px;
   background-color: #171716;
   padding: 30px;
@@ -500,7 +503,12 @@ body {
     background-color: #331c99;
 }
 
-.update-button {
+.modal-header {
+  display: flex;
+  flex-direction: row;
+}
+
+.editing.update-button {
     padding: 10px 20px;
     background-color: #221170;
     color: white;
@@ -510,11 +518,11 @@ body {
     font-size: 16px;
 }
 
-.update-button:hover {
+.editing.update-button:hover {
     background-color: #331c99;
 }
 
-.close-button {
+.editing.close-button {
     padding: 10px 20px;
     background-color: #221170;
     color: white;
@@ -524,11 +532,11 @@ body {
     font-size: 16px;
 }
 
-.close-button:hover {
+.editing.close-button:hover {
     background-color: #331c99;
 }
 
-.deleteTask-button {
+.editing.deleteTask-button {
     padding: 10px 20px;
     background-color: #700000;
     color: white;
@@ -538,16 +546,54 @@ body {
     font-size: 16px;
 }
 
-.deleteTask-button:hover {
+.editing.deleteTask-button:hover {
     background-color: #850000;
 }
 
-.modal-buttons {
+.editing.modal-buttons {
   display: flex;
   gap: 10px;          /* Adds a gap between the buttons */
   margin-top: auto;    /* Adds some space above the buttons */
   width: 100%;        /* Ensures the container fills the modal's width */
 }
+
+.viewing.update-button {
+    padding: 2px 2px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.viewing.close-button {
+    padding: 2px 2px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
+.viewing.deleteTask-button {
+    padding: 2px 2px;
+    background-color: transparent;
+    color: red;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
+.viewing.modal-buttons {
+  display: flex;
+  margin-left: auto;    /* Adds some space above the buttons */
+  width: 20%;        /* Ensures the container fills the modal's width */
+  margin-top: -50px;
+  margin-right: -20px;
+}
+
 
 .modal-buttons button {
     flex: 1;            /* Makes each button take equal space */

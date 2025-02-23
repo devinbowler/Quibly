@@ -13,8 +13,9 @@ const folderSchema = new Schema({
 
 const taskSchema = new Schema({
   title: { type: String, required: true },
-  details: { type: String, required: true },  // Ensure this is required
   dueDate: { type: Date, required: true },    // Ensure this is required
+  color: { type: String, required: false },
+  details: { type: String, required: true },  // Ensure this is required
   parentFolder: { type: String, required: true },  // Ensure this is passed correctly
   user_id: { type: String, required: true },  // Ensure the user is authenticated
   lastUpdateTime: { type: Date, default: Date.now },

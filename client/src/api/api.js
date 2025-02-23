@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 const API_URL = 'https://quibly.onrender.com'; // Update if backend URL changes
+const LOCAL_URL = 'http://localhost:4000';
 
 // Axios instance
 const axiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: LOCAL_URL,
   headers: {
     'Content-Type': 'application/json',
   },
