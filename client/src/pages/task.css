@@ -15,632 +15,118 @@ body {
     -ms-user-select: none;         /* Internet Explorer/Edge */
 }
 
-.app-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #0f0f0f;
-}
 
-.top-bar {
+/* Mobile View */
+@media only screen and (min-width: 0em){
+  /* Main Styling */
+  .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #0f0f0f;
+  }
+
+  /* Hovering Bar */
+  .top-bar {
     position: fixed;
     top: 25px;
-    left: 150px;
-    right: 150px;
+    left: 15px;
     height: 65px;
+    width: calc(100% - 30px);
     background-color: #171716;
     color: white;
     border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Aligns greeting and gear icon on opposite sides */
+    justify-content: space-between;
     padding: 0 30px;
     z-index: 100;
-}
+  }
 
-.left-content {
-  display: flex;
-  align-items: center;
-}
-
-.tasks-buttons {
-    padding-right: 35px;
-}
-
-.top-bar .greeting {
-  color: white !important;
-  font-size: 19px;
-  margin-right: 50px;
-}
-
-.top-bar .statistics-date {
-  color: grey !important;
-  font-size: 15px;
-  margin-right: 50px;
-}
-
-.top-bar .statistics-due {
-  color: grey !important;
-  font-size: 15px;
-  margin-right: 50px;
-}
-
-.settings-gear {
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.settings-gear .fa {
-    font-size: 16px;
-    color:rgba(202, 202, 202, 0.8);
-}
-.filter-buttons {
-    display: flex;
-    justify-content: space-between; /* Ensures that left and right buttons are aligned to opposite ends */
-    margin-top: 100px; /* Adjusts the space below the top bar */
-    margin-left: 150px; /* Aligns with the left side of the top bar */
-    margin-right: 150px; /* Aligns with the right side of the top bar */
-    align-items: center; /* Vertically centers the buttons in the container */
-}
-
-.filter-buttons button {
-    background-color: #171716;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin-right: 10px; /* Adds spacing between buttons */
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
+  .left-content {
     display: flex;
     align-items: center;
-    justify-content: center;
-}
+  }
 
-.filter-buttons button.active {
-    background-color: #343434; /* Slightly different background for active state */
-}
+  .tasks-buttons {
+      padding-right: 35px;
+  }
 
-.file-system-viewer {
+  .top-bar .greeting {
     color: white !important;
-    font-family: monospace;
-    font-size: 17px;
-    margin: 20px 150px 150px; /* Adjust left and right margins, add bottom padding */
-    height: calc(100vh - 210px); /* Adjust height to take full vertical space minus offsets */
-    overflow-y: auto; /* Allows scrolling */
-    box-sizing: border-box; /* Includes padding in height calculation */
-}
-
-.grid-item i {
-    font-size: 24px;  /* Increase the font size as needed */
-    margin-bottom: 8px;  /* Optional: Add some space below the icon */
-}
-
-.file-item {
-    display: flex;
-    justify-content: space-between; /* Aligns items on the left and right */
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.file-item.selected {
-    background-color: #4444; /* Slightly lighter than the viewer's background */
-}
-
-.last-accessed {
-    margin-left: auto; /* Pushes the date to the right */
-    white-space: nowrap; /* Prevents date from wrapping */
-}
-.grid-view {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 6 items per line */
-    gap: 20px; /* Spacing between grid items */
-    padding: 20px;
-    margin-left: 150px; /* Align with the rest of the content */
-    margin-right: 150px;
-}
-
-.grid-item {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px; /* Constant padding */
-    cursor: pointer;
-    transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
-    box-shadow: inset 0 0 0 0px #555; /* Initially no visible inset shadow */
-    border: 2px solid transparent; /* Transparent border to prevent layout shift */
-}
-
-.action-icons {
-    display: none;
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    cursor: pointer;
-}
-
-.grid-item:hover .action-icons {
-    display: block; /* Show action icons on hover */
-}
-
-.icon {
-    margin-left: 5px;
-    color: #fff; /* White icon color */
-}
-
-.grid-item:hover {
-    box-shadow: inset 0 0 0 2px #555; /* Inset shadow acts as a border */
-}
-
-
-.grid-item.folder i, .grid-item.folder .file-name {
-    color: white; /* Folder icon and name color */
-}
-
-.grid-item.file i, .grid-item.file .file-name {
-    color: grey; /* File icon and name color */
-}
-
-.file-name {
-    margin-top: 5px; /* Space between icon and text */
-}
-.search-bar {
-    display: flex;
-    align-items: center;
-    margin-top: 30px;
-    margin-left: 150px;
-    margin-right: 150px;
-}
-
-.find-file {
-    color: #007BFF;  /* Blue color */
-    margin-right: 10px; /* Adds some space between the label and the path */
-}
-
-.path {
-    background-color: rgba(255, 255, 255, 0.1); /* White with 30% opacity */
-    color: white; /* Ensuring the path is readable against the light background */
-    padding: 3px 6px; /* Slight padding around the path for better visibility */
-    border-radius: 4px; /* Optionally rounding the corners */
-    cursor: pointer;
-}
-
-
-#search-input {
-    flex-grow: 1;
-    background: none;
-    border: none;
-    color: white;
     font-size: 16px;
-    outline: none;
-}
+    margin-right: 50px;
+  }
 
-.delete-folder-button {
+  .top-bar .statistics-date {
+    color: grey !important;
+    font-size: 12px;
+    margin-right: 50px;
+  }
+
+  .top-bar .statistics-due {
+    color: grey !important;
+    font-size: 15px;
+    margin-right: 50px;
+  }
+
+  .settings-gear {
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .settings-gear .fa {
+      font-size: 16px;
+      color:rgba(202, 202, 202, 0.8);
+  }
+
+
+
+
+
+  /* User Settings */
+  .logout-button {
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 150px;
+  }
+
+  .deleteAcc-button {
+      padding: 10px 20px;
+      background-color: #700808;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: -10px;
+  }
+
+  .user-settings .update-form {
+      background-color: transparent;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      box-shadow: none;
+  }
+
+  .update-form input[type="password"],
+  .update-form input[type="email"] {
+    background-color: #121111;
+    color: white;
     padding: 1rem;
-    background-color: rgb(102, 0, 0) !important;
-    color: #fff !important;
-    font-size: 15px !important;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-left: 1rem;
-  }
-  
-  .delete-folder-button:hover {
-    background-color: darkred;
+    border: 1px solid #383838;
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 1rem;
   }
 
-.task-view {
-    color: white !important;
-    font-family: monospace;
-    font-size: 17px;
-    margin: 20px 150px 150px; /* Adjust margins to align with file-system-viewer */
-    height: calc(100vh - 210px); /* Adjust height similarly */
-    overflow-y: auto; /* Allows scrolling */
-    box-sizing: border-box; /* Include padding in height calculation */
-}
-
-.task-item {
-  display: grid;
-  grid-template-columns: 1fr 4fr 1fr;  /* Adjust these fractions as desired */
-  align-items: center;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-.task-title {
-  font-size: 16px;
-  padding: 5px 10px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-}
-
-/* Task details styling with text truncation */
-.task-details {
-  font-size: 13px;
-  margin-left: 10px;       /* Adds a little margin to the left of details */
-  white-space: nowrap;     /* Prevents wrapping */
-  overflow: hidden;        /* Hide overflow text */
-  text-overflow: ellipsis; /* Show ellipsis at the end if text is too long */
-}
-
-/* Due date styling */
-.task-due {
-  text-align: right;       /* Align due date text to the right */
-  font-size: 12px;
-  color: #ccc;
-}
-
-.task-item.selected {
-    background-color: #4444; /* Same selected state as file-item */
-}
-.task-view input, .task-view textarea {
-    border: none;
-    outline: none;
-    background: transparent;
-    width: 100%;
-}
-
-.modal-view {
-  width: 600px;
-  height: 400px;
-  background-color: #171716;
-  padding: 30px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.modal-overlay p.modal-title {
-  font-size: 18px;
-  background-color: transparent;
-  text-decoration: none;
-  resize: none;
-  border: none;
-  color: white;
-}
-
-.modal-overlay p.modal-date {
-  font-size: 12px;
-  background-color: transparent;
-  text-decoration: none;
-  resize: none;
-  border: none;
-  color: grey;
-  margin-top: -30px;
-  margin-bottom: 10px;
-}
-
-.modal-overlay p.modal-details {
-  font-size: 14px;
-  background-color: transparent;
-  text-decoration: none;
-  resize: none;
-  border: none;
-  color: white;
-}
-
-
-.left-buttons, .right-buttons {
-    display: flex; /* Makes buttons in these divs line up horizontally */
-}
-.filter-buttons button:last-child {
-    margin-right: 0; /* Removes margin from the last button to prevent extra spacing */
-}
-
-.filter-buttons button.active {
-    background-color: #343434; /* Differentiates the active button */
-}
-
-.modal.folder {
-    color: white !important;
-    height: 250px !important;
-}
-
-.modal.folder input {
-    background-color: transparent;
-    border: 1px solid rgb(53, 53, 53);
-    padding: 15px 10px;
-    border-radius: 5px;
-    color: white;
-}
-
-.modal.folder button {
-    padding: 10px 5px;
-    background-color: #221170;
-    border: none;
-    color: white;
-    border-radius: 5px;
-}
-
-.modal.folder button:hover {
-    padding: 10px 5px;
-    background-color: #331c99;
-}
-
-.note-view {
-    padding: 60px;
-    padding-left: 150px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: absolute;
-    top: 100px;
-    left: 150px;
-    right: 150px;
-    z-index: 10; /* Ensures it's on top */
-}
-
-.back-button {
-    font-size: 16px;
-    color: #007BFF;
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.back-button:hover {
-    text-decoration: underline;
-}
-
-.note-view input, .note-view textarea {
-    border: none;
-    outline: none;
-    background: transparent;
-    color:  white;
-    font-size: 16px;
-    width: 100%;
-    margin-bottom: 10px;
-    font-family: 'Roboto', sans-serif;
-    cursor: pointer;
-}
-
-.note-view textarea {
-    height: 75vh;
-    cursor: pointer;
-}
-
-.note-title::placeholder, .note-body::placeholder {
-    color: rgba(255, 255, 255, 0.5); /* Light grey placeholder */
-}
-
-.note-view .note-title {
-    font-size: 36px;
-    pointer: cursor;
-    margin-bottom: 0;
-    font-weight: 500;
-}
-
-.note-view .note-body {
-    resize: none; /* Prevent resizing */
-    pointer: cursor;
-    font-size: 20px;
-    line-height: 1.5;
-}
-
-.note-view .delete-button {
-    background-color: #171616;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-.note-view .delete-button::hover {
-  background-color: grey;
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal {
-    width: 400px;
-    height: 500px;
-    background-color: #171716;
-    padding: 30px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.modal-input, .modal-textarea {
-    background-color: transparent;
-    color: white;
-    border: none;
-    padding: 10px;
-    outline: none;
-    width: 100%;
-}
-
-.modal-input {
-    font-size: 24px; /* Increased font size for the title */
-    padding-bottom: 5px; /* Reduced padding below the title */
-}
-
-.modal-input[type="date"] {
-    font-size: 16px;
-    margin-top: 10px; /* Reduced the gap between title and date */
-}
-
-.modal-textarea {
-    border-top: 1px solid rgba(255, 255, 255, 0.5); /* Half-opacity grey border */
-    height: 200px;
-    resize: none;
-}
-
-.create-button {
-    margin-top: auto;
-    padding: 10px 20px;
-    background-color: #221170;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.create-button:hover {
-    background-color: #331c99;
-}
-
-.modal-header {
-  display: flex;
-  flex-direction: row;
-}
-
-.editing.update-button {
-    padding: 10px 20px;
-    background-color: #221170;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.editing.update-button:hover {
-    background-color: #331c99;
-}
-
-.editing.close-button {
-    padding: 10px 20px;
-    background-color: #221170;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.editing.close-button:hover {
-    background-color: #331c99;
-}
-
-.editing.deleteTask-button {
-    padding: 10px 20px;
-    background-color: #700000;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.editing.deleteTask-button:hover {
-    background-color: #850000;
-}
-
-.editing.modal-buttons {
-  display: flex;
-  gap: 10px;          /* Adds a gap between the buttons */
-  margin-top: auto;    /* Adds some space above the buttons */
-  width: 100%;        /* Ensures the container fills the modal's width */
-}
-
-.viewing.update-button {
-    padding: 2px 2px;
-    background-color: transparent;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.viewing.close-button {
-    padding: 2px 2px;
-    background-color: transparent;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-
-.viewing.deleteTask-button {
-    padding: 2px 2px;
-    background-color: transparent;
-    color: red;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-
-.viewing.modal-buttons {
-  display: flex;
-  margin-left: auto;    /* Adds some space above the buttons */
-  width: 20%;        /* Ensures the container fills the modal's width */
-  margin-top: -50px;
-  margin-right: -20px;
-}
-
-
-.modal-buttons button {
-    flex: 1;            /* Makes each button take equal space */
-}
-
-.logout-button {
-    padding: 10px 20px;
-    background-color: #221170;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 150px;
-}
-
-.deleteAcc-button {
-    padding: 10px 20px;
-    background-color: #700808;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: -10px;
-}
-
-.user-settings .update-form {
-    background-color: transparent;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    box-shadow: none;
-}
-
-.update-form input[type="password"],
-.update-form input[type="email"] {
-  background-color: #121111;
-  color: white;
-  padding: 1rem;
-  border: 1px solid #383838;
-  border-radius: 5px;
-  outline: none;
-  margin-bottom: 1rem;
-}
-
-.update-form button {
+  .update-form button {
     padding: 10px 20px;
     background-color: #221170;
     color: #fff;
@@ -650,7 +136,7 @@ body {
     cursor: pointer;
     margin-bottom: 1rem;
   }
-  
+    
 
   .error {
     background-color: rgba(156, 0, 0, 0.582); /* Transparent red background */
@@ -664,4 +150,1931 @@ body {
   .update-form button:hover {
     background-color: #331c99;
   }
+
+
+
+
+
+  /* Search Bar */
+  .search-bar {
+      display: flex;
+      align-items: center;
+      margin-top: 30px;
+      margin-left: 15px;
+      width: calc(100% - 10px);
+      margin-right: 15px;
+  }
+
+  .find-file {
+      color: #007BFF;  /* Blue color */
+      margin-right: 10px; /* Adds some space between the label and the path */
+      min-width: 70px;
+  }
+
+  .path {
+      background-color: rgba(255, 255, 255, 0.1); /* White with 30% opacity */
+      color: white; /* Ensuring the path is readable against the light background */
+      padding: 3px 6px; /* Slight padding around the path for better visibility */
+      border-radius: 4px; /* Optionally rounding the corners */
+      cursor: pointer;
+      min-width: 200px;
+  }
+
+  #search-input {
+      flex-grow: 1;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      outline: none;
+  }
+
+
+
+
+
+  /* Top Buttons */
+  .filter-buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* Ensures that left and right buttons are aligned to opposite ends */
+      margin-top: 100px; /* Adjusts the space below the top bar */
+      margin-left: 15px; /* Aligns with the left side of the top bar */
+      margin-right: 15px; /* Aligns with the right side of the top bar */
+      align-items: center; /* Vertically centers the buttons in the container */
+  }
+
+  .filter-buttons button {
+      background-color: #171716;
+      color: white;
+      border: none;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+  }
+
+  .filter-buttons button.active {
+      background-color: #343434; /* Slightly different background for active state */
+  }
+
+  .left-buttons, .right-buttons {
+      display: grid; /* Makes buttons in these divs line up horizontally */
+      grid-template-columns: repeat(3, 1fr);
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      gap: 5px;
+      width: 100%;
+  }
+
+  /* By default the first three buttons will fill row 1.
+     Force the delete button to be placed in the second row,
+     centered in the middle column. */
+  .right-buttons button.delete-folder-button {
+    grid-column: 2;  /* Place it in the second column */
+    grid-row: 2;         /* Force it onto row 2 */
+  }
+
+
+  .filter-buttons button:last-child {
+      margin-right: 0; /* Removes margin from the last button to prevent extra spacing */
+  }
+
+  .filter-buttons button.active {
+      background-color: #343434; /* Differentiates the active button */
+  }
+
+  .delete-folder-button {
+      padding: 5px 10px;
+      background-color: rgb(102, 0, 0) !important;
+      color: #fff !important;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: bold;
+  }
+    
+  .delete-folder-button:hover {
+    background-color: darkred;
+  }
+
+
+
+  /* File System */
+  .file-system-viewer {
+      color: white !important;
+      font-family: monospace;
+      font-size: 17px;
+      margin: 20px 5px 5px; /* Adjust left and right margins, add bottom padding */
+      height: calc(100vh - 210px); /* Adjust height to take full vertical space minus offsets */
+      overflow-y: auto; /* Allows scrolling */
+      box-sizing: border-box; /* Includes padding in height calculation */
+  }
+
+  .file-name {
+      margin-top: 5px; /* Space between icon and text */
+  }
+
+  .grid-item i {
+      font-size: 24px;  /* Increase the font size as needed */
+      margin-bottom: 8px;  /* Optional: Add some space below the icon */
+  }
+
+  .file-item {
+      display: flex;
+      justify-content: space-between; /* Aligns items on the left and right */
+      padding: 5px 10px;
+      cursor: pointer;
+  }
+
+  .file-item.selected {
+      background-color: #4444; /* Slightly lighter than the viewer's background */
+  }
+
+  .last-accessed {
+      margin-left: auto; /* Pushes the date to the right */
+      white-space: nowrap; /* Prevents date from wrapping */
+  }
+
+  .grid-view {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr); /* 6 items per line */
+      gap: 20px; /* Spacing between grid items */
+      padding: 20px;
+      margin-left: 5px; /* Align with the rest of the content */
+      margin-right: 5px;
+  }
+
+  .grid-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px; /* Constant padding */
+      cursor: pointer;
+      transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
+      box-shadow: inset 0 0 0 0px #555; /* Initially no visible inset shadow */
+      border: 2px solid transparent; /* Transparent border to prevent layout shift */
+  }
+
+  .action-icons {
+      display: none;
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+  }
+
+  .grid-item:hover .action-icons {
+      display: block; /* Show action icons on hover */
+  }
+
+  .icon {
+      margin-left: 5px;
+      color: #fff; /* White icon color */
+  }
+
+  .grid-item:hover {
+      box-shadow: inset 0 0 0 2px #555; /* Inset shadow acts as a border */
+  }
+
+
+  .grid-item.folder i, .grid-item.folder .file-name {
+      color: white; /* Folder icon and name color */
+  }
+
+  .grid-item.file i, .grid-item.file .file-name {
+      color: grey; /* File icon and name color */
+  }
+
+
+
+
+  /* File System Notes */ 
+  .note-view {
+      padding: 5px;
+      padding-left: 25px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: absolute;
+      top: 100px;
+      width: calc(100% - 10px);
+      z-index: 10; /* Ensures it's on top */
+  }
+
+  .back-button {
+      font-size: 16px;
+      color: #007BFF;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 20px;
+      text-align: left;
+  }
+
+  .back-button:hover {
+      text-decoration: underline;
+  }
+
+  .note-view input, .note-view textarea {
+      border: none;
+      outline: none;
+      background: transparent;
+      color:  white;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+      font-family: 'Roboto', sans-serif;
+      cursor: pointer;
+  }
+
+  .note-view textarea {
+      height: 75vh;
+      cursor: pointer;
+  }
+
+  .note-title::placeholder, .note-body::placeholder {
+      color: rgba(255, 255, 255, 0.5); /* Light grey placeholder */
+  }
+
+  .note-view .note-title {
+      font-size: 36px;
+      pointer: cursor;
+      margin-bottom: 0;
+      font-weight: 500;
+  }
+
+  .note-view .note-body {
+      resize: none; /* Prevent resizing */
+      pointer: cursor;
+      font-size: 20px;
+      line-height: 1.5;
+      margin-bottom: 25px;
+  }
+
+  .note-view .delete-button {
+      background-color: #171616;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+  }
+
+  .note-view .delete-button::hover {
+    background-color: grey;
+  }
+
+
+
+
+
+  /* Tasks View */
+  .task-view {
+      color: white !important;
+      font-family: monospace;
+      font-size: 17px;
+      margin: 20px 150px 150px; /* Adjust margins to align with file-system-viewer */
+      height: calc(100vh - 210px); /* Adjust height similarly */
+      overflow-y: auto; /* Allows scrolling */
+      box-sizing: border-box; /* Include padding in height calculation */
+  }
+
+  .task-item {
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;  /* Adjust these fractions as desired */
+    align-items: center;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .task-title {
+    font-size: 13px;
+    padding: 5px 10px;
+    min-width: 115px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .task-details {
+    font-size: 13px;
+    margin-left: 10px;       /* Adds a little margin to the left of details */
+    white-space: nowrap;     /* Prevents wrapping */
+    overflow: hidden;        /* Hide overflow text */
+    text-overflow: ellipsis; /* Show ellipsis at the end if text is too long */
+  }
+
+  .task-due {
+    text-align: right;       /* Align due date text to the right */
+    font-size: 12px;
+    color: #ccc;
+  }
+
+  .task-item.selected {
+      background-color: #4444; /* Same selected state as file-item */
+  }
+  .task-view input, .task-view textarea {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+  }
+
+
+
+
+
+  /* Task Form */
+  .modal-view {
+    width: calc(100% - 20px);
+    height: 400px;
+    background-color: #171716;
+    padding: 30px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .modal-overlay p.modal-title {
+    font-size: 18px;
+    background-color: transparent;
+    text-decoration: none;
+    resize: none;
+    border: none;
+    color: white;
+  }
+
+  .modal-overlay p.modal-date {
+    font-size: 12px;
+    background-color: transparent;
+    text-decoration: none;
+    resize: none;
+    border: none;
+    color: grey;
+    margin-top: -30px;
+    margin-bottom: 10px;
+  }
+
+  .modal-overlay p.modal-details {
+    font-size: 14px;
+    background-color: transparent;
+    text-decoration: none;
+    resize: none;
+    border: none;
+    color: white;
+  }
+
+  .modal.folder {
+      color: white !important;
+      height: 250px !important;
+  }
+
+  .modal.folder input {
+      background-color: transparent;
+      border: 1px solid rgb(53, 53, 53);
+      padding: 15px 10px;
+      border-radius: 5px;
+      color: white;
+  }
+
+  .modal.folder button {
+      padding: 10px 5px;
+      background-color: #221170;
+      border: none;
+      color: white;
+      border-radius: 5px;
+  }
+
+  .modal.folder button:hover {
+      padding: 10px 5px;
+      background-color: #331c99;
+  }
+
+  .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+  }
+
+  .modal {
+      width: calc(100% - 20px);
+      height: 500px;
+      background-color: #171716;
+      padding: 30px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  }
+
+  .modal-input, .modal-textarea {
+      background-color: transparent;
+      color: white;
+      border: none;
+      padding: 10px;
+      outline: none;
+      width: 100%;
+  }
+
+  .modal-input {
+      font-size: 24px; /* Increased font size for the title */
+      padding-bottom: 5px; /* Reduced padding below the title */
+  }
+
+  .modal-input[type="date"] {
+      font-size: 16px;
+      margin-top: 10px; /* Reduced the gap between title and date */
+  }
+
+  .modal-textarea {
+      border-top: 1px solid rgba(255, 255, 255, 0.5); /* Half-opacity grey border */
+      height: 200px;
+      resize: none;
+  }
+
+  .create-button {
+      margin-top: auto;
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .create-button:hover {
+      background-color: #331c99;
+  }
+
+  .modal-header {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .editing.update-button {
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .editing.update-button:hover {
+      background-color: #331c99;
+  }
+
+  .editing.close-button {
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .editing.close-button:hover {
+      background-color: #331c99;
+  }
+
+  .editing.deleteTask-button {
+      padding: 10px 20px;
+      background-color: #700000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .editing.deleteTask-button:hover {
+      background-color: #850000;
+  }
+
+  .editing.modal-buttons {
+    display: flex;
+    gap: 10px;          /* Adds a gap between the buttons */
+    margin-top: auto;    /* Adds some space above the buttons */
+    width: 100%;        /* Ensures the container fills the modal's width */
+  }
+
+  .viewing.update-button {
+      padding: 2px 2px;
+      background-color: transparent;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .viewing.close-button {
+      padding: 2px 2px;
+      background-color: transparent;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+
+  .viewing.deleteTask-button {
+      padding: 2px 2px;
+      background-color: transparent;
+      color: red;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+
+  .viewing.modal-buttons {
+    display: flex;
+    margin-left: auto;    /* Adds some space above the buttons */
+    width: 30%;        /* Ensures the container fills the modal's width */
+    margin-top: -50px;
+    margin-right: -20px;
+  }
+
+
+  .modal-buttons button {
+      flex: 1;            /* Makes each button take equal space */
+  }
+}
+
+
+/* Desktop View */
+@media only screen and (min-width: 48em){
+  /* Main Styling */
+  .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #0f0f0f;
+  }
+
+  /* Hovering Bar */
+  .top-bar {
+      position: fixed;
+      top: 25px;
+      left: 50px;
+      width: calc(100% - 100px);
+      height: 65px;
+      background-color: #171716;
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; /* Aligns greeting and gear icon on opposite sides */
+      padding: 0 30px;
+      z-index: 100;
+  }
+
+  .left-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .tasks-buttons {
+      padding-right: 35px;
+  }
+
+  .top-bar .greeting {
+    color: white !important;
+    font-size: 19px;
+    margin-right: 50px;
+  }
+
+  .top-bar .statistics-date {
+    color: grey !important;
+    font-size: 15px;
+    margin-right: 50px;
+  }
+
+  .top-bar .statistics-due {
+    color: grey !important;
+    font-size: 15px;
+    margin-right: 50px;
+  }
+
+  .settings-gear {
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .settings-gear .fa {
+      font-size: 16px;
+      color:rgba(202, 202, 202, 0.8);
+  }
+
+
+
+
+
+  /* User Settings */
+  .logout-button {
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 150px;
+  }
+
+  .deleteAcc-button {
+      padding: 10px 20px;
+      background-color: #700808;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: -10px;
+  }
+
+  .user-settings .update-form {
+      background-color: transparent;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      box-shadow: none;
+  }
+
+  .update-form input[type="password"],
+  .update-form input[type="email"] {
+    background-color: #121111;
+    color: white;
+    padding: 1rem;
+    border: 1px solid #383838;
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 1rem;
+  }
+
+  .update-form button {
+    padding: 10px 20px;
+    background-color: #221170;
+    color: #fff;
+    font-size: 15px !important;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+    
+
+  .error {
+    background-color: rgba(156, 0, 0, 0.582); /* Transparent red background */
+    border: rgb(184, 0, 0) solid 2px;
+    color: white;
+    padding: 1rem;
+    border-radius: 25px;
+    text-align: center;
+  }
+
+  .update-form button:hover {
+    background-color: #331c99;
+  }
+
+
+
+
+
+  /* Search Bar */
+  .search-bar {
+      display: flex;
+      align-items: center;
+      margin-top: 30px;
+      margin-left: 55px;
+      margin-right: 55px;
+  }
+
+  .find-file {
+      color: #007BFF;  /* Blue color */
+      margin-right: 10px; /* Adds some space between the label and the path */
+  }
+
+  .path {
+      background-color: rgba(255, 255, 255, 0.1); /* White with 30% opacity */
+      color: white; /* Ensuring the path is readable against the light background */
+      padding: 3px 6px; /* Slight padding around the path for better visibility */
+      border-radius: 4px; /* Optionally rounding the corners */
+      cursor: pointer;
+  }
+
+  #search-input {
+      flex-grow: 1;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      outline: none;
+  }
+
+
+
+
+
+  /* Top Buttons */
+  .filter-buttons {
+      display: flex;
+      justify-content: space-between; /* Ensures that left and right buttons are aligned to opposite ends */
+      flex-direction: row;
+      margin-top: 100px; /* Adjusts the space below the top bar */
+      margin-left: 50px; /* Aligns with the left side of the top bar */
+      margin-right: 50px; /* Aligns with the right side of the top bar */
+      align-items: center; /* Vertically centers the buttons in the container */
+  }
+
+  .filter-buttons button {
+      background-color: #171716;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-right: 10px; /* Adds spacing between buttons */
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .filter-buttons button.active {
+      background-color: #343434; /* Slightly different background for active state */
+  }
+
+  .left-buttons,
+  .right-buttons {
+    display: flex;
+    flex-wrap: nowrap;      /* all buttons in one line */
+    gap: 10px;
+    width: auto;
+  }
+
+  .right-buttons {
+    justify-content: flex-end;
+    /* Optionally, if the right-buttons container has a fixed width or flex:1,
+       make sure it stretches so its content reaches the edge */
+  }
+
+  .filter-buttons button:last-child {
+      margin-right: 0; /* Removes margin from the last button to prevent extra spacing */
+  }
+
+  .filter-buttons button.active {
+      background-color: #343434; /* Differentiates the active button */
+  }
+
+
+
+
+
+  /* File System */
+  .file-system-viewer {
+      color: white !important;
+      font-family: monospace;
+      font-size: 17px;
+      margin: 50px 50px 50px; /* Adjust left and right margins, add bottom padding */
+      height: calc(100vh - 210px); /* Adjust height to take full vertical space minus offsets */
+      overflow-y: auto; /* Allows scrolling */
+      box-sizing: border-box; /* Includes padding in height calculation */
+  }
+
+  .file-name {
+      margin-top: 5px; /* Space between icon and text */
+  }
+
+  .grid-item i {
+      font-size: 24px;  /* Increase the font size as needed */
+      margin-bottom: 8px;  /* Optional: Add some space below the icon */
+  }
+
+  .file-item {
+      display: flex;
+      justify-content: space-between; /* Aligns items on the left and right */
+      padding: 5px 10px;
+      cursor: pointer;
+  }
+
+  .file-item.selected {
+      background-color: #4444; /* Slightly lighter than the viewer's background */
+  }
+
+  .last-accessed {
+      margin-left: auto; /* Pushes the date to the right */
+      white-space: nowrap; /* Prevents date from wrapping */
+  }
+
+  .grid-view {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr); /* 6 items per line */
+      gap: 20px; /* Spacing between grid items */
+      padding: 20px;
+      margin-left: 50px; /* Align with the rest of the content */
+      margin-right: 50px;
+  }
+
+  .grid-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 25px; /* Constant padding */
+      cursor: pointer;
+      text-align: center;
+      transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
+      box-shadow: inset 0 0 0 0px #555; /* Initially no visible inset shadow */
+      border: 2px solid transparent; /* Transparent border to prevent layout shift */
+  }
+
+  .action-icons {
+      display: none;
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+  }
+
+  .grid-item:hover .action-icons {
+      display: block; /* Show action icons on hover */
+  }
+
+  .icon {
+      margin-left: 5px;
+      color: #fff; /* White icon color */
+  }
+
+  .grid-item:hover {
+      box-shadow: inset 0 0 0 2px #555; /* Inset shadow acts as a border */
+  }
+
+
+  .grid-item.folder i, .grid-item.folder .file-name {
+      color: white; /* Folder icon and name color */
+  }
+
+  .grid-item.file i, .grid-item.file .file-name {
+      color: grey; /* File icon and name color */
+  }
+
+
+
+
+  /* File System Notes */ 
+  .note-view {
+    padding: 5px;
+    padding-left: 5px;
+    padding-left: 50px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: absolute;
+    top: 100px;
+    width: calc(100% - 50px);
+    z-index: 10;
+  }
+
+  .back-button {
+      font-size: 16px;
+      color: #007BFF;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 20px;
+      text-align: left;
+  }
+
+  .back-button:hoverwidth {
+      text-decoration: underline;
+  }
+
+  .note-view input, .note-view textarea {
+      border: none;
+      outline: none;
+      background: transparent;
+      color:  white;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+      font-family: 'Roboto', sans-serif;
+      cursor: pointer;
+  }
+
+  .note-view textarea {
+      height: 75vh;
+      cursor: pointer;
+  }
+
+  .note-title::placeholder, .note-body::placeholder {
+      color: rgba(255, 255, 255, 0.5); /* Light grey placeholder */
+  }
+
+  .note-view .note-title {
+      font-size: 36px;
+      pointer: cursor;
+      margin-bottom: 0;
+      font-weight: 500;
+  }
+
+  .note-view .note-body {
+      resize: none; /* Prevent resizing */
+      pointer: cursor;
+      font-size: 20px;
+      line-height: 1.5;
+  }
+
+  .note-view .delete-button {
+      background-color: #171616;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+  }
+
+  .note-view .delete-button::hover {
+    background-color: grey;
+  }
+
+
+
+
+
+  /* Tasks View */
+  .task-view {
+      color: white !important;
+      font-family: monospace;
+      font-size: 17px;
+      margin: 20px 150px 150px; /* Adjust margins to align with file-system-viewer */
+      height: calc(100vh - 210px); /* Adjust height similarly */
+      overflow-y: auto; /* Allows scrolling */
+      box-sizing: border-box; /* Include padding in height calculation */
+  }
+
+  .task-item {
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;  /* Adjust these fractions as desired */
+    align-items: center;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .task-title {
+    font-size: 16px;
+    padding: 5px 10px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .task-details {
+    font-size: 13px;
+    margin-left: 10px;       /* Adds a little margin to the left of details */
+    white-space: nowrap;     /* Prevents wrapping */
+    overflow: hidden;        /* Hide overflow text */
+    text-overflow: ellipsis; /* Show ellipsis at the end if text is too long */
+  }
+
+  .task-due {
+    text-align: right;       /* Align due date text to the right */
+    font-size: 12px;
+    color: #ccc;
+  }
+
+  .task-item.selected {
+      background-color: #4444; /* Same selected state as file-item */
+  }
+  .task-view input, .task-view textarea {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+  }
+
+
+
+
+
+  /* Task Form */
+  .modal-view {
+    width: 600px;
+    height: 400px;
+    background-color: #171716;
+    padding: 30px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .modal-overlay p.modal-title {
+    font-size: 18px;
+    background-color: transparent;
+    text-decoration: none;
+    resize: none;
+    border: none;
+    color: white;
+  }
+
+  .modal-overlay p.modal-date {
+    font-size: 12px;
+    background-color: transparent;
+    text-decoration: none;
+    resize: none;
+    border: none;
+    color: grey;
+    margin-top: -30px;
+    margin-bottom: 10px;
+  }
+
+  .modal-overlay p.modal-details {
+    font-size: 14px;
+    background-color: transparent;
+    text-decoration: none;
+    resize: none;
+    border: none;
+    color: white;
+  }
+
+  .modal.folder {
+      color: white !important;
+      height: 250px !important;
+  }
+
+  .modal.folder input {
+      background-color: transparent;
+      border: 1px solid rgb(53, 53, 53);
+      padding: 15px 10px;
+      border-radius: 5px;
+      color: white;
+  }
+
+  .modal.folder button {
+      padding: 10px 5px;
+      background-color: #221170;
+      border: none;
+      color: white;
+      border-radius: 5px;
+  }
+
+  .modal.folder button:hover {
+      padding: 10px 5px;
+      background-color: #331c99;
+  }
+
+  .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+  }
+
+  .modal {
+      width: 400px;
+      height: 500px;
+      background-color: #171716;
+      padding: 30px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  }
+
+  .modal-input, .modal-textarea {
+      background-color: transparent;
+      color: white;
+      border: none;
+      padding: 10px;
+      outline: none;
+      width: 100%;
+  }
+
+  .modal-input {
+      font-size: 24px; /* Increased font size for the title */
+      padding-bottom: 5px; /* Reduced padding below the title */
+  }
+
+  .modal-input[type="date"] {
+      font-size: 16px;
+      margin-top: 10px; /* Reduced the gap between title and date */
+  }
+
+  .modal-textarea {
+      border-top: 1px solid rgba(255, 255, 255, 0.5); /* Half-opacity grey border */
+      height: 200px;
+      resize: none;
+  }
+
+  .create-button {
+      margin-top: auto;
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .create-button:hover {
+      background-color: #331c99;
+  }
+
+  .modal-header {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .editing.update-button {
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .editing.update-button:hover {
+      background-color: #331c99;
+  }
+
+  .editing.close-button {
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .editing.close-button:hover {
+      background-color: #331c99;
+  }
+
+  .editing.deleteTask-button {
+      padding: 10px 20px;
+      background-color: #700000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .editing.deleteTask-button:hover {
+      background-color: #850000;
+  }
+
+  .editing.modal-buttons {
+    display: flex;
+    gap: 10px;          /* Adds a gap between the buttons */
+    margin-top: auto;    /* Adds some space above the buttons */
+    width: 100%;        /* Ensures the container fills the modal's width */
+  }
+
+  .viewing.update-button {
+      padding: 2px 2px;
+      background-color: transparent;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .viewing.close-button {
+      padding: 2px 2px;
+      background-color: transparent;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+
+  .viewing.deleteTask-button {
+      padding: 2px 2px;
+      background-color: transparent;
+      color: red;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+
+  .viewing.modal-buttons {
+    display: flex;
+    margin-left: auto;    /* Adds some space above the buttons */
+    width: 20%;        /* Ensures the container fills the modal's width */
+    margin-top: -50px;
+    margin-right: -20px;
+  }
+
+
+  .modal-buttons button {
+      flex: 1;            /* Makes each button take equal space */
+  }
+}
+
+@media only screen and (min-width: 72em){
+  /* Main Styling */
+  .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #0f0f0f;
+  }
+
+  /* Hovering Bar */
+  .top-bar {
+    position: fixed;
+    top: 25px;
+    left: 50px;
+    height: 65px;
+    width: calc(100% - 100px);
+    background-color: #171716;
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    z-index: 100;
+  }
+
+  .left-content {
+    display: flex;
+    align-items: center;
+  }
+
+  .tasks-buttons {
+      padding-right: 35px;
+  }
+
+  .top-bar .greeting {
+    color: white !important;
+    font-size: 19px;
+    margin-right: 50px;
+  }
+
+  .top-bar .statistics-date {
+    color: grey !important;
+    font-size: 15px;
+    margin-right: 50px;
+  }
+
+  .top-bar .statistics-due {
+    color: grey !important;
+    font-size: 15px;
+    margin-right: 50px;
+  }
+
+  .settings-gear {
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .settings-gear .fa {
+      font-size: 16px;
+      color:rgba(202, 202, 202, 0.8);
+  }
+
+
+
+
+
+  /* User Settings */
+  .logout-button {
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 150px;
+  }
+
+  .deleteAcc-button {
+      padding: 10px 20px;
+      background-color: #700808;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: -10px;
+  }
+
+  .user-settings .update-form {
+      background-color: transparent;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      box-shadow: none;
+  }
+
+  .update-form input[type="password"],
+  .update-form input[type="email"] {
+    background-color: #121111;
+    color: white;
+    padding: 1rem;
+    border: 1px solid #383838;
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 1rem;
+  }
+
+  .update-form button {
+    padding: 10px 20px;
+    background-color: #221170;
+    color: #fff;
+    font-size: 15px !important;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+    
+
+  .error {
+    background-color: rgba(156, 0, 0, 0.582); /* Transparent red background */
+    border: rgb(184, 0, 0) solid 2px;
+    color: white;
+    padding: 1rem;
+    border-radius: 25px;
+    text-align: center;
+  }
+
+  .update-form button:hover {
+    background-color: #331c99;
+  }
+
+
+
+
+
+  /* Search Bar */
+  .search-bar {
+      display: flex;
+      align-items: center;
+      margin-top: 30px;
+      margin-left: 55px;
+      margin-right: 55px;
+  }
+
+  .find-file {
+      color: #007BFF;  /* Blue color */
+      margin-right: 10px; /* Adds some space between the label and the path */
+  }
+
+  .path {
+      background-color: rgba(255, 255, 255, 0.1); /* White with 30% opacity */
+      color: white; /* Ensuring the path is readable against the light background */
+      padding: 3px 6px; /* Slight padding around the path for better visibility */
+      border-radius: 4px; /* Optionally rounding the corners */
+      cursor: pointer;
+      min-width: 120px !important;
+  }
+
+  #search-input {
+      flex-grow: 1;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      outline: none;
+  }
+
+
+
+
+
+  /* Top Buttons */
+  .filter-buttons {
+      display: flex;
+      justify-content: space-between; /* Ensures that left and right buttons are aligned to opposite ends */
+      flex-direction: row;
+      margin-top: 100px; /* Adjusts the space below the top bar */
+      margin-left: 50px; /* Aligns with the left side of the top bar */
+      margin-right: 50px; /* Aligns with the right side of the top bar */
+      align-items: center; /* Vertically centers the buttons in the container */
+  }
+
+  .filter-buttons button {
+      background-color: #171716;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-right: 10px; /* Adds spacing between buttons */
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .filter-buttons button.active {
+      background-color: #343434; /* Slightly different background for active state */
+  }
+
+  .left-buttons, .right-buttons {
+      display: flex; /* Makes buttons in these divs line up horizontally */
+  }
+
+  .filter-buttons button:last-child {
+      margin-right: 0; /* Removes margin from the last button to prevent extra spacing */
+  }
+
+  .filter-buttons button.active {
+      background-color: #343434; /* Differentiates the active button */
+  }
+
+
+
+
+
+  /* File System */
+  .file-system-viewer {
+      color: white !important;
+      font-family: monospace;
+      font-size: 17px;
+      margin: 50px 50px 50px; /* Adjust left and right margins, add bottom padding */
+      height: calc(100vh - 210px); /* Adjust height to take full vertical space minus offsets */
+      overflow-y: auto; /* Allows scrolling */
+      box-sizing: border-box; /* Includes padding in height calculation */
+  }
+
+  .file-name {
+      margin-top: 5px; /* Space between icon and text */
+  }
+
+  .grid-item i {
+      font-size: 24px;  /* Increase the font size as needed */
+      margin-bottom: 8px;  /* Optional: Add some space below the icon */
+  }
+
+  .file-item {
+      display: flex;
+      justify-content: space-between; /* Aligns items on the left and right */
+      padding: 5px 10px;
+      cursor: pointer;
+  }
+
+  .file-item.selected {
+      background-color: #4444; /* Slightly lighter than the viewer's background */
+  }
+
+  .last-accessed {
+      margin-left: auto; /* Pushes the date to the right */
+      white-space: nowrap; /* Prevents date from wrapping */
+  }
+
+  .grid-view {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr); /* 6 items per line */
+      gap: 20px; /* Spacing between grid items */
+      padding: 20px;
+      margin-left: 50px; /* Align with the rest of the content */
+      margin-right: 50px;
+  }
+
+  .grid-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px; /* Constant padding */
+      cursor: pointer;
+      text-align: center;
+      transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
+      box-shadow: inset 0 0 0 0px #555; /* Initially no visible inset shadow */
+      border: 2px solid transparent; /* Transparent border to prevent layout shift */
+  }
+
+  .action-icons {
+      display: none;
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      cursor: pointer;
+  }
+
+  .grid-item:hover .action-icons {
+      display: block; /* Show action icons on hover */
+  }
+
+  .icon {
+      margin-left: 5px;
+      color: #fff; /* White icon color */
+  }
+
+  .grid-item:hover {
+      box-shadow: inset 0 0 0 2px #555; /* Inset shadow acts as a border */
+  }
+
+
+  .grid-item.folder i, .grid-item.folder .file-name {
+      color: white; /* Folder icon and name color */
+  }
+
+  .grid-item.file i, .grid-item.file .file-name {
+      color: grey; /* File icon and name color */
+  }
+
+
+
+
+  /* File System Notes */ 
+  .note-view {
+    padding: 5px;
+    padding-left: 50px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: absolute;
+    top: 100px;
+    width: calc(100% - 50px);
+    z-index: 10;
+  }
+
+  .back-button {
+      font-size: 16px;
+      color: #007BFF;
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 20px;
+      text-align: left;
+  }
+
+  .back-button:hover {
+      text-decoration: underline;
+  }
+
+  .note-view input, .note-view textarea {
+      border: none;
+      outline: none;
+      background: transparent;
+      color:  white;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 10px;
+      font-family: 'Roboto', sans-serif;
+      cursor: pointer;
+  }
+
+  .note-view textarea {
+      height: 75vh;
+      cursor: pointer;
+  }
+
+  .note-title::placeholder, .note-body::placeholder {
+      color: rgba(255, 255, 255, 0.5); /* Light grey placeholder */
+  }
+
+  .note-view .note-title {
+      font-size: 36px;
+      pointer: cursor;
+      margin-bottom: 0;
+      font-weight: 500;
+  }
+
+  .note-view .note-body {
+      resize: none; /* Prevent resizing */
+      pointer: cursor;
+      font-size: 20px;
+      line-height: 1.5;
+  }
+
+  .note-view .delete-button {
+      background-color: #171616;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+  }
+
+  .note-view .delete-button::hover {
+    background-color: grey;
+  }
+
+
+
+
+
+  /* Tasks View */
+  .task-view {
+      color: white !important;
+      font-family: monospace;
+      font-size: 17px;
+      margin: 20px 150px 150px; /* Adjust margins to align with file-system-viewer */
+      height: calc(100vh - 210px); /* Adjust height similarly */
+      overflow-y: auto; /* Allows scrolling */
+      box-sizing: border-box; /* Include padding in height calculation */
+  }
+
+  .task-item {
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;  /* Adjust these fractions as desired */
+    align-items: center;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  .task-title {
+    font-size: 16px;
+    padding: 5px 10px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .task-details {
+    font-size: 13px;
+    margin-left: 10px;       /* Adds a little margin to the left of details */
+    white-space: nowrap;     /* Prevents wrapping */
+    overflow: hidden;        /* Hide overflow text */
+    text-overflow: ellipsis; /* Show ellipsis at the end if text is too long */
+  }
+
+  .task-due {
+    text-align: right;       /* Align due date text to the right */
+    font-size: 12px;
+    color: #ccc;
+  }
+
+  .task-item.selected {
+      background-color: #4444; /* Same selected state as file-item */
+  }
+  .task-view input, .task-view textarea {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+  }
+
+
+
+
+
+  /* Task Form */
+  .modal-view {
+    width: 600px;
+    height: 400px;
+    background-color: #171716;
+    padding: 30px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .modal-overlay p.modal-title {
+    font-size: 18px;
+    background-color: transparent;
+    text-decoration: none;
+    resize: none;
+    border: none;
+    color: white;
+  }
+
+  .modal-overlay p.modal-date {
+    font-size: 12px;
+    background-color: transparent;
+    text-decoration: none;
+    resize: none;
+    border: none;
+    color: grey;
+    margin-top: -30px;
+    margin-bottom: 10px;
+  }
+
+  .modal-overlay p.modal-details {
+    font-size: 14px;
+    background-color: transparent;
+    text-decoration: none;
+    resize: none;
+    border: none;
+    color: white;
+  }
+
+  .modal.folder {
+      color: white !important;
+      height: 250px !important;
+  }
+
+  .modal.folder input {
+      background-color: transparent;
+      border: 1px solid rgb(53, 53, 53);
+      padding: 15px 10px;
+      border-radius: 5px;
+      color: white;
+  }
+
+  .modal.folder button {
+      padding: 10px 5px;
+      background-color: #221170;
+      border: none;
+      color: white;
+      border-radius: 5px;
+  }
+
+  .modal.folder button:hover {
+      padding: 10px 5px;
+      background-color: #331c99;
+  }
+
+  .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+  }
+
+  .modal {
+      width: 400px;
+      height: 500px;
+      background-color: #171716;
+      padding: 30px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  }
+
+  .modal-input, .modal-textarea {
+      background-color: transparent;
+      color: white;
+      border: none;
+      padding: 10px;
+      outline: none;
+      width: 100%;
+  }
+
+  .modal-input {
+      font-size: 24px; /* Increased font size for the title */
+      padding-bottom: 5px; /* Reduced padding below the title */
+  }
+
+  .modal-input[type="date"] {
+      font-size: 16px;
+      margin-top: 10px; /* Reduced the gap between title and date */
+  }
+
+  .modal-textarea {
+      border-top: 1px solid rgba(255, 255, 255, 0.5); /* Half-opacity grey border */
+      height: 200px;
+      resize: none;
+  }
+
+  .create-button {
+      margin-top: auto;
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .create-button:hover {
+      background-color: #331c99;
+  }
+
+  .modal-header {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .editing.update-button {
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .editing.update-button:hover {
+      background-color: #331c99;
+  }
+
+  .editing.close-button {
+      padding: 10px 20px;
+      background-color: #221170;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .editing.close-button:hover {
+      background-color: #331c99;
+  }
+
+  .editing.deleteTask-button {
+      padding: 10px 20px;
+      background-color: #700000;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .editing.deleteTask-button:hover {
+      background-color: #850000;
+  }
+
+  .editing.modal-buttons {
+    display: flex;
+    gap: 10px;          /* Adds a gap between the buttons */
+    margin-top: auto;    /* Adds some space above the buttons */
+    width: 100%;        /* Ensures the container fills the modal's width */
+  }
+
+  .viewing.update-button {
+      padding: 2px 2px;
+      background-color: transparent;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+  .viewing.close-button {
+      padding: 2px 2px;
+      background-color: transparent;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+
+  .viewing.deleteTask-button {
+      padding: 2px 2px;
+      background-color: transparent;
+      color: red;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+  }
+
+
+  .viewing.modal-buttons {
+    display: flex;
+    margin-left: auto;    /* Adds some space above the buttons */
+    width: 20%;        /* Ensures the container fills the modal's width */
+    margin-top: -50px;
+    margin-right: -20px;
+  }
+
+
+  .modal-buttons button {
+      flex: 1;            /* Makes each button take equal space */
+  }
+}
+
+
 
