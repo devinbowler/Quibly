@@ -632,8 +632,8 @@ const handleCreateTask = async () => {
                         {task.title}
                       </span>
                       <span className="task-details">
-                        {task.details && task.details.length > 100
-                          ? task.details.slice(0, 100) + "..."
+                        {task.details && task.details.length > 50
+                          ? task.details.slice(0, 50) + "..."
                           : task.details}
                       </span>
                     </div>
@@ -686,8 +686,8 @@ const handleCreateTask = async () => {
                         {task.title}
                       </span>
                       <span className="task-details">
-                        {task.details && task.details.length > 100
-                          ? task.details.slice(0, 100) + "..."
+                        {task.details && task.details.length > 50
+                          ? task.details.slice(0, 50) + "..."
                           : task.details}
                       </span>
                     </div>
@@ -740,8 +740,8 @@ const handleCreateTask = async () => {
                         {task.title}
                       </span>
                       <span className="task-details">
-                        {task.details && task.details.length > 100
-                          ? task.details.slice(0, 100) + "..."
+                        {task.details && task.details.length > 50
+                          ? task.details.slice(0, 50) + "..."
                           : task.details}
                       </span>
                     </div>
@@ -798,8 +798,8 @@ const handleCreateTask = async () => {
                         className="task-details"
                         style={{ textDecoration: "line-through" }}
                       >
-                        {task.details && task.details.length > 100
-                          ? task.details.slice(0, 100) + "..."
+                        {task.details && task.details.length > 50
+                          ? task.details.slice(0, 50) + "..."
                           : task.details}
                       </span>
                     </div>
