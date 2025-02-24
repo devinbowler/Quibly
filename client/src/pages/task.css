@@ -177,7 +177,7 @@ body {
       padding: 3px 6px; /* Slight padding around the path for better visibility */
       border-radius: 4px; /* Optionally rounding the corners */
       cursor: pointer;
-      min-width: 200px;
+      min-width: 80px;
   }
 
   #search-input {
