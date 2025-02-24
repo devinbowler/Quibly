@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import "./task.css";
 import {
   fetchAllItems,
@@ -38,7 +38,7 @@ function Task() {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [isEditingTask, setIsEditingTask] = useState(false);
-  const [newTask, setNewTask] = useState({ name: '', dueDate: '', color: '', details: '' });
+  const [newTask, setNewTask] = useState({ name: '', dueDate: '', color: '', details: '', completed: 'false' });
   const [tasks, setTasks] = useState([]);
   const [files, setFiles] = useState([]);
   const [filteredFiles, setFilteredFiles] = useState([]);
@@ -54,6 +54,7 @@ function Task() {
   const [showFolderModal, setShowFolderModal] = useState(false);
   const [folderModalMode, setFolderModalMode] = useState(""); // "add" or "edit"
   const [folderName, setFolderName] = useState("");
+
 
   // Function to load items from the backend
   const loadItems = async () => {
@@ -245,28 +246,29 @@ function Task() {
     }
   };
 
-  const handleCreateTask = async () => {
-    // Convert the input date string to a local Date object.
-    const localDueDate = new Date(newTask.dueDate + 'T00:00:00');
-    const newTaskData = {
-      title: newTask.name,
-      dueDate: localDueDate, // use the local date
-      color: newTask.color,
-      details: newTask.details,
-      parentFolder: currentPath,
-    };
-    try {
-      const createdTask = await createTask(newTaskData);
-      setTasks([...tasks, createdTask]);
-      setIsAddingTask(false);
-      setIsEditingTask(false);
-      setNewTask({ name: '', dueDate: '', color: '', details: '' });
-      setErrorMessage(null);
-    } catch (error) {
-      console.error('Error creating task:', error);
-      setErrorMessage('Failed to create task.');
-    }
+
+const handleCreateTask = async () => {
+  const localDueDate = new Date(newTask.dueDate + 'T00:00:00');
+  const newTaskData = {
+    title: newTask.name,
+    dueDate: localDueDate,
+    color: newTask.color,
+    details: newTask.details,
+    completed: 'false',
   };
+  console.log('handleCreateTask payload:', newTaskData); // Frontend logging
+  try {
+    const createdTask = await createTask(newTaskData);
+    setTasks([...tasks, createdTask]);
+    setIsAddingTask(false);
+    setIsEditingTask(false);
+    setNewTask({ name: '', dueDate: '', color: '', details: '', completed: 'false' });
+    setErrorMessage(null);
+  } catch (error) {
+    console.error('Error creating task:', error);
+    setErrorMessage('Failed to create task.');
+  }
+};
 
 
   const handleUpdateTask = async () => {
@@ -277,6 +279,7 @@ function Task() {
         dueDate: selectedTask.dueDate,
         color: selectedTask.color,
         details: selectedTask.details,
+        completed: selectedTask.completed,
       });
       setTasks(tasks.map(task => task._id === updatedTask._id ? updatedTask : task));
       setSelectedTask(null);
@@ -405,6 +408,64 @@ function Task() {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
   };
   
+  const handleToggleCompleted = async (e, task) => {
+    // Prevent the click event from bubbling up
+    e.stopPropagation();
+
+    // Toggle the completed value: if it's 'true', make it 'false'; otherwise, 'true'
+    const newCompletedValue = task.completed === 'true' ? 'false' : 'true';
+
+    try {
+      // Call your API to update the task with the new completed value
+      const updatedTask = await updateTask(task._id, { completed: newCompletedValue });
+
+      // Update the tasks state by replacing the updated task
+      setTasks(prevTasks =>
+        prevTasks.map(t => (t._id === updatedTask._id ? updatedTask : t))
+      );
+    } catch (error) {
+      console.error('Error updating task completed status:', error);
+    }
+  };
+
+
+  const sortedTasks = useMemo(() => {
+    return [...tasks].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+  }, [tasks]);
+
+
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
+  const weekFromToday = new Date(todayDate);
+  weekFromToday.setDate(todayDate.getDate() + 7);
+
+  const dueToday = tasks
+    .filter(task => {
+      const taskDate = new Date(task.dueDate);
+      taskDate.setHours(0, 0, 0, 0);
+      return taskDate.getTime() === todayDate.getTime() && task.completed !== 'true';
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+  const dueThisWeek = tasks
+    .filter(task => {
+      const taskDate = new Date(task.dueDate);
+      taskDate.setHours(0, 0, 0, 0);
+      return taskDate > todayDate && taskDate <= weekFromToday && task.completed !== 'true';
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+  const dueLater = tasks
+    .filter(task => {
+      const taskDate = new Date(task.dueDate);
+      taskDate.setHours(0, 0, 0, 0);
+      return taskDate > weekFromToday && task.completed !== 'true';
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
+  const completedTasks = tasks
+    .filter(task => task.completed === 'true')
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
   
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -550,34 +611,230 @@ function Task() {
       {/* Task View */}
       {viewType === 'task' && (
         <div className="file-system-viewer">
-          {tasks.map((task) => (
-            <div
-              key={task._id}
-              className={`file-item task-item ${selectedTask?._id === task._id ? 'selected' : ''}`}
-              onClick={() => openTaskDetailsModal(task)}
-            >
-              <span 
-                className="task-title" 
-                style={{ backgroundColor: task.color ? hexToRGBA(task.color, 0.2) : "transparent" }}
-              >
-                {task.title}
-              </span>
-              <span className="task-details">
-                {task.details && task.details.length > 100
-                  ? task.details.slice(0, 100) + '...'
-                  : task.details}
-              </span>
-              <span className="task-due">
-                {new Date(task.dueDate).toLocaleDateString(undefined, {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </span>
+          {/* Due Today */}
+          <div className="task-group">
+            <h2>Due Today</h2>
+            <div className="tasks-container">
+              {dueToday.length > 0 ? (
+                dueToday.map((task) => (
+                  <div
+                    key={task._id}
+                    className={`task-item ${selectedTask?._id === task._id ? 'selected' : ''}`}
+                    onClick={() => openTaskDetailsModal(task)}
+                  >
+                    <div className="task-info">
+                      <span
+                        className="task-title"
+                        style={{
+                          backgroundColor: task.color ? hexToRGBA(task.color, 0.2) : "transparent"
+                        }}
+                      >
+                        {task.title}
+                      </span>
+                      <span className="task-details">
+                        {task.details && task.details.length > 100
+                          ? task.details.slice(0, 100) + "..."
+                          : task.details}
+                      </span>
+                    </div>
+                    <div className="task-meta">
+                      <span className="task-due">
+                        {new Date(task.dueDate).toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric"
+                        })}
+                      </span>
+                      {/* Incomplete task checkbox */}
+                      <input
+                        type="checkbox"
+                        className="task-completed-checkbox"
+                        checked={false}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          handleToggleCompleted(e, task);
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No tasks due today.</p>
+              )}
             </div>
-          ))}
+          </div>
+
+          {/* Due This Week */}
+          <div className="task-group">
+            <h2>Due This Week</h2>
+            <div className="tasks-container">
+              {dueThisWeek.length > 0 ? (
+                dueThisWeek.map((task) => (
+                  <div
+                    key={task._id}
+                    className={`task-item ${selectedTask?._id === task._id ? 'selected' : ''}`}
+                    onClick={() => openTaskDetailsModal(task)}
+                  >
+                    <div className="task-info">
+                      <span
+                        className="task-title"
+                        style={{
+                          backgroundColor: task.color ? hexToRGBA(task.color, 0.2) : "transparent"
+                        }}
+                      >
+                        {task.title}
+                      </span>
+                      <span className="task-details">
+                        {task.details && task.details.length > 100
+                          ? task.details.slice(0, 100) + "..."
+                          : task.details}
+                      </span>
+                    </div>
+                    <div className="task-meta">
+                      <span className="task-due">
+                        {new Date(task.dueDate).toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric"
+                        })}
+                      </span>
+                      {/* Incomplete task checkbox */}
+                      <input
+                        type="checkbox"
+                        className="task-completed-checkbox"
+                        checked={task.completed === 'true'}
+                        onClick={(e) => e.stopPropagation()} // stops the click event from bubbling up
+                        onChange={(e) => {
+                          e.stopPropagation(); // extra precaution here
+                          handleToggleCompleted(e, task);
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No tasks due this week.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Due Later */}
+          <div className="task-group">
+            <h2>Due Later</h2>
+            <div className="tasks-container">
+              {dueLater.length > 0 ? (
+                dueLater.map((task) => (
+                  <div
+                    key={task._id}
+                    className={`task-item ${selectedTask?._id === task._id ? 'selected' : ''}`}
+                    onClick={() => openTaskDetailsModal(task)}
+                  >
+                    <div className="task-info">
+                      <span
+                        className="task-title"
+                        style={{
+                          backgroundColor: task.color ? hexToRGBA(task.color, 0.2) : "transparent"
+                        }}
+                      >
+                        {task.title}
+                      </span>
+                      <span className="task-details">
+                        {task.details && task.details.length > 100
+                          ? task.details.slice(0, 100) + "..."
+                          : task.details}
+                      </span>
+                    </div>
+                    <div className="task-meta">
+                      <span className="task-due">
+                        {new Date(task.dueDate).toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric"
+                        })}
+                      </span>
+                      {/* Incomplete task checkbox */}
+                      <input
+                        type="checkbox"
+                        className="task-completed-checkbox"
+                        checked={task.completed === 'true'}
+                        onClick={(e) => e.stopPropagation()} // stops the click event from bubbling up
+                        onChange={(e) => {
+                          e.stopPropagation(); // extra precaution here
+                          handleToggleCompleted(e, task);
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No tasks due later.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Completed Tasks */}
+          <div className="task-group" style={{ marginTop: "100px" }}>
+            <h2>Completed Tasks</h2>
+            <div className="tasks-container">
+              {completedTasks.length > 0 ? (
+                completedTasks.map((task) => (
+                  <div
+                    key={task._id}
+                    className={`task-item completed ${selectedTask?._id === task._id ? 'selected' : ''}`}
+                    onClick={() => openTaskDetailsModal(task)}
+                  >
+                    <div className="task-info">
+                      <span
+                        className="task-title"
+                        style={{
+                          backgroundColor: task.color ? hexToRGBA(task.color, 0.2) : "transparent",
+                          textDecoration: "line-through"
+                        }}
+                      >
+                        {task.title}
+                      </span>
+                      <span
+                        className="task-details"
+                        style={{ textDecoration: "line-through" }}
+                      >
+                        {task.details && task.details.length > 100
+                          ? task.details.slice(0, 100) + "..."
+                          : task.details}
+                      </span>
+                    </div>
+                    <div className="task-meta">
+                      <span
+                        className="task-due"
+                        style={{ textDecoration: "line-through" }}
+                      >
+                        {new Date(task.dueDate).toLocaleDateString(undefined, {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric"
+                        })}
+                      </span>
+                      {/* Completed task checkbox – checked by default */}
+                       <input
+                        type="checkbox"
+                        className="task-completed-checkbox"
+                        checked={task.completed === 'true'}
+                        onClick={(e) => e.stopPropagation()} // stops the click event from bubbling up
+                        onChange={(e) => {
+                          e.stopPropagation(); // extra precaution here
+                          handleToggleCompleted(e, task);
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No completed tasks.</p>
+              )}
+            </div>
+          </div>
         </div>
       )}
+
   
       {/* Code View and Grid View */}
       {(viewType === 'code' || viewType === 'grid') && (

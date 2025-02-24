@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'https://quibly.onrender.com'; // Update if backend URL changes
-const LOCAL_URL = 'http://localhost:3000/';
+const LOCAL_URL = 'http://localhost:4000/';
 
 // Axios instance
 const axiosInstance = axios.create({
@@ -82,8 +82,10 @@ export const updateFolder = async (folderId, folderData) => {
 
 // Create a new task
 export const createTask = async (taskData) => {
+  console.log('Creating task with data:', taskData); // Log the taskData payload
   try {
     const response = await axiosInstance.post('/api/tasks/task', taskData);
+    console.log('Task created successfully:', response.data); // Log the response from the server
     return response.data;
   } catch (error) {
     console.error('Error creating task:', error);
@@ -147,3 +149,4 @@ export const deleteAccount = async () => {
     throw error;
   }
 };
+

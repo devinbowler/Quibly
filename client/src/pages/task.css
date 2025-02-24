@@ -432,58 +432,119 @@ body {
 
 
 
+/* Tasks View */
+.task-view {
+  color: white !important;
+  font-family: monospace;
+  font-size: 17px;
+  margin: 20px 150px 150px; /* Adjust margins to align with file-system-viewer */
+  height: calc(100vh - 210px); /* Adjust height similarly */
+  overflow-y: auto; /* Allows scrolling */
+  box-sizing: border-box; /* Include padding in height calculation */
+}
 
-  /* Tasks View */
-  .task-view {
-      color: white !important;
-      font-family: monospace;
-      font-size: 17px;
-      margin: 20px 150px 150px; /* Adjust margins to align with file-system-viewer */
-      height: calc(100vh - 210px); /* Adjust height similarly */
-      overflow-y: auto; /* Allows scrolling */
-      box-sizing: border-box; /* Include padding in height calculation */
-  }
+.task-group {
+  margin-bottom: 30px;
+}
 
-  .task-item {
-    display: grid;
-    grid-template-columns: 1fr 4fr 1fr;  /* Adjust these fractions as desired */
-    align-items: center;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
+.task-group h2 {
+  margin-left: 15px;
+  font-size: 17px;
+  margin-bottom: 25px;
+}
 
-  .task-title {
-    font-size: 13px;
-    padding: 5px 10px;
-    min-width: 115px;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
+.task-group p {
+  margin-left: 15px;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
 
-  .task-details {
-    font-size: 13px;
-    margin-left: 10px;       /* Adds a little margin to the left of details */
-    white-space: nowrap;     /* Prevents wrapping */
-    overflow: hidden;        /* Hide overflow text */
-    text-overflow: ellipsis; /* Show ellipsis at the end if text is too long */
-  }
+/* Flex-based task item layout */
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  cursor: pointer;
+}
 
-  .task-due {
-    text-align: right;       /* Align due date text to the right */
-    font-size: 12px;
-    color: #ccc;
-  }
+/* Left container: Title and Details on one line */
+.task-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}
 
-  .task-item.selected {
-      background-color: #4444; /* Same selected state as file-item */
-  }
-  .task-view input, .task-view textarea {
-      border: none;
-      outline: none;
-      background: transparent;
-      width: 100%;
-  }
+/* Task Title */
+.task-title {
+  font-size: 13px;
+  padding: 5px 10px;
+  /* Adjust as needed */
+}
 
+/* Task Details */
+.task-details {
+  font-size: 13px;
+  margin-left: 10px;       /* Margin between title and details */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Right container: Due Date and Checkbox */
+.task-meta {
+  display: flex;
+  align-items: center;
+}
+
+/* Task Due Date */
+.task-due {
+  font-size: 12px;
+  color: #ccc;
+  margin-right: 10px;
+  text-align: right;
+}
+
+/* Selected state (if needed) */
+.task-item.selected {
+  background-color: #4444;
+}
+
+/* Existing input/textarea rules */
+.task-view input, .task-view textarea {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+}
+
+/* Checkbox styling */
+.task-completed-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+  background: transparent;
+}
+
+.task-completed-checkbox:checked {
+  background-color: white;
+  border-color: white;
+}
+
+.task-item.completed .task-title {
+  background-color: transparent !important;
+}
+
+/* Completed tasks get a green background in both info and meta */
+.task-item.completed {
+  background-color: rgba(0, 128, 0, 0.2);
+}
 
 
 
@@ -1131,43 +1192,13 @@ body {
       box-sizing: border-box; /* Include padding in height calculation */
   }
 
-  .task-item {
-    display: grid;
-    grid-template-columns: 1fr 4fr 1fr;  /* Adjust these fractions as desired */
-    align-items: center;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-
   .task-title {
     font-size: 16px;
     padding: 5px 10px;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
-  }
-
-  .task-details {
-    font-size: 13px;
-    margin-left: 10px;       /* Adds a little margin to the left of details */
-    white-space: nowrap;     /* Prevents wrapping */
-    overflow: hidden;        /* Hide overflow text */
-    text-overflow: ellipsis; /* Show ellipsis at the end if text is too long */
-  }
-
-  .task-due {
-    text-align: right;       /* Align due date text to the right */
-    font-size: 12px;
-    color: #ccc;
-  }
-
-  .task-item.selected {
-      background-color: #4444; /* Same selected state as file-item */
-  }
-  .task-view input, .task-view textarea {
-      border: none;
-      outline: none;
-      background: transparent;
-      width: 100%;
+    min-width: 120px;
+    max-width: 150px;
   }
 
 
@@ -1805,19 +1836,13 @@ body {
       box-sizing: border-box; /* Include padding in height calculation */
   }
 
-  .task-item {
-    display: grid;
-    grid-template-columns: 1fr 4fr 1fr;  /* Adjust these fractions as desired */
-    align-items: center;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-
   .task-title {
     font-size: 16px;
     padding: 5px 10px;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
+    min-width: 130px;
+    max-width: 170px;
   }
 
   .task-details {
@@ -1826,22 +1851,6 @@ body {
     white-space: nowrap;     /* Prevents wrapping */
     overflow: hidden;        /* Hide overflow text */
     text-overflow: ellipsis; /* Show ellipsis at the end if text is too long */
-  }
-
-  .task-due {
-    text-align: right;       /* Align due date text to the right */
-    font-size: 12px;
-    color: #ccc;
-  }
-
-  .task-item.selected {
-      background-color: #4444; /* Same selected state as file-item */
-  }
-  .task-view input, .task-view textarea {
-      border: none;
-      outline: none;
-      background: transparent;
-      width: 100%;
   }
 
 

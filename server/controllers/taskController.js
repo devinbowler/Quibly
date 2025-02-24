@@ -32,21 +32,30 @@ const createFolder = async (req, res) => {
 
 // Create a task
 const createTask = async (req, res) => {
-    const { title, dueDate, color, details, parentFolder } = req.body;
-    const user_id = req.user._id;
+  // Log the request body to see all incoming values
+  console.log('Create Task Request Body:', req.body);
 
-    // Add logs to check the incoming data
-    // console.log('Create Task Request Body:', req.body);
-    // console.log('Authenticated User:', req.user);
-
-    try {
-        const task = await Task.create({ title, dueDate, color, details, user_id, parentFolder });
-        // console.log('Task created in MongoDB:', task);  // Ensure task is created correctly
-        res.status(201).json(task);
-    } catch (error) {
-        console.error('Error creating task:', error.message);
-        res.status(400).json({ error: error.message });
-    }
+  // Destructure the fields from the request body.
+  // Note: We removed parentFolder since it's not needed.
+  const { title, dueDate, color, details, completed } = req.body;
+  const user_id = req.user._id;
+  
+  try {
+    // Log the values being used to create the task
+    console.log('Creating task with:', { title, dueDate, color, details, completed, user_id });
+    
+    // Create the task
+    const task = await Task.create({ title, dueDate, color, details, completed, user_id });
+    
+    // Log the successfully created task
+    console.log('Task created successfully:', task);
+    
+    res.status(201).json(task);
+  } catch (error) {
+    // Log the full error for debugging
+    console.error('Error creating task:', error);
+    res.status(400).json({ error: error.message });
+  }
 };
 
 // Create a note
