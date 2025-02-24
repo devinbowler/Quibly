@@ -477,13 +477,18 @@ body {
 
 /* Task Title */
 .task-title {
+  max-width: 13ch;
+  min-width: 13ch;
   font-size: 13px;
   padding: 5px 10px;
-  /* Adjust as needed */
 }
 
 /* Task Details */
 .task-details {
+  max-width: 10ch; /* roughly 10 characters wide */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 13px;
   margin-left: 10px;       /* Margin between title and details */
   white-space: nowrap;
@@ -1193,12 +1198,27 @@ body {
   }
 
   .task-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 20ch;
+    min-width: 20ch;
     font-size: 16px;
     padding: 5px 10px;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
-    min-width: 120px;
-    max-width: 150px;
+  }
+
+  .task-details {
+    max-width: 50ch; /* roughly 10 characters wide */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    margin-left: 10px;       /* Margin between title and details */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
 
@@ -1837,20 +1857,28 @@ body {
   }
 
   .task-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 20ch;
+    min-width: 20ch;
     font-size: 16px;
     padding: 5px 10px;
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
-    min-width: 130px;
-    max-width: 170px;
   }
 
+
   .task-details {
+    max-width: 100ch; /* roughly 10 characters wide */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: 13px;
-    margin-left: 10px;       /* Adds a little margin to the left of details */
-    white-space: nowrap;     /* Prevents wrapping */
-    overflow: hidden;        /* Hide overflow text */
-    text-overflow: ellipsis; /* Show ellipsis at the end if text is too long */
+    margin-left: 10px;       /* Margin between title and details */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
 

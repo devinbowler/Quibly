@@ -33,7 +33,7 @@ const createFolder = async (req, res) => {
 // Create a task
 const createTask = async (req, res) => {
   // Log the request body to see all incoming values
-  console.log('Create Task Request Body:', req.body);
+  // console.log('Create Task Request Body:', req.body);
 
   // Destructure the fields from the request body.
   // Note: We removed parentFolder since it's not needed.
@@ -42,13 +42,13 @@ const createTask = async (req, res) => {
   
   try {
     // Log the values being used to create the task
-    console.log('Creating task with:', { title, dueDate, color, details, completed, user_id });
+    // console.log('Creating task with:', { title, dueDate, color, details, completed, user_id });
     
     // Create the task
     const task = await Task.create({ title, dueDate, color, details, completed, user_id });
     
     // Log the successfully created task
-    console.log('Task created successfully:', task);
+    // console.log('Task created successfully:', task);
     
     res.status(201).json(task);
   } catch (error) {
