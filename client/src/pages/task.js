@@ -649,9 +649,10 @@ const handleCreateTask = async () => {
                       <input
                         type="checkbox"
                         className="task-completed-checkbox"
-                        checked={false}
+                        checked={task.completed === 'true'}
+                        onClick={(e) => e.stopPropagation()} // stops the click event from bubbling up
                         onChange={(e) => {
-                          e.stopPropagation();
+                          e.stopPropagation(); // extra precaution here
                           handleToggleCompleted(e, task);
                         }}
                       />
