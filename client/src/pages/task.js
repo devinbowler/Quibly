@@ -49,6 +49,24 @@ function Task() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [collapsedToday, setCollapsedToday] = useState(() => {
+    const saved = localStorage.getItem("collapsedToday");
+    return saved ? JSON.parse(saved) : false;
+  });
+  const [collapsedWeek, setCollapsedWeek] = useState(() => {
+    const saved = localStorage.getItem("collapsedWeek");
+    return saved ? JSON.parse(saved) : false;
+  });
+  const [collapsedLater, setCollapsedLater] = useState(() => {
+    const saved = localStorage.getItem("collapsedLater");
+    return saved ? JSON.parse(saved) : false;
+  });
+  const [collapsedComplete, setCollapsedComplete] = useState(() => {
+    const saved = localStorage.getItem("collapsedComplete");
+    return saved ? JSON.parse(saved) : false;
+  });
+
+
 
   // Folder modal state
   const [showFolderModal, setShowFolderModal] = useState(false);
@@ -123,12 +141,63 @@ function Task() {
     setFolderName("");
   };
 
+  // Determine the current folder object (if not at root)
+  let currentFolderObj = null;
+  if (currentPath !== "system:/user/") {
+    const segments = currentPath.split('/').filter(s => s !== '');
+    const currentFolderName = segments[segments.length - 1];
+    currentFolderObj = files.find(file => file.type === 'folder' && file.name === currentFolderName);
+  }
+
   const handleSaveFolder = async () => {
-    // Implementation omitted
+    if (folderModalMode === "add") {
+      // Create a new folder with the entered name
+      try {
+        const newFolder = await createFolder({ name: folderName, parentFolder: currentPath });
+        setFiles([...files, newFolder]);
+        setFilteredFiles([...filteredFiles, newFolder]);
+        closeFolderModal();
+      } catch (error) {
+        alert("Failed to create folder.");
+      }
+    } else if (folderModalMode === "edit") {
+      // Update the current folder's name
+      try {
+        const updatedFolder = await updateFolder(currentFolderObj._id, { name: folderName });
+        // Update currentPath: replace the old folder name with the new name
+        const segments = currentPath.split('/');
+        segments[segments.length - 1] = folderName;
+        const newPath = segments.join('/');
+        setCurrentPath(newPath);
+        // Refresh items list
+        await loadItems();
+        closeFolderModal();
+      } catch (error) {
+        alert("Failed to update folder.");
+      }
+    }
   };
 
+  // Delete folder (and all nested content)
   const handleDeleteFolder = async () => {
-    // Implementation omitted
+    if (!currentFolderObj) {
+      alert("No folder to delete.");
+      return;
+    }
+    if (!window.confirm("Are you sure you want to delete this folder and all its contents?")) {
+      return;
+    }
+    try {
+      await deleteItem(currentFolderObj._id, 'folder');
+      let newPath = currentPath.replace(/\/[^/]+\/?$/, '');
+      if (newPath === '' || newPath === 'system:/user') {
+        newPath = 'system:/user/';
+      }
+      setCurrentPath(newPath);
+      await loadItems();
+    } catch (error) {
+      alert("Failed to delete folder.");
+    }
   };
 
   const debouncedSaveNote = useCallback(
@@ -403,6 +472,23 @@ function Task() {
   }, [isAddingTask, selectedTask, currentPath, searchQuery, showFolderModal]);
 
 
+  useEffect(() => {
+    localStorage.setItem("collapsedToday", JSON.stringify(collapsedToday));
+  }, [collapsedToday]);
+
+  useEffect(() => {
+    localStorage.setItem("collapsedWeek", JSON.stringify(collapsedWeek));
+  }, [collapsedWeek]);
+
+  useEffect(() => {
+    localStorage.setItem("collapsedLater", JSON.stringify(collapsedLater));
+  }, [collapsedLater]);
+
+  useEffect(() => {
+    localStorage.setItem("collapsedComplete", JSON.stringify(collapsedComplete));
+  }, [collapsedComplete]);
+
+
 return (
   <div className="app-container">
     {/* Top Bar */}
@@ -478,46 +564,88 @@ return (
 
     {/* Filter Buttons */}
     <div className="filter-buttons">
-      <div className="left-buttons">
-        {viewType !== 'note' && (
-          <button onClick={() => setViewType('task')} className={viewType === 'task' ? 'active' : ''}>
-            <i className="fas fa-tasks"></i>
-          </button>
-        )}
-        {viewType !== 'note' && (
-          <>
-            <button onClick={() => { setViewType('grid'); setNoteBack('grid'); }} className={viewType === 'grid' ? 'active' : ''}>
-              <i className="fas fa-th-large"></i>
-            </button>
-            <button onClick={() => { setViewType('code'); setNoteBack('code'); }} className={viewType === 'code' ? 'active' : ''}>
-              <i className="fas fa-code"></i>
-            </button>
-          </>
-        )}
-      </div>
-      <div className="right-buttons">
-        {viewType === 'task' ? (
-          <button onClick={openAddTaskModal}>Add Task</button>
-        ) : viewType === 'note' ? (
-          <></>
-        ) : (
-          <>
-            <button onClick={() => handleCreate('folder')}>Add Folder</button>
-            <button onClick={() => handleCreate('file')}>Add Note</button>
-            {currentPath !== "system:/user/" && (
+      { viewType !== 'note' && (
+        <>
+          { viewType === 'task' ? (
+            // If we're in task view, check if we're at the root or inside a folder.
+            currentPath === "system:/user/" ? (
+              // At root: Combined buttons – view selectors (left) and Add Task (right)
+              <div className="combined-buttons">
+                <div className="left-group">
+                  <button onClick={() => setViewType('task')} className={viewType === 'task' ? 'active' : ''}>
+                    <i className="fas fa-tasks"></i>
+                  </button>
+                  <button onClick={() => { setViewType('grid'); setNoteBack('grid'); }} className={viewType === 'grid' ? 'active' : ''}>
+                    <i className="fas fa-th-large"></i>
+                  </button>
+                  <button onClick={() => { setViewType('code'); setNoteBack('code'); }} className={viewType === 'code' ? 'active' : ''}>
+                    <i className="fas fa-code"></i>
+                  </button>
+                </div>
+                <div className="right-group">
+                  <button onClick={openAddTaskModal}>Add Task</button>
+                </div>
+              </div>
+            ) : (
+              // Inside a folder: Two rows – view selectors on top and folder actions below.
               <>
-                <button className="edit-folder-button" onClick={() => openFolderModal("edit")}>
-                  Edit Folder
-                </button>
-                <button className="delete-folder-button" onClick={handleDeleteFolder}>
-                  Delete Folder
-                </button>
+                <div className="left-buttons">
+                  <button onClick={() => setViewType('task')} className={viewType === 'task' ? 'active' : ''}>
+                    <i className="fas fa-tasks"></i>
+                  </button>
+                  <button onClick={() => { setViewType('grid'); setNoteBack('grid'); }} className={viewType === 'grid' ? 'active' : ''}>
+                    <i className="fas fa-th-large"></i>
+                  </button>
+                  <button onClick={() => { setViewType('code'); setNoteBack('code'); }} className={viewType === 'code' ? 'active' : ''}>
+                    <i className="fas fa-code"></i>
+                  </button>
+                </div>
+                <div className="right-buttons">
+                  <button onClick={() => handleCreate('folder')}>Add Folder</button>
+                  <button onClick={() => handleCreate('file')}>Add Note</button>
+                  <button className="edit-folder-button" onClick={() => openFolderModal("edit")}>
+                    Edit Folder
+                  </button>
+                  <button className="delete-folder-button" onClick={handleDeleteFolder}>
+                    Delete Folder
+                  </button>
+                </div>
               </>
-            )}
-          </>
-        )}
-      </div>
+            )
+          ) : (
+            // Else (for code or grid view)
+            <>
+              <div className="left-buttons">
+                <button onClick={() => setViewType('task')} className={viewType === 'task' ? 'active' : ''}>
+                  <i className="fas fa-tasks"></i>
+                </button>
+                <button onClick={() => { setViewType('grid'); setNoteBack('grid'); }} className={viewType === 'grid' ? 'active' : ''}>
+                  <i className="fas fa-th-large"></i>
+                </button>
+                <button onClick={() => { setViewType('code'); setNoteBack('code'); }} className={viewType === 'code' ? 'active' : ''}>
+                  <i className="fas fa-code"></i>
+                </button>
+              </div>
+              <div className="right-buttons">
+                <button onClick={() => handleCreate('folder')}>Add Folder</button>
+                <button onClick={() => handleCreate('file')}>Add Note</button>
+                {currentPath !== "system:/user/" && (
+                  <>
+                    <button className="edit-folder-button" onClick={() => openFolderModal("edit")}>
+                      Edit Folder
+                    </button>
+                    <button className="delete-folder-button" onClick={handleDeleteFolder}>
+                      Delete Folder
+                    </button>
+                  </>
+                )}
+              </div>
+            </>
+          )}
+        </>
+      )}
     </div>
+
 
     {/* Search Bar */}
     {viewType !== 'task' && viewType !== 'note' && viewType !== 'taskDetails' && (
@@ -539,12 +667,22 @@ return (
     {errorMessage && <div className="error-message">{errorMessage}</div>}
 
     {/* Task View */}
-    {viewType === 'task' && (
+    {(viewType === 'task' || viewType === 'taskDetails') && (
       <div className="file-system-viewer">
         {/* Due Today */}
         <div className="task-group">
-          <h2>Due Today</h2>
-          <div className="tasks-container">
+          <div className="section-header">
+            <div className="collapse" onClick={() => {setCollapsedToday(!collapsedToday)}} style={{ transform: collapsedToday ? '' : "rotate(90deg)" }}>
+              >
+            </div>
+            <div className="group-label">
+              <h2>Due Today</h2>
+            </div>
+            <div className="task-count">
+              {dueToday.length} Tasks
+            </div>
+          </div>
+          <div className={`tasks-container ${collapsedToday ? 'collapsed-style' : ''}`}>
             {dueToday.length > 0 ? (
               dueToday.map((task) => (
                 <div
@@ -594,8 +732,18 @@ return (
 
         {/* Due This Week */}
         <div className="task-group">
-          <h2>Due This Week</h2>
-          <div className="tasks-container">
+          <div className="section-header">
+            <div className="collapse" onClick={() => {setCollapsedWeek(!collapsedWeek)}} style={{ transform: collapsedWeek ? '' : "rotate(90deg)" }}>
+              >
+            </div>
+            <div className="group-label">
+              <h2>Due This Week</h2>
+            </div>
+            <div className="task-count">
+              {dueThisWeek.length} Tasks
+            </div>
+          </div>
+          <div className={`tasks-container ${collapsedWeek ? 'collapsed-style' : ''}`}>
             {dueThisWeek.length > 0 ? (
               dueThisWeek.map((task) => (
                 <div
@@ -645,8 +793,18 @@ return (
 
         {/* Due Later */}
         <div className="task-group">
-          <h2>Due Later</h2>
-          <div className="tasks-container">
+          <div className="section-header">
+            <div className="collapse" onClick={() => {setCollapsedLater(!collapsedLater)}} style={{ transform: collapsedLater ? '' : "rotate(90deg)" }}>
+              >
+            </div>
+            <div className="group-label">
+              <h2>Due Later</h2>
+            </div>
+            <div className="task-count">
+              {dueLater.length} Tasks
+            </div>
+          </div>
+          <div className={`tasks-container ${collapsedLater ? 'collapsed-style' : ''}`}>
             {dueLater.length > 0 ? (
               dueLater.map((task) => (
                 <div
@@ -696,8 +854,18 @@ return (
 
         {/* Completed Tasks */}
         <div className="task-group" style={{ marginTop: "100px" }}>
-          <h2>Completed Tasks</h2>
-          <div className="tasks-container">
+          <div className="section-header">
+            <div className="collapse" onClick={() => {setCollapsedComplete(!collapsedComplete)}} style={{ transform: collapsedComplete ? '' : "rotate(90deg)" }}>
+              >
+            </div>
+            <div className="group-label">
+              <h2>Completed Tasks</h2>
+            </div>
+            <div className="task-count">
+              {completedTasks.length} Tasks
+            </div>
+          </div>
+          <div className={`tasks-container ${collapsedComplete ? 'collapsed-style' : ''}`}>
             {completedTasks.length > 0 ? (
               completedTasks.map((task) => (
                 <div
@@ -745,69 +913,6 @@ return (
             )}
           </div>
         </div>
-      </div>
-    )}
-
-    {/* Code View and Grid View */}
-    {(viewType === 'code' || viewType === 'grid') && (
-      <div className={viewType === 'code' ? "file-system-viewer" : "grid-view"}>
-        {files.filter(file => file.parentFolder === currentPath).map((file) => (
-          <div
-            key={file._id}
-            className={`${viewType === 'code' ? 'file-item' : 'grid-item'} ${file.type} ${selectedIndex === file._id ? 'selected' : ''}`}
-            onClick={() => handleFileClick(file)}
-          >
-            {viewType === 'code' ? (
-              <>
-                <span className="file-name">
-                  {file.type === 'folder' ? file.name : file.title}
-                </span>
-                <span className="last-accessed">
-                  {file.lastAccessed
-                    ? new Date(file.lastAccessed).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
-                    : 'N/A'}
-                </span>
-              </>
-            ) : (
-              <>
-                <i className={`fas ${file.type === 'folder' ? 'fa-folder' : 'fa-file'}`}></i>
-                <span className="file-name">
-                  {file.type === 'folder' ? file.name : file.title}
-                </span>
-              </>
-            )}
-          </div>
-        ))}
-      </div>
-    )}
-
-    {/* Note View */}
-    {viewType === 'note' && selectedNote && (
-      <div className="note-view">
-        <div className="note-view-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button className="back-button" onClick={() => setViewType(noteBack)}>
-            ← Back
-          </button>
-          <div className="note-status-controls" style={{ display: 'flex', alignItems: 'center' }}>
-            {saveMessage && <span className="save-status" style={{ marginRight: '1rem' }}>{saveMessage}</span>}
-            <button onClick={handleDelete} className="delete-button">
-              Delete
-            </button>
-          </div>
-        </div>
-        <input
-          className="note-title"
-          placeholder="Enter note title..."
-          value={selectedNote.title}
-          onChange={(e) => handleNoteChange('title', e.target.value)}
-        />
-        <textarea
-          placeholder="Details..."
-          className="note-body"
-          value={selectedNote.body}
-          onChange={(e) => handleNoteChange('body', e.target.value)}
-          onInput={handleTextareaFormatting}
-        />
       </div>
     )}
 
@@ -925,6 +1030,69 @@ return (
             </button>
           </div>
         </div>
+      </div>
+    )}
+
+    {/* Code View and Grid View */}
+    {(viewType === 'code' || viewType === 'grid') && (
+      <div className={viewType === 'code' ? "file-system-viewer" : "grid-view"}>
+        {files.filter(file => file.parentFolder === currentPath).map((file) => (
+          <div
+            key={file._id}
+            className={`${viewType === 'code' ? 'file-item' : 'grid-item'} ${file.type} ${selectedIndex === file._id ? 'selected' : ''}`}
+            onClick={() => handleFileClick(file)}
+          >
+            {viewType === 'code' ? (
+              <>
+                <span className="file-name">
+                  {file.type === 'folder' ? file.name : file.title}
+                </span>
+                <span className="last-accessed">
+                  {file.lastAccessed
+                    ? new Date(file.lastAccessed).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+                    : 'N/A'}
+                </span>
+              </>
+            ) : (
+              <>
+                <i className={`fas ${file.type === 'folder' ? 'fa-folder' : 'fa-file'}`}></i>
+                <span className="file-name">
+                  {file.type === 'folder' ? file.name : file.title}
+                </span>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    )}
+
+    {/* Note View */}
+    {viewType === 'note' && selectedNote && (
+      <div className="note-view">
+        <div className="note-view-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <button className="back-button" onClick={() => setViewType(noteBack)}>
+            ← Back
+          </button>
+          <div className="note-status-controls" style={{ display: 'flex', alignItems: 'center' }}>
+            {saveMessage && <span className="save-status" style={{ marginRight: '1rem' }}>{saveMessage}</span>}
+            <button onClick={handleDelete} className="delete-button">
+              Delete
+            </button>
+          </div>
+        </div>
+        <input
+          className="note-title"
+          placeholder="Enter note title..."
+          value={selectedNote.title}
+          onChange={(e) => handleNoteChange('title', e.target.value)}
+        />
+        <textarea
+          placeholder="Details..."
+          className="note-body"
+          value={selectedNote.body}
+          onChange={(e) => handleNoteChange('body', e.target.value)}
+          onInput={handleTextareaFormatting}
+        />
       </div>
     )}
   </div>

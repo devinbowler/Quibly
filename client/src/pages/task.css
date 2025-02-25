@@ -197,11 +197,25 @@ body {
   .filter-buttons {
       display: flex;
       flex-direction: column;
+      gap: 10px;
       justify-content: space-between; /* Ensures that left and right buttons are aligned to opposite ends */
       margin-top: 100px; /* Adjusts the space below the top bar */
       margin-left: 15px; /* Aligns with the left side of the top bar */
       margin-right: 15px; /* Aligns with the right side of the top bar */
       align-items: center; /* Vertically centers the buttons in the container */
+  }
+
+  .combined-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .combined-buttons .left-group {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
   }
 
   .filter-buttons button {
@@ -212,19 +226,33 @@ body {
       font-size: 14px;
       border-radius: 5px;
       cursor: pointer;
+      width: 100%;
   }
 
   .filter-buttons button.active {
       background-color: #343434; /* Slightly different background for active state */
   }
 
+  .filter-buttons .combined-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+  }
+
   .left-buttons, .right-buttons {
-      display: grid; /* Makes buttons in these divs line up horizontally */
-      grid-template-columns: repeat(3, 1fr);
-      flex-wrap: wrap;
+      display: flex;
+      flex-direction: row;
       margin-bottom: 10px;
-      gap: 5px;
       width: 100%;
+      gap: 10px;
+  }
+  .filter-buttons.code-grid .right-buttons {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
   }
 
   /* By default the first three buttons will fill row 1.
@@ -447,10 +475,33 @@ body {
   margin-bottom: 30px;
 }
 
+.tasks-container.collapsed-style {
+  display: none;
+}
+
 .task-group h2 {
   margin-left: 15px;
   font-size: 17px;
+  min-width: 135px;
+}
+
+.task-group .section-header {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
   margin-bottom: 25px;
+  margin-left: 15px;
+}
+
+.task-group .section-header .collapse {
+  cursor: pointer;
+  user-select: none;
+}
+
+.task-group .section-header .task-count {
+  font-size: 12px;
+  color: grey;
 }
 
 .task-group p {
@@ -609,7 +660,7 @@ body {
   }
 
   .modal.folder button {
-      padding: 10px 5px;
+      padding: 10px 10px;
       background-color: #221170;
       border: none;
       color: white;
@@ -617,8 +668,12 @@ body {
   }
 
   .modal.folder button:hover {
-      padding: 10px 5px;
+      cursor: pointer;
       background-color: #331c99;
+  }
+
+  .modal.folder .modal-buttons button {
+    margin-right: 10px;
   }
 
   .modal-overlay {
@@ -973,13 +1028,12 @@ body {
       color: white;
       border: none;
       padding: 10px 20px;
-      margin-right: 10px; /* Adds spacing between buttons */
       cursor: pointer;
-      font-size: 16px;
       border-radius: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: auto;
   }
 
   .filter-buttons button.active {
@@ -990,7 +1044,6 @@ body {
   .right-buttons {
     display: flex;
     flex-wrap: nowrap;      /* all buttons in one line */
-    gap: 10px;
     width: auto;
   }
 
@@ -1107,8 +1160,7 @@ body {
   /* File System Notes */ 
   .note-view {
     padding: 5px;
-    padding-left: 5px;
-    padding-left: 50px;
+    padding-left: 55px;
     color: white;
     display: flex;
     flex-direction: column;
@@ -1223,8 +1275,6 @@ body {
 
 
 
-
-
   /* Task Form */
   .modal-view {
     width: 600px;
@@ -1235,61 +1285,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-
-  .modal-overlay p.modal-title {
-    font-size: 18px;
-    background-color: transparent;
-    text-decoration: none;
-    resize: none;
-    border: none;
-    color: white;
-  }
-
-  .modal-overlay p.modal-date {
-    font-size: 12px;
-    background-color: transparent;
-    text-decoration: none;
-    resize: none;
-    border: none;
-    color: grey;
-    margin-top: -30px;
-    margin-bottom: 10px;
-  }
-
-  .modal-overlay p.modal-details {
-    font-size: 14px;
-    background-color: transparent;
-    text-decoration: none;
-    resize: none;
-    border: none;
-    color: white;
-  }
-
-  .modal.folder {
-      color: white !important;
-      height: 250px !important;
-  }
-
-  .modal.folder input {
-      background-color: transparent;
-      border: 1px solid rgb(53, 53, 53);
-      padding: 15px 10px;
-      border-radius: 5px;
-      color: white;
-  }
-
-  .modal.folder button {
-      padding: 10px 5px;
-      background-color: #221170;
-      border: none;
-      color: white;
-      border-radius: 5px;
-  }
-
-  .modal.folder button:hover {
-      padding: 10px 5px;
-      background-color: #331c99;
   }
 
   .modal-overlay {
@@ -1314,142 +1309,6 @@ body {
       display: flex;
       flex-direction: column;
       gap: 20px;
-  }
-
-  .modal-input, .modal-textarea {
-      background-color: transparent;
-      color: white;
-      border: none;
-      padding: 10px;
-      outline: none;
-      width: 100%;
-  }
-
-  .modal-input {
-      font-size: 24px; /* Increased font size for the title */
-      padding-bottom: 5px; /* Reduced padding below the title */
-  }
-
-  .modal-input[type="date"] {
-      font-size: 16px;
-      margin-top: 10px; /* Reduced the gap between title and date */
-  }
-
-  .modal-textarea {
-      border-top: 1px solid rgba(255, 255, 255, 0.5); /* Half-opacity grey border */
-      height: 200px;
-      resize: none;
-  }
-
-  .create-button {
-      margin-top: auto;
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .create-button:hover {
-      background-color: #331c99;
-  }
-
-  .modal-header {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .editing.update-button {
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .editing.update-button:hover {
-      background-color: #331c99;
-  }
-
-  .editing.close-button {
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .editing.close-button:hover {
-      background-color: #331c99;
-  }
-
-  .editing.deleteTask-button {
-      padding: 10px 20px;
-      background-color: #700000;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .editing.deleteTask-button:hover {
-      background-color: #850000;
-  }
-
-  .editing.modal-buttons {
-    display: flex;
-    gap: 10px;          /* Adds a gap between the buttons */
-    margin-top: auto;    /* Adds some space above the buttons */
-    width: 100%;        /* Ensures the container fills the modal's width */
-  }
-
-  .viewing.update-button {
-      padding: 2px 2px;
-      background-color: transparent;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .viewing.close-button {
-      padding: 2px 2px;
-      background-color: transparent;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-
-  .viewing.deleteTask-button {
-      padding: 2px 2px;
-      background-color: transparent;
-      color: red;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-
-  .viewing.modal-buttons {
-    display: flex;
-    margin-left: auto;    /* Adds some space above the buttons */
-    width: 20%;        /* Ensures the container fills the modal's width */
-    margin-top: -50px;
-    margin-right: -20px;
-  }
-
-
-  .modal-buttons button {
-      flex: 1;            /* Makes each button take equal space */
   }
 }
 
@@ -1638,12 +1497,18 @@ body {
       align-items: center; /* Vertically centers the buttons in the container */
   }
 
+  .filter-buttons.task-view-buttons .left-buttons,
+  .filter-buttons.task-view-buttons .right-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
   .filter-buttons button {
       background-color: #171716;
       color: white;
       border: none;
       padding: 10px 20px;
-      margin-right: 10px; /* Adds spacing between buttons */
       cursor: pointer;
       font-size: 16px;
       border-radius: 5px;
@@ -1767,7 +1632,7 @@ body {
   /* File System Notes */ 
   .note-view {
     padding: 5px;
-    padding-left: 50px;
+    padding-left: 55px;
     color: white;
     display: flex;
     flex-direction: column;
@@ -1879,237 +1744,6 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-
-
-
-
-  /* Task Form */
-  .modal-view {
-    width: 600px;
-    height: 400px;
-    background-color: #171716;
-    padding: 30px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .modal-overlay p.modal-title {
-    font-size: 18px;
-    background-color: transparent;
-    text-decoration: none;
-    resize: none;
-    border: none;
-    color: white;
-  }
-
-  .modal-overlay p.modal-date {
-    font-size: 12px;
-    background-color: transparent;
-    text-decoration: none;
-    resize: none;
-    border: none;
-    color: grey;
-    margin-top: -30px;
-    margin-bottom: 10px;
-  }
-
-  .modal-overlay p.modal-details {
-    font-size: 14px;
-    background-color: transparent;
-    text-decoration: none;
-    resize: none;
-    border: none;
-    color: white;
-  }
-
-  .modal.folder {
-      color: white !important;
-      height: 250px !important;
-  }
-
-  .modal.folder input {
-      background-color: transparent;
-      border: 1px solid rgb(53, 53, 53);
-      padding: 15px 10px;
-      border-radius: 5px;
-      color: white;
-  }
-
-  .modal.folder button {
-      padding: 10px 5px;
-      background-color: #221170;
-      border: none;
-      color: white;
-      border-radius: 5px;
-  }
-
-  .modal.folder button:hover {
-      padding: 10px 5px;
-      background-color: #331c99;
-  }
-
-  .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-  }
-
-  .modal {
-      width: 400px;
-      height: 500px;
-      background-color: #171716;
-      padding: 30px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-  }
-
-  .modal-input, .modal-textarea {
-      background-color: transparent;
-      color: white;
-      border: none;
-      padding: 10px;
-      outline: none;
-      width: 100%;
-  }
-
-  .modal-input {
-      font-size: 24px; /* Increased font size for the title */
-      padding-bottom: 5px; /* Reduced padding below the title */
-  }
-
-  .modal-input[type="date"] {
-      font-size: 16px;
-      margin-top: 10px; /* Reduced the gap between title and date */
-  }
-
-  .modal-textarea {
-      border-top: 1px solid rgba(255, 255, 255, 0.5); /* Half-opacity grey border */
-      height: 200px;
-      resize: none;
-  }
-
-  .create-button {
-      margin-top: auto;
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .create-button:hover {
-      background-color: #331c99;
-  }
-
-  .modal-header {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .editing.update-button {
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .editing.update-button:hover {
-      background-color: #331c99;
-  }
-
-  .editing.close-button {
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .editing.close-button:hover {
-      background-color: #331c99;
-  }
-
-  .editing.deleteTask-button {
-      padding: 10px 20px;
-      background-color: #700000;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .editing.deleteTask-button:hover {
-      background-color: #850000;
-  }
-
-  .editing.modal-buttons {
-    display: flex;
-    gap: 10px;          /* Adds a gap between the buttons */
-    margin-top: auto;    /* Adds some space above the buttons */
-    width: 100%;        /* Ensures the container fills the modal's width */
-  }
-
-  .viewing.update-button {
-      padding: 2px 2px;
-      background-color: transparent;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .viewing.close-button {
-      padding: 2px 2px;
-      background-color: transparent;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-
-  .viewing.deleteTask-button {
-      padding: 2px 2px;
-      background-color: transparent;
-      color: red;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-
-  .viewing.modal-buttons {
-    display: flex;
-    margin-left: auto;    /* Adds some space above the buttons */
-    width: 20%;        /* Ensures the container fills the modal's width */
-    margin-top: -50px;
-    margin-right: -20px;
-  }
-
-
-  .modal-buttons button {
-      flex: 1;            /* Makes each button take equal space */
   }
 }
 
