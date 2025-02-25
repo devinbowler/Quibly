@@ -567,8 +567,6 @@ return (
       { viewType !== 'note' && (
         <>
           { viewType === 'task' ? (
-            // If we're in task view, check if we're at the root or inside a folder.
-            currentPath === "system:/user/" ? (
               // At root: Combined buttons – view selectors (left) and Add Task (right)
               <div className="combined-buttons">
                 <div className="left-group">
@@ -587,33 +585,6 @@ return (
                 </div>
               </div>
             ) : (
-              // Inside a folder: Two rows – view selectors on top and folder actions below.
-              <>
-                <div className="left-buttons">
-                  <button onClick={() => setViewType('task')} className={viewType === 'task' ? 'active' : ''}>
-                    <i className="fas fa-tasks"></i>
-                  </button>
-                  <button onClick={() => { setViewType('grid'); setNoteBack('grid'); }} className={viewType === 'grid' ? 'active' : ''}>
-                    <i className="fas fa-th-large"></i>
-                  </button>
-                  <button onClick={() => { setViewType('code'); setNoteBack('code'); }} className={viewType === 'code' ? 'active' : ''}>
-                    <i className="fas fa-code"></i>
-                  </button>
-                </div>
-                <div className="right-buttons">
-                  <button onClick={() => handleCreate('folder')}>Add Folder</button>
-                  <button onClick={() => handleCreate('file')}>Add Note</button>
-                  <button className="edit-folder-button" onClick={() => openFolderModal("edit")}>
-                    Edit Folder
-                  </button>
-                  <button className="delete-folder-button" onClick={handleDeleteFolder}>
-                    Delete Folder
-                  </button>
-                </div>
-              </>
-            )
-          ) : (
-            // Else (for code or grid view)
             <>
               <div className="left-buttons">
                 <button onClick={() => setViewType('task')} className={viewType === 'task' ? 'active' : ''}>
