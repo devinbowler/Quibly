@@ -20,10 +20,17 @@ const allowedOrigins = [
 
 
 // CORS configuration
-app.use(cors({
-  origin: '*', // Allow all origins
-  credentials: true, // Allow credentials
-}));
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed from this origin'));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 // Middleware
 app.use(express.json());
