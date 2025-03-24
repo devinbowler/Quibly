@@ -20,10 +20,18 @@ const app = express();
 
 // CORS configuration
 // CORS configuration: allow all origins by reflecting the request's origin
-app.use(cors({
-    origin: true,        // Reflect the request's origin
-    credentials: true,   // Allow credentials
-}));
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS not allowed from this origin'));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 
 // Explicitly handle all OPTIONS requests
 app.options('*', (req, res) => {
