@@ -11,7 +11,9 @@ function Home() {
   return (
     <div className="home">
       <header className="topbar">
-        <img src={logo} alt="Quibly Logo" className="logo" />
+        <a aria-label="go back to home" href="">
+          <img src={logo} alt="Quibly Logo" className="logo" />
+        </a>
         <nav className="navbar">
           <a href="#about">About</a>
           <a href="#cs-footer-274">Support</a>
