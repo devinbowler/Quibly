@@ -10,13 +10,12 @@ const userRoutes = require('./routes/user');
 // Express app
 const app = express();
 
-/*const allowedOrigins = [
+const allowedOrigins = [
   'https://quibly.net', // No trailing slash
   'https://quibly.net/register',
   'https://quibly.net/login',
   'http://localhost:3000',
-  // other domains...
-];*/
+];
 
 // CORS configuration
 // CORS configuration: allow all origins by reflecting the request's origin
