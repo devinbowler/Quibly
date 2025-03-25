@@ -26,30 +26,36 @@ function Home() {
         </section>
 
         <section className="feature-section">
-          <div className="feature-block">
+          {/* Task Section - image left, text right */}
+          <div className="feature-block reverse">
             <div className="feature-images">
               <img src={taskImg} alt="Task Management Screenshot" />
             </div>
             <div className="feature-content">
               <h2 className="feature-title">Smart Task Management</h2>
-              <p>Track your daily responsibilities with precision and ease. Our task management interface is built for clarity, speed, and efficiency—helping you stay on top of your goals.</p>
+              <p>
+                Track your daily responsibilities with precision and ease. Our task management interface is built for clarity, speed, and efficiency—helping you stay on top of your goals.
+              </p>
             </div>
           </div>
-
-          <section className="feature-block stacked-notes-section">
-            <div className="stacked-images">
-              <div className="img-wrapper bottom">
-                <img src={noteImg2} alt="Single Note View" />
-              </div>
-              <div className="img-wrapper top">
-                <img src={noteImg1} alt="Notes Folder View" />
-              </div>
-            </div>
+        
+          {/* Notes Section - text left, stacked images right */}
+          <div className="feature-block stacked-notes-section">
             <div className="feature-content tight">
               <h2 className="feature-title">View & Edit Your Notes Clearly</h2>
-              <p>View all your notes in one place and easily dive into details. Simple layout, organized folders, and distraction-free editing built for clarity.</p>
+              <p>
+                View all your notes in one place and easily dive into details. Simple layout, organized folders, and distraction-free editing built for clarity.
+              </p>
             </div>
-          </section>
+            <div className="stacked-images">
+              <div className="img-wrapper bottom">
+                <img src={noteImg2} alt="Notes Folder View" />
+              </div>
+              <div className="img-wrapper top">
+                <img src={noteImg1} alt="Single Note View" />
+              </div>
+            </div>
+          </div>
         </section>
       </main>
 
