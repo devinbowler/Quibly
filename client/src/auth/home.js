@@ -2,8 +2,8 @@ import React from 'react';
 import './home.css';
 import logo from '../images/Quantumix-B6.png';
 import taskImg from '../images/QuiblyTasks.png';
-import noteImg1 from '../images/QuiblyNote.png';
-import noteImg2 from '../images/QuiblyFolder.png';
+import noteImg1 from '../images/QuiblyFolder.png';
+import noteImg2 from '../images/QuiblyNote.png';
 import privacypolicy from './privacypolicy.js';
 import { Link } from 'react-router-dom';
 
