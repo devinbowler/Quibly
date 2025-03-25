@@ -316,10 +316,6 @@
     align-items: center;
   }
 
-  .feature-block.reverse {
-    flex-direction: row-reverse;
-  }
-
   .stacked-notes-section {
     flex-direction: row;
     justify-content: space-between;
@@ -364,10 +360,6 @@
   .feature-block {
     flex-direction: row;
     justify-content: space-between;
-  }
-
-  .feature-block.reverse {
-    flex-direction: row-reverse;
   }
 }
 
