@@ -3,12 +3,12 @@
   "name": "Quibly - Task Tracker",
   "icons": [
     {
-      "src": "Quantumix-B6.ico",
+      "src": "QuiblyLogo.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "Quantumix-B6.ico",
+      "src": "QuiblyLogo.png",
       "sizes": "512x512",
       "type": "image/png"
     }
