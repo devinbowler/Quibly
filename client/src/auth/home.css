@@ -172,6 +172,53 @@
   .cs-logo-img {
     position: relative;
   }
+
+  .feature-section {
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+  .feature-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+    gap: 2rem;
+  }
+  
+  .feature-block.reverse {
+    flex-direction: column-reverse;
+  }
+  
+  .feature-images {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+  }
+  
+  .feature-images img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .feature-images img + img {
+    margin-top: 1rem;
+  }
+  
+  .feature-content {
+    max-width: 600px;
+    color: white;
+  }
+  
+  .feature-title {
+    font-size: 2rem;
+    color: #495BFA;
+    margin-bottom: 1rem;
+  }
 }
 
 /* Responsive Design */
@@ -226,6 +273,15 @@
 
   .topbar {
     font-size: 2rem !important;
+  }
+
+  .feature-block {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .feature-block.reverse {
+    flex-direction: row-reverse;
   }
 }
 
