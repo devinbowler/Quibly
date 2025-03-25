@@ -14,7 +14,7 @@ function Home() {
         <img src={logo} alt="Quibly Logo" className="logo" />
         <nav className="navbar">
           <a href="#about">About</a>
-          <a href="#support">Support</a>
+          <a href="#cs-footer-274">Support</a>
           <a href="./register" className="login-button">Sign Up</a>
         </nav>
       </header>
@@ -36,10 +36,12 @@ function Home() {
                 <span style={{ color: '#495BFA' }}>Smart</span> Task Management
               </h2>
               <p>
-                Track your daily responsibilities with precision and ease. Our task management interface is built for clarity, speed, and efficiency—helping you stay on top of your goals.
+                With Quibly you can track your daily responsibilities with precision and ease. Our task management interface is built for clarity, speed, and efficiency—helping you stay on top of your goals.
               </p>
             </div>
           </div>
+
+          <div id="about"></div>
         
           {/* Notes Section - TEXT LEFT, IMAGES RIGHT */}
           <div className="feature-block stacked-notes-section reverse">
@@ -48,7 +50,7 @@ function Home() {
                 <span style={{ color: '#495BFA' }}>View & Edit</span> Your Notes Clearly
               </h2>
               <p>
-                View all your notes in one place and easily dive into details. Simple layout, organized folders, and distraction-free editing built for clarity.
+                View all your notes in one place and easily dive into details. With simple yet powerful editing, and viewing for all projects and ideas. Simple layout, organized folders, and distraction-free editing built for clarity. 
               </p>
             </div>
             <div className="stacked-images">
@@ -62,6 +64,8 @@ function Home() {
           </div>
         </section>
       </main>
+
+          
 
       <footer id="cs-footer-274">
         <div className="cs-container">
