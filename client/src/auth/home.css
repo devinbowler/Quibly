@@ -86,6 +86,10 @@
     cursor: pointer;
   }
 
+  .hero {
+    margin-top: 200px;
+  }
+
   .note {
     margin-top: 1rem;
     color: gray;
