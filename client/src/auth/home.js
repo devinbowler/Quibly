@@ -24,7 +24,8 @@ function Home() {
           <p>Effortlessly manage, sort, and track your tasks with efficient and simple task management.</p>
           <a className="cta-button" href="./register">Sign up for Free</a>
         </section>
-
+    
+        <div id="about"></div>
         <section className="feature-section">
           {/* Task Section - IMAGE LEFT, TEXT RIGHT */}
           <div className="feature-block">
@@ -40,8 +41,6 @@ function Home() {
               </p>
             </div>
           </div>
-
-          <div id="about"></div>
         
           {/* Notes Section - TEXT LEFT, IMAGES RIGHT */}
           <div className="feature-block stacked-notes-section reverse">
