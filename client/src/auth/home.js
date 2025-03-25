@@ -38,11 +38,11 @@ function Home() {
 
           <section className="feature-block stacked-notes-section">
             <div className="stacked-images">
-              <div className="img-wrapper top">
-                <img src={noteImg1} alt="Notes Folder View" />
-              </div>
               <div className="img-wrapper bottom">
                 <img src={noteImg2} alt="Single Note View" />
+              </div>
+              <div className="img-wrapper top">
+                <img src={noteImg1} alt="Notes Folder View" />
               </div>
             </div>
             <div className="feature-content tight">
