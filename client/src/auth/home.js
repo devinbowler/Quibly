@@ -50,11 +50,9 @@ function Home() {
             <div className="stacked-images">
               <div className="img-wrapper bottom">
                 <img src={noteImg2} alt="Notes Folder View" />
-                <span className="img-label">All Notes</span>
               </div>
               <div className="img-wrapper top">
                 <img src={noteImg1} alt="Single Note View" />
-                <span className="img-label">Detailed Note</span>
               </div>
             </div>
           </div>
