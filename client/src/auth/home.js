@@ -26,8 +26,8 @@ function Home() {
         </section>
 
         <section className="feature-section">
-          {/* Task Section - image left, text right */}
-          <div className="feature-block reverse">
+          {/* Task Section - IMAGE LEFT, TEXT RIGHT (no reverse) */}
+          <div className="feature-block">
             <div className="feature-images">
               <img src={taskImg} alt="Task Management Screenshot" />
             </div>
@@ -39,10 +39,10 @@ function Home() {
             </div>
           </div>
         
-          {/* Notes Section - text left, stacked images right */}
-          <div className="feature-block stacked-notes-section">
+          {/* Notes Section - TEXT LEFT, IMAGES RIGHT (reverse layout) */}
+          <div className="feature-block stacked-notes-section reverse">
             <div className="feature-content tight">
-              <h2 className="feature-title">View & Edit Your Notes Clearly</h2>
+              <h2 className="feature-title">See & Edit Your Notes Clearly</h2>
               <p>
                 View all your notes in one place and easily dive into details. Simple layout, organized folders, and distraction-free editing built for clarity.
               </p>
@@ -50,9 +50,11 @@ function Home() {
             <div className="stacked-images">
               <div className="img-wrapper bottom">
                 <img src={noteImg2} alt="Notes Folder View" />
+                <span className="img-label">All Notes</span>
               </div>
               <div className="img-wrapper top">
                 <img src={noteImg1} alt="Single Note View" />
+                <span className="img-label">Detailed Note</span>
               </div>
             </div>
           </div>
