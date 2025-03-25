@@ -223,21 +223,37 @@
 /* NOTES section: stacked layout */
 .stacked-notes-section {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 1.5rem;
   align-items: center;
+  margin-top: 200px;
 }
 
 .stacked-images {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 800px;
+  position: relative;
   width: 100%;
+  max-width: 800px;
+  height: auto;
 }
 
 .img-wrapper {
-  position: relative;
+  position: absolute;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.img-wrapper.bottom {
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
+
+.img-wrapper.top {
+  z-index: 2;
+  top: 40px;
+  left: 40px;
 }
 
 .img-wrapper img {
@@ -256,6 +272,7 @@
   font-size: 0.85rem;
   padding: 0.25rem 0.6rem;
   border-radius: 4px;
+  z-index: 3;
 }
 }
 
@@ -287,7 +304,7 @@
     order: -1;
   }
 
-    .feature-block {
+  .feature-block {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -298,12 +315,14 @@
   }
 
   .stacked-notes-section {
-    flex-direction: row;
+    flex-direction: row-reverse;
     justify-content: space-between;
   }
 
   .stacked-images {
     flex: 1;
+    position: relative;
+    min-height: 450px;
   }
 
   .feature-content.tight {
