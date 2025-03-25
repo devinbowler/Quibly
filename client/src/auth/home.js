@@ -26,23 +26,27 @@ function Home() {
         </section>
 
         <section className="feature-section">
-          {/* Task Section - IMAGE LEFT, TEXT RIGHT (no reverse) */}
+          {/* Task Section - IMAGE LEFT, TEXT RIGHT */}
           <div className="feature-block">
             <div className="feature-images">
               <img src={taskImg} alt="Task Management Screenshot" />
             </div>
             <div className="feature-content">
-              <h2 className="feature-title">Smart Task Management</h2>
+              <h2 className="feature-title">
+                <span style={{ color: '#495BFA' }}>Smart</span> Task Management
+              </h2>
               <p>
                 Track your daily responsibilities with precision and ease. Our task management interface is built for clarity, speed, and efficiency—helping you stay on top of your goals.
               </p>
             </div>
           </div>
         
-          {/* Notes Section - TEXT LEFT, IMAGES RIGHT (reverse layout) */}
+          {/* Notes Section - TEXT LEFT, IMAGES RIGHT */}
           <div className="feature-block stacked-notes-section reverse">
             <div className="feature-content tight">
-              <h2 className="feature-title">See & Edit Your Notes Clearly</h2>
+              <h2 className="feature-title">
+                <span style={{ color: '#495BFA' }}>View & Edit</span> Your Notes Clearly
+              </h2>
               <p>
                 View all your notes in one place and easily dive into details. Simple layout, organized folders, and distraction-free editing built for clarity.
               </p>
