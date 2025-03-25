@@ -219,6 +219,24 @@
     color: #495BFA;
     margin-bottom: 1rem;
   }
+
+  .feature-block.tight {
+  align-items: center;
+  gap: 2rem;
+}
+
+.feature-block.tight .feature-images img {
+  max-width: 700px;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* NOTES section: stacked layout */
+.stacked-notes-section {
+  flex-direction: column;
+  gap: 2rem;
+}
 }
 
 /* Responsive Design */
