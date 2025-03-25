@@ -127,7 +127,7 @@
 
   #about {
     postition: aboslute;
-    top: 900px;
+    top: 1100px;
   }
 
   .support {
@@ -238,7 +238,6 @@
     flex-direction: column;
     gap: 1.5rem;
     align-items: center;
-    margin-top: 35px;
   }
 
   .stacked-images {
