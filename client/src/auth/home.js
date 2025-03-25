@@ -36,16 +36,22 @@ function Home() {
             </div>
           </div>
 
-          <div className="feature-block reverse">
-            <div className="feature-images">
-              <img src={noteImg1} alt="Note Section Screenshot 1" />
-              <img src={noteImg2} alt="Note Section Screenshot 2" />
+          <section className="feature-block stacked-notes-section">
+            <div className="stacked-images">
+              <div className="img-wrapper top">
+                <img src={noteImg1} alt="Notes Folder View" />
+                <span className="img-label">All Notes</span>
+              </div>
+              <div className="img-wrapper bottom">
+                <img src={noteImg2} alt="Single Note View" />
+                <span className="img-label">Detailed Note</span>
+              </div>
             </div>
-            <div className="feature-content">
-              <h2 className="feature-title">Your Ideas, Noted Instantly</h2>
-              <p>Quickly capture thoughts, ideas, or important information. Our note-taking feature is built to let you write and organize without the clutter, giving you a digital notepad that works like you think.</p>
+            <div className="feature-content tight">
+              <h2 className="feature-title">See & Edit Your Notes Clearly</h2>
+              <p>View all your notes in one place and easily dive into details. Simple layout, organized folders, and distraction-free editing built for clarity.</p>
             </div>
-          </div>
+          </section>
         </section>
       </main>
 
