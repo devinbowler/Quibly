@@ -1,7 +1,3 @@
-## Organize Your Life, with Quibly
+## Visit Quibly Here --> https://quibly.net/
 
-### Effortlessly manage, sort, and track your tasks with efficient and simple task management.
-
----
-
-# Visit Quibly Here --> https://quibly.net/
+Organize Your Life, with Quibly
