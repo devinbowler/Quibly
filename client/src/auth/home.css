@@ -125,6 +125,11 @@
     border-radius: 5px;
   }
 
+  #about {
+    postition: aboslute;
+    top: 900px;
+  }
+
   .support {
     padding: 2rem;
     margin-top: 4rem;
