@@ -368,15 +368,6 @@ function Task() {
     }
   };
 
-  const handlePathBackspace = () => {
-    let newPath = currentPath.replace(/\/[^/]+\/?$/, '');
-    if (newPath === 'system:/user' || newPath === 'system:/user/') {
-      setCurrentPath('system:/user/');
-    } else {
-      setCurrentPath(newPath);
-    }
-  };
-
   const handleKeyDown = (e) => {
     if (showFolderModal) return;
     const activeEl = document.activeElement;
@@ -392,22 +383,6 @@ function Task() {
         e.preventDefault();
         activeEl.blur();
         return;
-      }
-    }
-    if (e.key === 'Backspace') {
-      if (activeEl && activeEl.id === 'search-input') {
-        if (activeEl.value === '' && currentPath !== 'system:/user/') {
-          e.preventDefault();
-          handlePathBackspace();
-        }
-        return;
-      }
-      if (tag === 'INPUT' || tag === 'TEXTAREA') {
-        return;
-      }
-      e.preventDefault();
-      if (!searchQuery && currentPath !== 'system:/user/') {
-        handlePathBackspace();
       }
     }
   };
@@ -435,6 +410,20 @@ function Task() {
       console.error('Error updating task completed status:', error);
     }
   };
+
+  const goBackInPath = () => {
+  // Only proceed if we are not at the default path
+  if (currentPath !== "system:/user/") {
+    // Remove the last folder segment from the path
+    let newPath = currentPath.replace(/\/[^/]+\/?$/, '');
+    // Ensure the new path is valid
+    if (newPath === '' || newPath === 'system:/user') {
+      newPath = 'system:/user/';
+    }
+    setCurrentPath(newPath);
+  }
+};
+
 
   const sortedTasks = useMemo(() => {
     return [...tasks].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
@@ -576,9 +565,6 @@ return (
                   <button onClick={() => { setViewType('grid'); setNoteBack('grid'); }} className={viewType === 'grid' ? 'active' : ''}>
                     <i className="fas fa-th-large"></i>
                   </button>
-                  <button onClick={() => { setViewType('code'); setNoteBack('code'); }} className={viewType === 'code' ? 'active' : ''}>
-                    <i className="fas fa-code"></i>
-                  </button>
                 </div>
                 <div className="right-group">
                   <button onClick={openAddTaskModal}>Add Task</button>
@@ -592,9 +578,6 @@ return (
                 </button>
                 <button onClick={() => { setViewType('grid'); setNoteBack('grid'); }} className={viewType === 'grid' ? 'active' : ''}>
                   <i className="fas fa-th-large"></i>
-                </button>
-                <button onClick={() => { setViewType('code'); setNoteBack('code'); }} className={viewType === 'code' ? 'active' : ''}>
-                  <i className="fas fa-code"></i>
                 </button>
               </div>
               <div className="right-buttons">
@@ -617,22 +600,12 @@ return (
       )}
     </div>
 
-
-    {/* Search Bar */}
-    {viewType !== 'task' && viewType !== 'note' && viewType !== 'taskDetails' && (
-      <div className="search-bar">
-        <span className="find-file">Find file:</span>
-        <span className={`path ${selectedIndex !== null ? 'path-active' : ''}`}>
-          {`~${currentPath}`}
-        </span>
-        <input
-          id="search-input"
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+    {currentPath !== "system:/user/" && (
+      <div className="back-button-container">
+        <button className="back-button" onClick={goBackInPath}>← Back</button>
       </div>
     )}
+
 
     {/* Error Message */}
     {errorMessage && <div className="error-message">{errorMessage}</div>}
@@ -1005,33 +978,18 @@ return (
     )}
 
     {/* Code View and Grid View */}
-    {(viewType === 'code' || viewType === 'grid') && (
-      <div className={viewType === 'code' ? "file-system-viewer" : "grid-view"}>
+    {viewType === 'grid' && (
+      <div className="grid-view">
         {files.filter(file => file.parentFolder === currentPath).map((file) => (
           <div
             key={file._id}
-            className={`${viewType === 'code' ? 'file-item' : 'grid-item'} ${file.type} ${selectedIndex === file._id ? 'selected' : ''}`}
+            className={`grid-item ${file.type} ${selectedIndex === file._id ? 'selected' : ''}`}
             onClick={() => handleFileClick(file)}
           >
-            {viewType === 'code' ? (
-              <>
-                <span className="file-name">
-                  {file.type === 'folder' ? file.name : file.title}
-                </span>
-                <span className="last-accessed">
-                  {file.lastAccessed
-                    ? new Date(file.lastAccessed).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
-                    : 'N/A'}
-                </span>
-              </>
-            ) : (
-              <>
-                <i className={`fas ${file.type === 'folder' ? 'fa-folder' : 'fa-file'}`}></i>
-                <span className="file-name">
-                  {file.type === 'folder' ? file.name : file.title}
-                </span>
-              </>
-            )}
+            <i className={`fas ${file.type === 'folder' ? 'fa-folder' : 'fa-file'}`}></i>
+            <span className="file-name">
+              {file.type === 'folder' ? file.name : file.title}
+            </span>
           </div>
         ))}
       </div>
