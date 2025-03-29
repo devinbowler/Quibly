@@ -600,12 +600,11 @@ return (
       )}
     </div>
 
-    {currentPath !== "system:/user/" || viewType !== 'note' || viewType !== 'task' && (
+    {viewType === 'grid' && currentPath !== "system:/user/" && (
       <div className="back-button-container">
         <button className="back-button" onClick={goBackInPath}>← Back</button>
       </div>
     )}
-
 
     {/* Error Message */}
     {errorMessage && <div className="error-message">{errorMessage}</div>}
