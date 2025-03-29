@@ -421,7 +421,7 @@ body {
   .note-view .note-body {
       resize: none; /* Prevent resizing */
       pointer: cursor;
-      font-size: 20px;
+      font-size: 14px;
       line-height: 1.5;
       margin-bottom: 25px;
   }
@@ -434,6 +434,16 @@ body {
       cursor: pointer;
       font-size: 16px;
       border-radius: 5px;
+  }
+
+  .note-body {
+    overflow: auto;          /* Ensure scrolling is enabled */
+    -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
+    scrollbar-width: none;   /* Hide scrollbar in Firefox */
+  }
+  
+  .note-body::-webkit-scrollbar {
+    display: none;           /* Hide scrollbar in Chrome, Safari, and Opera */
   }
 
   .note-view .delete-button::hover {
@@ -1172,7 +1182,7 @@ body {
   .note-view .note-body {
       resize: none; /* Prevent resizing */
       pointer: cursor;
-      font-size: 20px;
+      font-size: 14px;
       line-height: 1.5;
   }
 
@@ -1616,7 +1626,7 @@ body {
   .note-view .note-body {
       resize: none; /* Prevent resizing */
       pointer: cursor;
-      font-size: 20px;
+      font-size: 14px;
       line-height: 1.5;
   }
 
