@@ -373,6 +373,7 @@ body {
       top: 100px;
       width: calc(100% - 32px);
       margin-left: 20px;
+      margin-top: 50px;
       z-index: 10; /* Ensures it's on top */
   }
 
