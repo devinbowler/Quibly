@@ -600,7 +600,7 @@ return (
       )}
     </div>
 
-    {currentPath !== "system:/user/" && (
+    {currentPath !== "system:/user/" || viewType !== 'note' && (
       <div className="back-button-container">
         <button className="back-button" onClick={goBackInPath}>← Back</button>
       </div>
