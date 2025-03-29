@@ -155,8 +155,8 @@ body {
 
 
 
-  /* Search Bar */
-  .search-bar {
+  /* Back Button */
+  .back-button-container {
       display: flex;
       align-items: center;
       margin-top: 30px;
@@ -165,28 +165,10 @@ body {
       margin-right: 15px;
   }
 
-  .find-file {
+  .back-button-container .back-button {
       color: #007BFF;  /* Blue color */
       margin-right: 10px; /* Adds some space between the label and the path */
       min-width: 70px;
-  }
-
-  .path {
-      background-color: rgba(255, 255, 255, 0.1); /* White with 30% opacity */
-      color: white; /* Ensuring the path is readable against the light background */
-      padding: 3px 6px; /* Slight padding around the path for better visibility */
-      border-radius: 4px; /* Optionally rounding the corners */
-      cursor: pointer;
-      min-width: 80px;
-  }
-
-  #search-input {
-      flex-grow: 1;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 16px;
-      outline: none;
   }
 
 
@@ -978,41 +960,6 @@ body {
 
 
 
-  /* Search Bar */
-  .search-bar {
-      display: flex;
-      align-items: center;
-      margin-top: 30px;
-      margin-left: 55px;
-      margin-right: 55px;
-  }
-
-  .find-file {
-      color: #007BFF;  /* Blue color */
-      margin-right: 10px; /* Adds some space between the label and the path */
-  }
-
-  .path {
-      background-color: rgba(255, 255, 255, 0.1); /* White with 30% opacity */
-      color: white; /* Ensuring the path is readable against the light background */
-      padding: 3px 6px; /* Slight padding around the path for better visibility */
-      border-radius: 4px; /* Optionally rounding the corners */
-      cursor: pointer;
-  }
-
-  #search-input {
-      flex-grow: 1;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 16px;
-      outline: none;
-  }
-
-
-
-
-
   /* Top Buttons */
   .filter-buttons {
       display: flex;
@@ -1446,42 +1393,6 @@ body {
 
   .update-form button:hover {
     background-color: #331c99;
-  }
-
-
-
-
-
-  /* Search Bar */
-  .search-bar {
-      display: flex;
-      align-items: center;
-      margin-top: 30px;
-      margin-left: 55px;
-      margin-right: 55px;
-  }
-
-  .find-file {
-      color: #007BFF;  /* Blue color */
-      margin-right: 10px; /* Adds some space between the label and the path */
-  }
-
-  .path {
-      background-color: rgba(255, 255, 255, 0.1); /* White with 30% opacity */
-      color: white; /* Ensuring the path is readable against the light background */
-      padding: 3px 6px; /* Slight padding around the path for better visibility */
-      border-radius: 4px; /* Optionally rounding the corners */
-      cursor: pointer;
-      min-width: 120px !important;
-  }
-
-  #search-input {
-      flex-grow: 1;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 16px;
-      outline: none;
   }
 
 
