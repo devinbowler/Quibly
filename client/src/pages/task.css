@@ -307,21 +307,22 @@ body {
   }
 
   .grid-view {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr); /* 6 items per line */
-      gap: 20px; /* Spacing between grid items */
-      padding: 20px;
-      margin-left: 5px; /* Align with the rest of the content */
-      margin-right: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Changed from 6 to 3 columns */
+    gap: 10px; /* Reduced gap size for mobile */
+    padding: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: calc(100% - 10px); /* Ensure it takes full width minus margins */
   }
-
+  
   .grid-item {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px; /* Constant padding */
+      padding: 15px;
       cursor: pointer;
       transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
       box-shadow: inset 0 0 0 0px #555; /* Initially no visible inset shadow */
