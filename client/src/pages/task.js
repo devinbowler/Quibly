@@ -49,6 +49,10 @@ function Task() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [collapsedPast, setCollapsedPast] = useState(() => {
+    const saved = localStorage.getItem("collapsedPast");
+    return saved ? JSON.parse(saved) : false;
+  });
   const [collapsedToday, setCollapsedToday] = useState(() => {
     const saved = localStorage.getItem("collapsedToday");
     return saved ? JSON.parse(saved) : false;
@@ -434,6 +438,12 @@ function Task() {
   const weekFromToday = new Date(todayDate);
   weekFromToday.setDate(todayDate.getDate() + 7);
 
+  const pastDue = tasks.filter(task => {
+    const taskDate = new Date(task.dueDate);
+    taskDate.setHours(0, 0, 0, 0);
+    return taskDate < todayDate && task.completed !== 'true';
+  }).sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+
   const dueToday = tasks.filter(task => {
     const taskDate = new Date(task.dueDate);
     taskDate.setHours(0, 0, 0, 0);
@@ -460,6 +470,9 @@ function Task() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isAddingTask, selectedTask, currentPath, searchQuery, showFolderModal]);
 
+  useEffect(() => {
+    localStorage.setItem("collapsedPast", JSON.stringify(collapsedPast));
+  }, [collapsedPast]);
 
   useEffect(() => {
     localStorage.setItem("collapsedToday", JSON.stringify(collapsedToday));
@@ -612,6 +625,70 @@ return (
     {/* Task View */}
     {(viewType === 'task' || viewType === 'taskDetails') && (
       <div className="file-system-viewer">
+        {/* Past Due */}
+        <div className="task-group">
+          <div className="section-header">
+            <div className="collapse" onClick={() => {setCollapsedPast(!collapsedPast)}} style={{ transform: collapsedPast ? '' : "rotate(90deg)" }}>
+              >
+            </div>
+            <div className="group-label">
+              <h2>Past Due</h2>
+            </div>
+            <div className="task-count">
+              {pastDue.length} Tasks
+            </div>
+          </div>
+          <div className={`tasks-container ${collapsedPast ? 'collapsed-style' : ''}`}>
+            {dueToday.length > 0 ? (
+              pastDue.map((task) => (
+                <div
+                  key={task._id}
+                  className={`task-item ${selectedTask?._id === task._id ? 'selected' : ''}`}
+                  onClick={() => openTaskDetailsModal(task)}
+                  style={{
+                    backgroundColor: 'rgba(255, 0, 0, 0.05)'
+                  }}
+                >
+                  <div className="task-info">
+                    <span
+                      className="task-title"
+                      style={{
+                        backgroundColor: task.color ? hexToRGBA(task.color, 0.1) : "transparent"
+                      }}
+                    >
+                      {task.title ? getTruncatedTitle(task.title) : ""}
+                    </span>
+                    <span className="task-details">
+                      {task.details ? getTruncatedDetails(task.details, 50) : ""}
+                    </span>
+                  </div>
+                  <div className="task-meta">
+                    <span className="task-due">
+                      {new Date(task.dueDate).toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                      })}
+                    </span>
+                    <input
+                      type="checkbox"
+                      className="task-completed-checkbox"
+                      checked={task.completed === 'true'}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        handleToggleCompleted(e, task);
+                      }}
+                    />
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No past due tasks.</p>
+            )}
+          </div>
+        </div>
+
         {/* Due Today */}
         <div className="task-group">
           <div className="section-header">
