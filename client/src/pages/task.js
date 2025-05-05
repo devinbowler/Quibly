@@ -32,7 +32,7 @@ const BlockNoteEditor = ({ noteContent, onChange }) => {
       try {
         return JSON.parse(noteContent);
       } catch (e) {
-        console.error("Error parsing initial content:", e);
+        // console.error("Error parsing initial content:", e);
         return [{ type: "paragraph", content: [] }];
       }
     }, []),
@@ -45,7 +45,7 @@ const BlockNoteEditor = ({ noteContent, onChange }) => {
     // Set up the change handler using the editor.onChange method
     const unsubscribe = editor.onChange(() => {
       if (!updatingRef.current) {
-        console.log("User changed content - triggering save");
+        // console.log("User changed content - triggering save");
         // Use editor.document instead of getJSON()
         const jsonContent = JSON.stringify(editor.document);
         onChange(jsonContent);
@@ -69,7 +69,7 @@ const BlockNoteEditor = ({ noteContent, onChange }) => {
       
       // Only update if content actually changed
       if (JSON.stringify(newContent) !== JSON.stringify(currentContent)) {
-        console.log("Updating editor with new content from props");
+        // console.log("Updating editor with new content from props");
         
         // Set flag to prevent onChange from triggering
         updatingRef.current = true;
@@ -79,7 +79,7 @@ const BlockNoteEditor = ({ noteContent, onChange }) => {
         try {
           editor.replaceBlocks(editor.document, newContent);
         } catch (e) {
-          console.error("Error with replaceBlocks, trying alternative method:", e);
+          // console.error("Error with replaceBlocks, trying alternative method:", e);
           // Alternative approach if replaceBlocks isn't available
           editor.document = newContent;
         }
@@ -90,7 +90,7 @@ const BlockNoteEditor = ({ noteContent, onChange }) => {
         }, 50);
       }
     } catch (e) {
-      console.error("Error updating editor content:", e);
+      // console.error("Error updating editor content:", e);
       updatingRef.current = false;
     }
   }, [noteContent, editor]);
@@ -312,7 +312,7 @@ function Task() {
 
   // Updated handleNoteChange function
   const handleNoteChange = (field, value) => {
-    console.log(`handleNoteChange called: field=${field}, value=${typeof value === 'string' ? value.substring(0, 30) + '...' : 'non-string value'}`);
+    // console.log(`handleNoteChange called: field=${field}, value=${typeof value === 'string' ? value.substring(0, 30) + '...' : 'non-string value'}`);
     
     // Create updated note with new content
     const updatedNote = { ...selectedNote, [field]: value };
@@ -338,11 +338,12 @@ function Task() {
       setSaveMessage("Saving...");
       
       try {
-        console.log("Calling saveNote API with data:", {
-          title: note.title,
-          body: note.body ? 
-            (typeof note.body === 'string' ? `${note.body.substring(0, 30)}...` : 'non-string body') 
-            : 'undefined body'
+        // console.log("Calling saveNote API with data:", {
+          // title: note.title,
+          // body: note.body ? 
+          //  (typeof note.body === 'string' ? `${note.body.substring(0, 30)}...` : 'non-string body') 
+          //  : 'undefined body'
+          const none = 0;
         });
         
         await saveNote(note._id, {
@@ -350,7 +351,7 @@ function Task() {
           body: note.body
         });
         
-        console.log("saveNote API call successful");
+        // console.log("saveNote API call successful");
         
         // Using the current files state via ref
         setFiles(prevFiles =>
@@ -371,7 +372,7 @@ function Task() {
           setSaveMessage("");
         }, 3000); // Clear the message after 3 seconds
       } catch (error) {
-        console.error("Error saving note:", error);
+        // console.error("Error saving note:", error);
         setErrorMessage("Failed to save note.");
         setSaveMessage("");
       } finally {
