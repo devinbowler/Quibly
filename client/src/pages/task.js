@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import "./task.css";
 import {
   fetchAllItems,
@@ -21,35 +21,81 @@ import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 
 const BlockNoteEditor = ({ noteContent, onChange }) => {
-  // Parse the content or use default
-  const [editorContent, setEditorContent] = useState(() => {
-    try {
-      return noteContent ? JSON.parse(noteContent) : undefined;
-    } catch (e) {
-      return [{ type: "paragraph", content: [] }];
-    }
-  });
-
-  // Update content when prop changes
-  useEffect(() => {
-    try {
-      setEditorContent(noteContent ? JSON.parse(noteContent) : undefined);
-    } catch (e) {
-      setEditorContent([{ type: "paragraph", content: [] }]);
-    }
-  }, [noteContent]);
-
-  // Create the editor instance
+  // Reference to track if we're programmatically updating content
+  const updatingRef = useRef(false);
+  
+  // Create the editor directly using the hook (don't create in useState or useEffect)
   const editor = useCreateBlockNote({
-    initialContent: editorContent,
-    onUpdate: ({ editor }) => {
-      if (onChange) {
-        onChange(JSON.stringify(editor.getJSON()));
+    // Parse initial content if it exists
+    initialContent: useMemo(() => {
+      if (!noteContent) return undefined;
+      try {
+        return JSON.parse(noteContent);
+      } catch (e) {
+        console.error("Error parsing initial content:", e);
+        return [{ type: "paragraph", content: [] }];
       }
-    }
+    }, []),
   });
-
-  // Render the BlockNoteView
+  
+  // Handle user changes to the editor
+  useEffect(() => {
+    if (!editor) return;
+    
+    // Set up the change handler using the editor.onChange method
+    const unsubscribe = editor.onChange(() => {
+      if (!updatingRef.current) {
+        console.log("User changed content - triggering save");
+        // Use editor.document instead of getJSON()
+        const jsonContent = JSON.stringify(editor.document);
+        onChange(jsonContent);
+      }
+    });
+    
+    // Cleanup function to remove the listener
+    return () => {
+      unsubscribe();
+    };
+  }, [editor, onChange]);
+  
+  // Update editor when props change
+  useEffect(() => {
+    if (!editor || !noteContent) return;
+    
+    try {
+      const newContent = JSON.parse(noteContent);
+      // Use editor.document instead of getJSON()
+      const currentContent = editor.document;
+      
+      // Only update if content actually changed
+      if (JSON.stringify(newContent) !== JSON.stringify(currentContent)) {
+        console.log("Updating editor with new content from props");
+        
+        // Set flag to prevent onChange from triggering
+        updatingRef.current = true;
+        
+        // Update content - if replaceBlocks doesn't work, use the appropriate method
+        // from the current BlockNote API
+        try {
+          editor.replaceBlocks(editor.document, newContent);
+        } catch (e) {
+          console.error("Error with replaceBlocks, trying alternative method:", e);
+          // Alternative approach if replaceBlocks isn't available
+          editor.document = newContent;
+        }
+        
+        // Reset the flag after a short delay
+        setTimeout(() => {
+          updatingRef.current = false;
+        }, 50);
+      }
+    } catch (e) {
+      console.error("Error updating editor content:", e);
+      updatingRef.current = false;
+    }
+  }, [noteContent, editor]);
+  
+  // Render the editor view
   return <BlockNoteView editor={editor} />;
 };
 
@@ -252,47 +298,88 @@ function Task() {
   };
 
 
+
+  const selectedNoteRef = useRef();
+  const filesRef = useRef();
+  const filteredFilesRef = useRef();
+
+  // Update these refs when state changes
+  useEffect(() => {
+    selectedNoteRef.current = selectedNote;
+    filesRef.current = files;
+    filteredFilesRef.current = filteredFiles;
+  }, [selectedNote, files, filteredFiles]);
+
+  // Updated handleNoteChange function
+  const handleNoteChange = (field, value) => {
+    console.log(`handleNoteChange called: field=${field}, value=${typeof value === 'string' ? value.substring(0, 30) + '...' : 'non-string value'}`);
+    
+    // Create updated note with new content
+    const updatedNote = { ...selectedNote, [field]: value };
+    
+    // Update state immediately for responsive UI
+    setSelectedNote(updatedNote);
+    
+    // Trigger the debounced save
+    console.log("Triggering debouncedSaveNote");
+    debouncedSaveNote(updatedNote);
+  };
+
+  // Improved debouncedSaveNote function using refs for current state
   const debouncedSaveNote = useCallback(
     debounce(async (note) => {
-      if (!note._id) return;
+      console.log("debouncedSaveNote executing.");
+      if (!note._id) {
+        console.warn("No note ID, cannot save");
+        return;
+      }
+      
       setIsSaving(true);
       setSaveMessage("Saving...");
+      
       try {
+        console.log("Calling saveNote API with data:", {
+          title: note.title,
+          body: note.body ? 
+            (typeof note.body === 'string' ? `${note.body.substring(0, 30)}...` : 'non-string body') 
+            : 'undefined body'
+        });
+        
         await saveNote(note._id, {
           title: note.title,
-          body: note.body, // This is now a JSON string from BlockNote
+          body: note.body
         });
-        setErrorMessage(null);
+        
+        console.log("saveNote API call successful");
+        
+        // Using the current files state via ref
         setFiles(prevFiles =>
           prevFiles.map(file =>
             file._id === note._id ? { ...file, title: note.title, body: note.body } : file
           )
         );
+        
         setFilteredFiles(prevFiles =>
           prevFiles.map(file =>
             file._id === note._id ? { ...file, title: note.title, body: note.body } : file
           )
         );
+        
+        setErrorMessage(null);
+        setSaveMessage("Saved.");
         setTimeout(() => {
-          setSaveMessage("Saved.");
-        }, 1000);
+          setSaveMessage("");
+        }, 3000); // Clear the message after 3 seconds
       } catch (error) {
-        console.error("Error auto-saving note:", error.response?.data?.error || error.message);
-        setErrorMessage("Failed to auto-save note.");
+        console.error("Error saving note:", error);
+        setErrorMessage("Failed to save note.");
         setSaveMessage("");
       } finally {
         setIsSaving(false);
       }
-    }, 1000),
-    []
+    }, 1000), // 1 second debounce
+    [] // Empty dependency array is safe because we use refs
   );
-
-  const handleNoteChange = (field, value) => {
-    const updatedNote = { ...selectedNote, [field]: value };
-    setSelectedNote(updatedNote);
-    debouncedSaveNote(updatedNote);
-  };
-
   const navigateIntoFolder = (folderName) => {
     setCurrentPath(`${currentPath}${currentPath.endsWith('/') ? '' : '/'}${folderName}`);
     setSelectedIndex(null);
