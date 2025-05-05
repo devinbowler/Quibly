@@ -15,6 +15,43 @@ import { debounce } from 'lodash';
 import { useLogout } from '../hooks/useLogout';
 import { useNavigate } from 'react-router-dom';
 import { useUpdate } from '../hooks/useUpdate';
+import { useCreateBlockNote } from "@blocknote/react";
+import { BlockNoteView } from "@blocknote/mantine";
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/mantine/style.css";
+
+const BlockNoteEditor = ({ noteContent, onChange }) => {
+  // Parse the content or use default
+  const [editorContent, setEditorContent] = useState(() => {
+    try {
+      return noteContent ? JSON.parse(noteContent) : undefined;
+    } catch (e) {
+      return [{ type: "paragraph", content: [] }];
+    }
+  });
+
+  // Update content when prop changes
+  useEffect(() => {
+    try {
+      setEditorContent(noteContent ? JSON.parse(noteContent) : undefined);
+    } catch (e) {
+      setEditorContent([{ type: "paragraph", content: [] }]);
+    }
+  }, [noteContent]);
+
+  // Create the editor instance
+  const editor = useCreateBlockNote({
+    initialContent: editorContent,
+    onUpdate: ({ editor }) => {
+      if (onChange) {
+        onChange(JSON.stringify(editor.getJSON()));
+      }
+    }
+  });
+
+  // Render the BlockNoteView
+  return <BlockNoteView editor={editor} />;
+};
 
 function Task() {
   // State for settings modal
@@ -76,7 +113,7 @@ function Task() {
   const [showFolderModal, setShowFolderModal] = useState(false);
   const [folderModalMode, setFolderModalMode] = useState(""); // "add" or "edit"
   const [folderName, setFolderName] = useState("");
-
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Helper function for the task title
   const getTruncatedTitle = (title) => {
@@ -204,6 +241,17 @@ function Task() {
     }
   };
 
+  const toggleFullscreen = () => {
+    setIsFullscreen(!isFullscreen);
+    // Add or remove a class from body to help with hiding the top bar
+    if (!isFullscreen) {
+      document.body.classList.add('fullscreen-active');
+    } else {
+      document.body.classList.remove('fullscreen-active');
+    }
+  };
+
+
   const debouncedSaveNote = useCallback(
     debounce(async (note) => {
       if (!note._id) return;
@@ -212,7 +260,7 @@ function Task() {
       try {
         await saveNote(note._id, {
           title: note.title,
-          body: note.body,
+          body: note.body, // This is now a JSON string from BlockNote
         });
         setErrorMessage(null);
         setFiles(prevFiles =>
@@ -489,6 +537,12 @@ function Task() {
   useEffect(() => {
     localStorage.setItem("collapsedComplete", JSON.stringify(collapsedComplete));
   }, [collapsedComplete]);
+
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove('fullscreen-active');
+    };
+  }, []);
 
 
 return (
@@ -1072,32 +1126,48 @@ return (
     )}
 
     {/* Note View */}
+    {/* Note View with BlockNote Editor */}
     {viewType === 'note' && selectedNote && (
-      <div className="note-view">
-        <div className="note-view-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button className="back-button" onClick={() => setViewType(noteBack)}>
-            ← Back
-          </button>
-          <div className="note-status-controls" style={{ display: 'flex', alignItems: 'center' }}>
-            {saveMessage && <span className="save-status" style={{ marginRight: '1rem' }}>{saveMessage}</span>}
-            <button onClick={handleDelete} className="delete-button">
-              Delete
+      <div className={`note-view ${isFullscreen ? 'fullscreen-editor' : ''}`}>
+        {!isFullscreen && (
+          <div className="note-view-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <button className="back-button" onClick={() => setViewType(noteBack)}>
+              ← Back
             </button>
+            <div className="note-status-controls" style={{ display: 'flex', alignItems: 'center' }}>
+              {saveMessage && <span className="save-status" style={{ marginRight: '1rem' }}>{saveMessage}</span>}
+              <button className="fullscreen-button" onClick={toggleFullscreen} style={{ marginRight: '10px' }}>
+                <i className={`fas ${isFullscreen ? 'fa-compress' : 'fa-expand'}`}></i>
+              </button>
+              <button onClick={handleDelete} className="delete-button">
+                Delete
+              </button>
+            </div>
           </div>
+        )}
+        
+        {isFullscreen && (
+          <button className="fullscreen-button" onClick={toggleFullscreen} style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 10000 }}>
+            <i className={`fas ${isFullscreen ? 'fa-compress' : 'fa-expand'}`}></i>
+          </button>
+        )}
+        
+        {!isFullscreen && (
+          <input
+            className="note-title"
+            placeholder="Enter note title..."
+            value={selectedNote.title}
+            onChange={(e) => handleNoteChange('title', e.target.value)}
+          />
+        )}
+        
+        {/* BlockNote Editor */}
+        <div className="editor-container" style={{ height: isFullscreen ? "95vh" : "75vh" }}>
+          <BlockNoteEditor 
+            noteContent={selectedNote.body}
+            onChange={(newContent) => handleNoteChange('body', newContent)}
+          />
         </div>
-        <input
-          className="note-title"
-          placeholder="Enter note title..."
-          value={selectedNote.title}
-          onChange={(e) => handleNoteChange('title', e.target.value)}
-        />
-        <textarea
-          placeholder="Details..."
-          className="note-body"
-          value={selectedNote.body}
-          onChange={(e) => handleNoteChange('body', e.target.value)}
-          onInput={handleTextareaFormatting}
-        />
       </div>
     )}
   </div>

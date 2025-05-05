@@ -18,6 +18,72 @@ body {
 
 /* Mobile View */
 @media only screen and (min-width: 0em){
+.editor-container {
+  position: relative;
+  --bn-colors-editor-background: #0f0f0f !important;
+  --bn-colors-editor-text: white !important;
+  --bn-colors-menu-background: #171716 !important;
+  --bn-colors-menu-text: white !important;
+  --bn-colors-tooltip-background: #171716 !important;
+  --bn-colors-tooltip-text: white !important;
+  --bn-colors-text-muted: #aaa !important;
+  --bn-colors-line: rgba(255, 255, 255, 0.1) !important;
+  --bn-colors-background-muted: rgba(255, 255, 255, 0.05) !important;
+  --bn-border-radius: 5px !important;
+  
+  /* Code block colors */
+  --bn-colors-code-block-background: #171716 !important;
+  --bn-colors-code-block-text: white !important;
+
+  left: -50px;
+}
+
+
+
+/* Make BlockNote fullscreen match your theme */
+.fullscreen-editor .bn-container {
+  background-color: #0f0f0f !important;
+}
+
+/* Ensuring good contrast in the toolbar and controls */
+.bn-toolbar {
+  background-color: #171716 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.bn-editor {
+  background-color: transparent !important;
+}
+
+.bn-toolbar button {
+  color: white !important;
+}
+
+.bn-toolbar button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Style for BlockNote within the app */
+.note-view .bn-container {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Custom styling for code blocks */
+.bn-code-block {
+  background-color: #171716 !important;
+  border-radius: 5px !important;
+  margin: 8px 0 !important;
+}
+
+/* Fullscreen button positioning when in BlockNote view */
+.fullscreen-button {
+  background-color: transparent !important;
+  color: white;
+  border: none !important;
+  position: relative;
+  z-index: 2000;
+}
   /* Main Styling */
   .app-container {
       display: flex;
