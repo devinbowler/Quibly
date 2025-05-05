@@ -36,13 +36,13 @@ body {
   --bn-colors-code-block-text: white !important;
 
   left: -50px;
+  width: calc(100% + 90px);
 }
-
-
 
 /* Make BlockNote fullscreen match your theme */
 .fullscreen-editor .bn-container {
   background-color: #0f0f0f !important;
+  padding-right: 0 !important;
 }
 
 /* Ensuring good contrast in the toolbar and controls */
@@ -472,6 +472,7 @@ body {
 
   .note-view textarea {
       height: 75vh;
+      width: 1000px;
       cursor: pointer;
   }
 
@@ -480,7 +481,7 @@ body {
   }
 
   .note-view .note-title {
-      font-size: 36px;
+      font-size: 28px;
       pointer: cursor;
       margin-bottom: 0;
       font-weight: 500;

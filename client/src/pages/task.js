@@ -337,15 +337,7 @@ function Task() {
       setIsSaving(true);
       setSaveMessage("Saving...");
       
-      try {
-        // console.log("Calling saveNote API with data:", {
-          // title: note.title,
-          // body: note.body ? 
-          //  (typeof note.body === 'string' ? `${note.body.substring(0, 30)}...` : 'non-string body') 
-          //  : 'undefined body'
-          const none = 0;
-        });
-        
+      try {        
         await saveNote(note._id, {
           title: note.title,
           body: note.body
