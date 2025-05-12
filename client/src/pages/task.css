@@ -1235,7 +1235,7 @@ body.light-mode .img-wrapper img {
 
   .modal {
       width: calc(100% - 20px);
-      height: 500px;
+      height: 575px;
       background-color: #171716;
       padding: 30px;
       border-radius: 10px;
