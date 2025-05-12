@@ -15,7 +15,466 @@ body {
     -ms-user-select: none;         /* Internet Explorer/Edge */
 }
 
+/* Light Mode Styles */
+:root {
+  --light-bg-color: #f5f5f5;
+  --light-card-bg: #ffffff;
+  --light-text-color: #333333;
+  --light-border-color: #e0e0e0;
+  --light-highlight: #9ba3fb;
+  --light-secondary-bg: #f0f0f0;
+  --light-button-bg: #e8e8e8;
+  --light-button-hover: #d0d0d0;
+  --light-accent-color: #495BFA;
+  
+  /* Dark Mode Colors for reference */
+  --dark-bg-color: #0f0f0f;
+  --dark-card-bg: #171716;
+  --dark-text-color: white;
+  --dark-border-color: #444;
+  --dark-highlight: #495BFA;
+  --dark-secondary-bg: #171716;
+  --dark-button-bg: #171716;
+  --dark-button-hover: #343434;
+}
 
+/* Base styles that apply to both modes */
+body {
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Default Dark Mode (current app design) */
+body.dark-mode {
+  background-color: var(--dark-bg-color) !important;
+  color: var(--dark-text-color) !important;
+}
+
+body.dark-mode .app-container {
+  background-color: var(--dark-bg-color) !important;
+}
+
+/* Light Mode Styles */
+body.light-mode {
+  background-color: var(--light-bg-color) !important;
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode, 
+body.light-mode html {
+    width: 100%;
+    background-color: var(--light-bg-color) !important;
+    overflow-x: hidden;
+  }
+
+
+body.light-mode .app-container {
+  background-color: var(--light-bg-color) !important;
+}
+
+/* Top Bar */
+body.light-mode .top-bar {
+  background-color: var(--light-card-bg) !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .greeting {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .settings-gear {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .statistics-date,
+body.light-mode .statistics-due {
+  color: #777 !important;
+}
+
+body.light-mode .settings-gear .fa {
+  color: rgba(50, 50, 50, 0.8) !important;
+}
+
+/* Modals and Settings */
+body.light-mode .modal,
+body.light-mode .settings-modal,
+body.light-mode .modal-view {
+  background-color: var(--light-card-bg) !important;
+  color: var(--light-text-color) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-mode .update-form input[type="password"],
+body.light-mode .update-form input[type="email"] {
+  background-color: var(--light-bg-color) !important;
+  color: var(--light-text-color) !important;
+  border: 1px solid var(--light-border-color) !important;
+}
+
+/* Task View and Grid View */
+body.light-mode .file-system-viewer {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .grid-item.folder i, 
+body.light-mode .grid-item.folder .file-name {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .grid-item.file i, 
+body.light-mode .grid-item.file .file-name {
+  color: #555 !important;
+}
+
+body.light-mode .grid-item:hover {
+  box-shadow: inset 0 0 0 2px var(--light-border-color) !important;
+}
+
+body.light-mode .task-item,
+body.light-mode .file-item {
+  border-bottom: 1px solid var(--light-border-color) !important;
+}
+
+body.light-mode .task-item.selected,
+body.light-mode .file-item.selected {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Buttons */
+body.light-mode .filter-buttons button {
+  background-color: var(--light-button-bg) !important;
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .filter-buttons button.active {
+  background-color: var(--light-button-hover) !important;
+}
+
+body.light-mode .filter-buttons button:hover {
+  background-color: var(--light-button-hover) !important;
+}
+
+/* Task Items */
+body.light-mode .section-header h2 {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .task-group p {
+  color: #777 !important;
+}
+
+body.light-mode .task-count {
+  color: #777 !important;
+}
+
+body.light-mode .task-completed-checkbox {
+  border: 2px solid #999 !important;
+}
+
+body.light-mode .task-completed-checkbox:checked {
+  background-color: var(--light-accent-color) !important;
+  border-color: var(--light-accent-color) !important;
+}
+
+body.light-mode .task-view {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .task-due {
+  color: #666 !important;
+}
+
+body.light-mode .task-item.completed {
+  background-color: rgba(0, 180, 0, 0.1) !important;
+}
+
+/* Notes View */
+body.light-mode .note-view {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .note-view input, 
+body.light-mode .note-view textarea {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .note-title::placeholder, 
+body.light-mode .note-body::placeholder {
+  color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* BlockNote Editor Light Theme */
+body.light-mode .editor-container {
+  --bn-colors-editor-background: #ffffff !important;
+  --bn-colors-editor-text: black !important;
+  --bn-colors-menu-background: #f5f5f5 !important;
+  --bn-colors-menu-text: #333333 !important;
+  --bn-colors-tooltip-background: #f5f5f5 !important;
+  --bn-colors-tooltip-text: #333333 !important;
+  --bn-colors-line: rgba(0, 0, 0, 0.1) !important;
+  --bn-colors-background-muted: rgba(0, 0, 0, 0.05) !important;
+  
+  /* Code block colors */
+  --bn-colors-code-block-background: #f0f0f0 !important;
+  --bn-colors-code-block-text: #333333 !important;
+}
+
+body.light-mode .fullscreen-editor .bn-container {
+  background-color: #ffffff !important;
+}
+
+body.light-mode .bn-toolbar {
+  background-color: #f5f5f5 !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-mode .bn-toolbar button {
+  color: #333333 !important;
+}
+
+body.light-mode .bn-editor {
+  color: black !important;
+}
+
+body.light-mode .bn-toolbar button:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-mode .fullscreen-button {
+  color: #333333 !important;
+}
+
+body.light-mode .bn-code-block {
+  background-color: #f0f0f0 !important;
+}
+
+/* Theme Toggle Switch */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.toggle-label {
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 24px;
+  transition: .4s;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: .4s;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--dark-highlight);
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+/* Icons for light/dark mode */
+.toggle-slider .light-icon,
+.toggle-slider .dark-icon {
+  position: absolute;
+  top: 4px;
+  font-size: 14px;
+  transition: opacity 0.3s;
+}
+
+.toggle-slider .light-icon {
+  right: 6px;
+  opacity: 1;
+}
+
+.toggle-slider .dark-icon {
+  left: 6px;
+  opacity: 0;
+}
+
+input:checked + .toggle-slider .light-icon {
+  opacity: 0;
+}
+
+input:checked + .toggle-slider .dark-icon {
+  opacity: 1;
+}
+
+/* Modal Task View Light Mode */
+body.light-mode .modal-overlay p.modal-title,
+body.light-mode .modal-overlay p.modal-details {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .modal-overlay p.modal-date {
+  color: #666 !important;
+}
+
+/* Back Button Light Mode */
+body.light-mode .back-button {
+  color: var(--light-accent-color) !important;
+}
+
+/* Action Buttons in Light Mode */
+body.light-mode .logout-button,
+body.light-mode .update-form button,
+body.light-mode .create-button,
+body.light-mode .editing.update-button {
+  background-color: var(--light-accent-color) !important;
+  color: white !important;
+}
+
+body.light-mode .logout-button:hover,
+body.light-mode .update-form button:hover,
+body.light-mode .create-button:hover,
+body.light-mode .editing.update-button:hover {
+  background-color: #3344d8 !important;
+}
+
+body.light-mode .deleteAcc-button,
+body.light-mode .editing.deleteTask-button {
+  background-color: #a12121 !important;
+  color: white !important;
+}
+
+body.light-mode .deleteAcc-button:hover,
+body.light-mode .editing.deleteTask-button:hover {
+  background-color: #c42b2b !important;
+}
+
+body.light-mode .editing.close-button {
+  background-color: #555 !important;
+  color: white !important;
+}
+
+body.light-mode .editing.close-button:hover {
+  background-color: #444 !important;
+}
+
+body.light-mode .delete-folder-button {
+  background-color: #a12121 !important;
+  color: white !important;
+}
+
+body.light-mode .delete-folder-button:hover {
+  background-color: #c42b2b !important;
+}
+
+body.light-mode .viewing.deleteTask-button {
+  color: #c42b2b !important;
+}
+
+body.light-mode .viewing.update-button,
+body.light-mode .viewing.close-button {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .note-view .delete-button {
+  background-color: var(--light-button-bg) !important;
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .note-view .delete-button:hover {
+  background-color: var(--light-button-hover) !important;
+}
+
+body.light-mode .error {
+  background-color: rgba(156, 0, 0, 0.2) !important;
+  border: rgb(184, 0, 0) solid 2px !important;
+  color: #900 !important;
+}
+
+body.light-mode html, 
+body.light-mode {
+  background-color: var(--light-bg-color) !important;
+}
+
+body.light-mode .home .content h1 {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .topbar {
+  background-color: var(--light-bg-color) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-mode .navbar a {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .feature-content {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .feature-title {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .cs-nav {
+  color: var(--light-text-color) !important;
+}
+
+body.light-mode .cs-nav-link {
+  color: #777 !important;
+}
+
+body.light-mode .feature-images img,
+body.light-mode .img-wrapper img {
+  border: 2px solid var(--light-border-color) !important;
+}
+
+
+/* Force app container background in all media queries */
+@media only screen and (min-width: 0em),
+       only screen and (min-width: 48em),
+       only screen and (min-width: 72em) {
+  body.light-mode .app-container {
+    background-color: var(--light-bg-color) !important;
+  }
+  
+  body.light-mode .top-bar {
+    background-color: var(--light-card-bg) !important;
+    color: var(--light-text-color) !important;
+  }
+  
+  body.light-mode .greeting {
+    color: var(--light-text-color) !important;
+  }
+}
 /* Mobile View */
 @media only screen and (min-width: 0em){
 .editor-container {
@@ -38,6 +497,29 @@ body {
   left: -50px;
   width: calc(100% + 90px);
 }
+
+  body.light-mode html,
+  html body.light-mode {
+    width: 100%;
+    background-color: var(--light-bg-color) !important;
+    overflow-x: hidden;
+  }
+   html body.light-mode,
+  body.light-mode,
+  body.light-mode html {
+    background-color: var(--light-bg-color) !important;
+  } 
+  body.light-mode .home .content h1 {
+    color: var(--light-text-color) !important;
+  }
+  
+  body.light-mode .feature-content {
+    color: var(--light-text-color) !important;
+  }
+  
+  body.light-mode .feature-title {
+    color: var(--light-text-color) !important;
+  }
 
 /* Make BlockNote fullscreen match your theme */
 .fullscreen-editor .bn-container {
@@ -1337,7 +1819,7 @@ body {
 
   .modal {
       width: 400px;
-      height: 500px;
+      height: 575px;
       background-color: #171716;
       padding: 30px;
       border-radius: 10px;

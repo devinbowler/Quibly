@@ -1,10 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
+/* Light/Dark Mode base variables */
+:root {
+  --light-bg-color: #f5f5f5;
+  --light-card-bg: #ffffff;
+  --light-text-color: #333333;
+  --light-border-color: #e0e0e0;
+  --light-highlight: #9ba3fb;
+  --light-secondary-bg: #f0f0f0;
+  --light-button-bg: #e8e8e8;
+  --light-button-hover: #d0d0d0;
+  --light-accent-color: #495BFA;
+  
+  --dark-bg-color: #0f0f0f;
+  --dark-card-bg: #171716;
+  --dark-text-color: white;
+  --dark-border-color: #444;
+  --dark-highlight: #495BFA;
+  --dark-secondary-bg: #171716;
+  --dark-button-bg: #171716;
+  --dark-button-hover: #343434;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   font-weight: 300; /* This sets the font to Roboto Light */
+  transition: background-color 0.3s, color 0.3s;
 }
-
 
 .App {
   text-align: center;

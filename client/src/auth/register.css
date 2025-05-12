@@ -1,79 +1,157 @@
-.register-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 90vh;
-    color: black !important;
-  }
+/* register.css - Add dark/light mode support */
 
-  .register-logo {
-    display: block;
-    max-width: 250px;
-    margin: 0 auto 1rem;
-    margin-bottom: -30px;
-  }
-  
-  .register-form {
-    position: relative;
-    background-color: transparent;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-    box-shadow: none;
-  }
-  
-  .register-form input[type="text"],
-  .register-form input[type="password"],
-  .register-form input[type="email"] {
-    color: white;
-    background-color: #121111;
-    padding: 1rem;
-    border: 1px solid #3a3a3a;
-    border-radius: 25px;
-    outline: none;
-    margin-bottom: 1rem;
-  }
-  
-  .register-form button {
-    padding: 1rem;
-    background-color: #221170;
-    color: #fff;
-    font-size: 13px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-  
-  .register-form button:hover {
-    background-color: #331c99;
-  }
-  
-  .login-text {
-    color: grey;
-    text-align: center;
-    margin-top: 1rem;
-    font-size: 15px !important;
-  }
-  
-  .login-text a {
-    text-decoration: none;
-    color: #2464b3;
-  }
-  
-  .login-text a:hover {
-    text-decoration: underline;
-  }
+/* Dark mode container */
+body.dark-mode .register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  color: black !important;
+}
 
-  .error {
-    background-color: rgba(156, 0, 0, 0.582); /* Transparent red background */
-    border: rgb(184, 0, 0) solid 2px;
-    color: white;
-    padding: 1rem;
-    border-radius: 5px;
-    text-align: center;
-  }
-  
+/* Light mode container */
+body.light-mode .register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  color: var(--light-text-color) !important;
+}
+
+.register-logo {
+  display: block;
+  max-width: 250px;
+  margin: 0 auto 1rem;
+  margin-bottom: -30px;
+}
+
+.register-form {
+  position: relative;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  box-shadow: none;
+}
+
+/* Dark mode input fields */
+body.dark-mode .register-form input[type="text"],
+body.dark-mode .register-form input[type="password"],
+body.dark-mode .register-form input[type="email"] {
+  color: white;
+  background-color: #121111;
+  padding: 1rem;
+  border: 1px solid #3a3a3a;
+  border-radius: 25px;
+  outline: none;
+  margin-bottom: 1rem;
+}
+
+/* Light mode input fields */
+body.light-mode .register-form input[type="text"],
+body.light-mode .register-form input[type="password"],
+body.light-mode .register-form input[type="email"] {
+  color: var(--light-text-color);
+  background-color: var(--light-bg-color);
+  padding: 1rem;
+  border: 1px solid var(--light-border-color);
+  border-radius: 25px;
+  outline: none;
+  margin-bottom: 1rem;
+}
+
+/* Dark mode button */
+body.dark-mode .register-form button {
+  padding: 1rem;
+  background-color: #221170;
+  color: #fff;
+  font-size: 13px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Light mode button */
+body.light-mode .register-form button {
+  padding: 1rem;
+  background-color: var(--light-accent-color);
+  color: #fff;
+  font-size: 13px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Dark mode button hover */
+body.dark-mode .register-form button:hover {
+  background-color: #331c99;
+}
+
+/* Light mode button hover */
+body.light-mode .register-form button:hover {
+  background-color: #3344d8;
+}
+
+/* Dark mode login text */
+body.dark-mode .login-text {
+  color: grey;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 15px !important;
+}
+
+/* Light mode login text */
+body.light-mode .login-text {
+  color: #777;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 15px !important;
+}
+
+/* Dark mode login link */
+body.dark-mode .login-text a {
+  text-decoration: none;
+  color: #2464b3;
+}
+
+/* Light mode login link */
+body.light-mode .login-text a {
+  text-decoration: none;
+  color: var(--light-accent-color);
+}
+
+/* Dark mode login link hover */
+body.dark-mode .login-text a:hover {
+  text-decoration: underline;
+}
+
+/* Light mode login link hover */
+body.light-mode .login-text a:hover {
+  text-decoration: underline;
+}
+
+/* Dark mode error */
+body.dark-mode .error {
+  background-color: rgba(156, 0, 0, 0.582);
+  border: rgb(184, 0, 0) solid 2px;
+  color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  text-align: center;
+}
+
+/* Light mode error */
+body.light-mode .error {
+  background-color: rgba(156, 0, 0, 0.2);
+  border: rgb(184, 0, 0) solid 2px;
+  color: #900;
+  padding: 1rem;
+  border-radius: 5px;
+  text-align: center;
+}

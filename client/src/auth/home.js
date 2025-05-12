@@ -5,9 +5,11 @@ import taskImg from '../images/QuiblyTasks.png';
 import noteImg1 from '../images/QuiblyNote.png';
 import noteImg2 from '../images/QuiblyFolder.png';
 import privacypolicy from './privacypolicy.js';
+import { useTheme } from '../ThemeContext';
 import { Link } from 'react-router-dom';
 
 function Home() {
+  const { darkMode, toggleTheme } = useTheme();
   return (
     <div className="home">
       <header className="topbar">
@@ -17,6 +19,19 @@ function Home() {
         <nav className="navbar">
           <a href="#about">About</a>
           <a href="#cs-footer-274">Support</a>
+          <div className="theme-toggle-container">
+            <label className="toggle-switch">
+              <input 
+                type="checkbox" 
+                checked={darkMode}
+                onChange={toggleTheme}
+              />
+              <span className="toggle-slider">
+                <i className="fas fa-sun light-icon"></i>
+                <i className="fas fa-moon dark-icon"></i>
+              </span>
+            </label>
+          </div>
           <a href="./register" className="login-button">Sign Up</a>
         </nav>
       </header>

@@ -1,75 +1,152 @@
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 90vh;
-    color: black !important;
-  }
-  
-  .login-form {
-    background-color: transparent;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    padding: 2rem;
-    box-shadow: none;
-  }
-  
-  .login-form input[type="password"],
-  .login-form input[type="email"] {
-    background-color: #121111;
-    color: white;
-    padding: 1rem;
-    border: 1px solid #3a3a3a;
-    border-radius: 25px;
-    outline: none;
-    margin-bottom: 1rem;
-  }
-  
-  .login-form button {
-    padding: 1rem;
-    background-color: #221170;
-    color: #fff;
-    font-size: 15px !important;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-  
-  .login-form button:hover {
-    background-color: #331c99;
-  }
+/* login.css - Add dark/light mode support */
 
-  .signup-text {
-    color: grey;
-    text-align: center;
-    font-size: 15px !important;
-  }
-  
-  .signup-text a {
-    text-decoration: none;
-    color: #2464b3;;
-  }
-  
-  .signup-text a:hover {
-    color: #285388;
-  }
-  
-  .login-logo {
-    display: block;
-    max-width: 250px;
-    margin: 0 auto 1rem;
-    margin-bottom: -30px;
-  }
+/* Dark mode (default) */
+body.dark-mode .login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  color: black !important;
+}
 
-  .error {
-    background-color: rgba(156, 0, 0, 0.582); /* Transparent red background */
-    border: rgb(184, 0, 0) solid 2px;
-    color: white;
-    padding: 1rem;
-    border-radius: 25px;
-    text-align: center;
-  }
+/* Light mode */
+body.light-mode .login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  color: var(--light-text-color) !important;
+}
+
+.login-form {
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  box-shadow: none;
+}
+
+/* Dark mode input fields */
+body.dark-mode .login-form input[type="password"],
+body.dark-mode .login-form input[type="email"] {
+  background-color: #121111;
+  color: white;
+  padding: 1rem;
+  border: 1px solid #3a3a3a;
+  border-radius: 25px;
+  outline: none;
+  margin-bottom: 1rem;
+}
+
+/* Light mode input fields */
+body.light-mode .login-form input[type="password"],
+body.light-mode .login-form input[type="email"] {
+  background-color: var(--light-bg-color);
+  color: var(--light-text-color);
+  padding: 1rem;
+  border: 1px solid var(--light-border-color);
+  border-radius: 25px;
+  outline: none;
+  margin-bottom: 1rem;
+}
+
+/* Dark mode button */
+body.dark-mode .login-form button {
+  padding: 1rem;
+  background-color: #221170;
+  color: #fff;
+  font-size: 15px !important;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Light mode button */
+body.light-mode .login-form button {
+  padding: 1rem;
+  background-color: var(--light-accent-color);
+  color: #fff;
+  font-size: 15px !important;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Dark mode button hover */
+body.dark-mode .login-form button:hover {
+  background-color: #331c99;
+}
+
+/* Light mode button hover */
+body.light-mode .login-form button:hover {
+  background-color: #3344d8;
+}
+
+/* Dark mode signup text */
+body.dark-mode .signup-text {
+  color: grey;
+  text-align: center;
+  font-size: 15px !important;
+}
+
+/* Light mode signup text */
+body.light-mode .signup-text {
+  color: #777;
+  text-align: center;
+  font-size: 15px !important;
+}
+
+/* Dark mode signup link */
+body.dark-mode .signup-text a {
+  text-decoration: none;
+  color: #2464b3;
+}
+
+/* Light mode signup link */
+body.light-mode .signup-text a {
+  text-decoration: none;
+  color: var(--light-accent-color);
+}
+
+/* Dark mode signup link hover */
+body.dark-mode .signup-text a:hover {
+  color: #285388;
+}
+
+/* Light mode signup link hover */
+body.light-mode .signup-text a:hover {
+  color: #3344d8;
+}
+
+.login-logo {
+  display: block;
+  max-width: 250px;
+  margin: 0 auto 1rem;
+  margin-bottom: -30px;
+}
+
+/* Dark mode error */
+body.dark-mode .error {
+  background-color: rgba(156, 0, 0, 0.582);
+  border: rgb(184, 0, 0) solid 2px;
+  color: white;
+  padding: 1rem;
+  border-radius: 25px;
+  text-align: center;
+}
+
+/* Light mode error */
+body.light-mode .error {
+  background-color: rgba(156, 0, 0, 0.2);
+  border: rgb(184, 0, 0) solid 2px;
+  color: #900;
+  padding: 1rem;
+  border-radius: 25px;
+  text-align: center;
+}

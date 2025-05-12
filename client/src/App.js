@@ -57,7 +57,7 @@ function App() {
   }
 
   return (
-    <div className={`app ${darkMode ? "dark-mode" : ""}`}>
+    <div className={`app ${darkMode ? "dark-mode" : "light-mode"}`}>
       <div className="content">
         <Routes>
           <Route path="/" element={<PublicLayout><AuthHome /></PublicLayout>} exact />

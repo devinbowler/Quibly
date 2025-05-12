@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import "./task.css";
+import { useTheme } from '../ThemeContext';
 import {
   fetchAllItems,
   createTask,
@@ -113,6 +114,7 @@ function Task() {
 
   // Other state variables
   const [greeting, setGreeting] = useState('');
+  const { darkMode, toggleTheme } = useTheme();
   const [currentDate, setCurrentDate] = useState('');
   const [viewType, setViewType] = useState('task'); // 'task', 'note', 'code', 'grid', 'taskDetails'
   const [noteBack, setNoteBack] = useState(''); 
@@ -664,6 +666,21 @@ return (
     {showSettings && (
       <div className="modal-overlay settings-modal-overlay" onClick={() => setShowSettings(false)}>
         <div className="modal settings-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="theme-toggle">
+            <span className="toggle-label">Dark Mode</span>
+            <label className="toggle-switch">
+              <input 
+                type="checkbox" 
+                checked={darkMode}
+                onChange={toggleTheme}
+              />
+              <span className="toggle-slider">
+                <i className="fas fa-sun light-icon"></i>
+                <i className="fas fa-moon dark-icon"></i>
+              </span>
+            </label>
+          </div>
+          
           <div className="user-settings">
             <form
               className="update-form"
@@ -1216,9 +1233,6 @@ return (
             </button>
             <div className="note-status-controls" style={{ display: 'flex', alignItems: 'center' }}>
               {saveMessage && <span className="save-status" style={{ marginRight: '1rem' }}>{saveMessage}</span>}
-              <button className="fullscreen-button" onClick={toggleFullscreen} style={{ marginRight: '10px' }}>
-                <i className={`fas ${isFullscreen ? 'fa-compress' : 'fa-expand'}`}></i>
-              </button>
               <button onClick={handleDelete} className="delete-button">
                 Delete
               </button>
