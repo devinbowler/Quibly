@@ -96,6 +96,10 @@ body.light-mode .settings-gear .fa {
   color: rgba(50, 50, 50, 0.8) !important;
 }
 
+body.light-mode .modal-input {
+  color: black;
+}
+
 /* Modals and Settings */
 body.light-mode .modal,
 body.light-mode .settings-modal,
