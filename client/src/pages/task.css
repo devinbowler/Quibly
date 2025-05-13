@@ -229,8 +229,26 @@ body.light-mode .bn-toolbar {
   border-color: rgba(0, 0, 0, 0.1) !important;
 }
 
+body.light-mode .bn-mantine .mantine-Menu-item {
+  background-color: white !important;
+}
+
 body.light-mode .bn-toolbar button {
   color: #333333 !important;
+}
+
+body.light-mode .bn-mantine .mantine-Menu-dropdown {
+  background-color: white !important;
+  box-shadow: 0 4px 12px grey !important;
+  border: none !important;
+}
+
+body.light-mode .bn-toolbar .mantine-Button-root {
+  background-color: white !important;
+}
+
+body.light-mode .bn-toolbar .mantine-ActionIcon-root {
+  background-color: white !important;
 }
 
 body.light-mode .bn-editor {
@@ -553,6 +571,7 @@ body.light-mode .img-wrapper img {
 /* Fix toolbar in light mode */
 body.light-mode .bn-toolbar {
   background-color: #f5f5f5 !important;
+  box-shadow: 0 4px 12px grey !important;
   border-color: rgba(0, 0, 0, 0.1) !important;
 }
 
