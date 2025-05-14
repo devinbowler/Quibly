@@ -253,7 +253,13 @@ body.light-mode .bn-toolbar .mantine-ActionIcon-root {
 
 body.light-mode .bn-editor {
   color: black !important;
+  padding-bottom: 150px;
 }
+
+body.dark-mode .bn-editor {
+  padding-bottom: 150px;
+}
+  
 
 body.light-mode .bn-toolbar button:hover {
   background-color: rgba(0, 0, 0, 0.05) !important;
@@ -546,6 +552,7 @@ body.light-mode .img-wrapper img {
 }
 
 .bn-editor {
+  padding-bottom: 150px;
   background-color: transparent !important;
 }
 
