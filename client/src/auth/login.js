@@ -47,6 +47,9 @@ const Login = () => {
                 <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
                 <button type="submit" disabled={isLoading}>Log In</button>
                 <p className="signup-text">Don't have an account? <a href="/register">Sign Up</a></p>
+                <p className="forgot-password">
+                  <a href="/forgot-password">Forgot your password?</a>
+                </p>
                 {error && <div className="error">{error}</div>}
             </form>
         </div>

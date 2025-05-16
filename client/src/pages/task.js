@@ -15,11 +15,21 @@ import {
 import { debounce } from 'lodash';
 import { useLogout } from '../hooks/useLogout';
 import { useNavigate } from 'react-router-dom';
-import { useUpdate } from '../hooks/useUpdate';
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
+
+// Error Message Component
+const ErrorMessage = ({ message }) => {
+  if (!message) return null;
+  
+  return (
+    <div className="form-error">
+      {message}
+    </div>
+  );
+};
 
 const BlockNoteEditor = ({ noteContent, onChange }) => {
   // Reference to track if we're programmatically updating content
@@ -104,7 +114,6 @@ function Task() {
   // State for settings modal
   const [showSettings, setShowSettings] = useState(false);
   const { logout } = useLogout();
-  const { update, error } = useUpdate();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -132,8 +141,15 @@ function Task() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  
+  // Password management
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(null);
+  const [passwordSuccess, setPasswordSuccess] = useState(null);
+  const [isPasswordReset, setIsPasswordReset] = useState(false);
+
   const [collapsedPast, setCollapsedPast] = useState(() => {
     const saved = localStorage.getItem("collapsedPast");
     return saved ? JSON.parse(saved) : false;
@@ -155,13 +171,70 @@ function Task() {
     return saved ? JSON.parse(saved) : false;
   });
 
-
-
   // Folder modal state
   const [showFolderModal, setShowFolderModal] = useState(false);
   const [folderModalMode, setFolderModalMode] = useState(""); // "add" or "edit"
   const [folderName, setFolderName] = useState("");
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Check if user is in password reset mode
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.passwordReset) {
+      setIsPasswordReset(true);
+    }
+  }, []);
+
+  // Password change handler
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    
+    // Check if new passwords match
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New passwords don't match");
+      return;
+    }
+    
+    try {
+      // Prepare request body based on password reset status
+      const requestBody = isPasswordReset 
+        ? { newPassword } 
+        : { currentPassword, newPassword };
+      
+      const response = await fetch('https://quibly.onrender.com/api/user/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).token}`
+        },
+        body: JSON.stringify(requestBody)
+      });
+      
+      const json = await response.json();
+      
+      if (!response.ok) {
+        setPasswordError(json.error);
+        setPasswordSuccess(null);
+      } else {
+        // Update local storage to remove passwordReset flag
+        if (isPasswordReset) {
+          const user = JSON.parse(localStorage.getItem('user'));
+          user.passwordReset = false;
+          localStorage.setItem('user', JSON.stringify(user));
+          setIsPasswordReset(false);
+        }
+        
+        setPasswordSuccess("Password changed successfully");
+        setPasswordError(null);
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+      }
+    } catch (error) {
+      setPasswordError("An error occurred. Try again later.");
+      setPasswordSuccess(null);
+    }
+  };
 
   // Helper function for the task title
   const getTruncatedTitle = (title) => {
@@ -213,7 +286,7 @@ function Task() {
     setCurrentDate(`${now.toLocaleString('default', { month: 'long' })} ${now.getDate()}, ${now.getFullYear()}`);
   }, []);
 
-  // Folder modal functions (omitted for brevity)
+  // Folder modal functions
   const openFolderModal = (mode) => {
     setFolderModalMode(mode);
     if (mode === "edit") {
@@ -222,12 +295,14 @@ function Task() {
       setFolderName("");
     }
     setShowFolderModal(true);
+    setErrorMessage(null);
   };
 
   const closeFolderModal = () => {
     setShowFolderModal(false);
     setFolderModalMode("");
     setFolderName("");
+    setErrorMessage(null);
   };
 
   // Determine the current folder object (if not at root)
@@ -239,6 +314,11 @@ function Task() {
   }
 
   const handleSaveFolder = async () => {
+    if (!folderName.trim()) {
+      setErrorMessage('Folder name is required');
+      return;
+    }
+
     if (folderModalMode === "add") {
       // Create a new folder with the entered name
       try {
@@ -247,7 +327,7 @@ function Task() {
         setFilteredFiles([...filteredFiles, newFolder]);
         closeFolderModal();
       } catch (error) {
-        alert("Failed to create folder.");
+        setErrorMessage("Failed to create folder.");
       }
     } else if (folderModalMode === "edit") {
       // Update the current folder's name
@@ -262,7 +342,7 @@ function Task() {
         await loadItems();
         closeFolderModal();
       } catch (error) {
-        alert("Failed to update folder.");
+        setErrorMessage("Failed to update folder.");
       }
     }
   };
@@ -270,7 +350,7 @@ function Task() {
   // Delete folder (and all nested content)
   const handleDeleteFolder = async () => {
     if (!currentFolderObj) {
-      alert("No folder to delete.");
+      setErrorMessage("No folder to delete.");
       return;
     }
     if (!window.confirm("Are you sure you want to delete this folder and all its contents?")) {
@@ -285,7 +365,7 @@ function Task() {
       setCurrentPath(newPath);
       await loadItems();
     } catch (error) {
-      alert("Failed to delete folder.");
+      setErrorMessage("Failed to delete folder.");
     }
   };
 
@@ -298,8 +378,6 @@ function Task() {
       document.body.classList.remove('fullscreen-active');
     }
   };
-
-
 
   const selectedNoteRef = useRef();
   const filesRef = useRef();
@@ -417,25 +495,37 @@ function Task() {
   };
 
   const handleCreateTask = async () => {
+    // Validation
+    if (!newTask.name.trim()) {
+      setErrorMessage('Task title is required');
+      return;
+    }
+    if (!newTask.dueDate) {
+      setErrorMessage('Due date is required');
+      return;
+    }
+    
+    // Clear any previous errors
+    setErrorMessage(null);
+
     const localDueDate = new Date(newTask.dueDate + 'T00:00:00');
     const newTaskData = {
       title: newTask.name,
       dueDate: localDueDate,
-      color: newTask.color,
-      details: newTask.details,
+      color: newTask.color || '#495BFA', // Default color if not set
+      details: newTask.details || '',
       completed: 'false',
     };
-    console.log('handleCreateTask payload:', newTaskData);
+    
     try {
       const createdTask = await createTask(newTaskData);
       setTasks([...tasks, createdTask]);
       setIsAddingTask(false);
       setIsEditingTask(false);
       setNewTask({ name: '', dueDate: '', color: '', details: '', completed: 'false' });
-      setErrorMessage(null);
     } catch (error) {
       console.error('Error creating task:', error);
-      setErrorMessage('Failed to create task.');
+      setErrorMessage('Failed to create task. Please try again.');
     }
   };
 
@@ -483,6 +573,7 @@ function Task() {
 
   const openAddTaskModal = () => {
     setIsAddingTask(true);
+    setErrorMessage(null);
   };
 
   const openTaskDetailsModal = (task) => {
@@ -557,7 +648,6 @@ function Task() {
     setCurrentPath(newPath);
   }
 };
-
 
   const sortedTasks = useMemo(() => {
     return [...tasks].sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
@@ -654,6 +744,7 @@ return (
             placeholder="Enter folder name"
             required
           />
+          <ErrorMessage message={errorMessage} />
           <div className="modal-buttons">
             <button onClick={handleSaveFolder}>Save</button>
             <button onClick={closeFolderModal}>Cancel</button>
@@ -666,6 +757,10 @@ return (
     {showSettings && (
       <div className="modal-overlay settings-modal-overlay" onClick={() => setShowSettings(false)}>
         <div className="modal settings-modal" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close-btn" onClick={() => { setShowSettings(false); setErrorMessage(null); }}>
+            <i className="fas fa-times"></i>
+          </button>
+          
           <div className="theme-toggle">
             <span className="toggle-label">Dark Mode</span>
             <label className="toggle-switch">
@@ -682,27 +777,44 @@ return (
           </div>
           
           <div className="user-settings">
+            <h3>Change Password</h3>
+            {isPasswordReset && (
+              <div className="password-reset-notice">
+                For security reasons, please create a new password.
+              </div>
+            )}
             <form
               className="update-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                update(email, password);
-              }}
+              onSubmit={handlePasswordChange}
             >
+              {!isPasswordReset && (
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  placeholder="Current Password"
+                  required
+                />
+              )}
               <input
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="New Password"
                 required
               />
               <input
                 type="password"
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm New Password"
                 required
               />
-              <button type="submit">Update</button>
-              {error && <div className="error">{error}</div>}
+              <button type="submit">
+                {isPasswordReset ? "Set New Password" : "Update Password"}
+              </button>
+              <ErrorMessage message={passwordError} />
+              {passwordSuccess && <div className="success">{passwordSuccess}</div>}
             </form>
           </div>
           <button className="logout-button" onClick={handleLogout}>
@@ -771,7 +883,9 @@ return (
     )}
 
     {/* Error Message */}
-    {errorMessage && <div className="error-message">{errorMessage}</div>}
+    {errorMessage && viewType !== 'note' && !showFolderModal && !isAddingTask && (
+      <ErrorMessage message={errorMessage} />
+    )}
 
     {/* Task View */}
     {(viewType === 'task' || viewType === 'taskDetails') && (
@@ -790,7 +904,7 @@ return (
             </div>
           </div>
           <div className={`tasks-container ${collapsedPast ? 'collapsed-style' : ''}`}>
-            {dueToday.length > 0 ? (
+            {pastDue.length > 0 ? (
               pastDue.map((task) => (
                 <div
                   key={task._id}
@@ -1088,6 +1202,7 @@ return (
     )}
 
     {/* Modal for Adding Task */}
+
     {isAddingTask && (
       <div className="modal-overlay">
         <div className="modal">
@@ -1117,8 +1232,18 @@ return (
             value={newTask.details}
             onChange={(e) => setNewTask({ ...newTask, details: e.target.value })}
           />
-          <button className="create-button" onClick={handleCreateTask}>Create Task</button>
-          <button className="editing close-button" onClick={() => setIsAddingTask(false)}>Cancel</button>
+          
+          {/* Error message */}
+          {errorMessage && <div className="error">{errorMessage}</div>}
+          
+          {/* Updated button layout */}
+          <div className="modal-buttons">
+            <button className="create-button" onClick={handleCreateTask}>Create Task</button>
+            <button className="editing close-button" onClick={() => {
+              setIsAddingTask(false);
+              setErrorMessage(null);
+            }}>Cancel</button>
+          </div>
         </div>
       </div>
     )}
@@ -1130,7 +1255,7 @@ return (
           <div className="modal-header">
             <p className="modal-title unselectable">{selectedTask.title}</p>
             <div className="viewing modal-buttons">
-              <button className="viewing deleteTask-button" onClick={() => { handleDelete(); setViewType('task'); }}>
+              <button className="viewing deleteTask-button" onClick={() => { handleDelete(); setViewType('task'); setErrorMessage(null); }}>
                 <i className="fa-solid fa-trash"></i>
               </button>
               <button className="viewing update-button" onClick={handleEditTask}>
@@ -1179,6 +1304,7 @@ return (
             onChange={(e) => setSelectedTask({ ...selectedTask, details: e.target.value })}
             required
           />
+          <ErrorMessage message={errorMessage} />
           <div className="editing modal-buttons">
             <button
               className="editing update-button"
@@ -1254,6 +1380,8 @@ return (
             onChange={(e) => handleNoteChange('title', e.target.value)}
           />
         )}
+        
+        <ErrorMessage message={errorMessage} />
         
         {/* BlockNote Editor */}
         <div className="editor-container" style={{ height: isFullscreen ? "95vh" : "75vh" }}>

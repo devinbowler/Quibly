@@ -15,6 +15,7 @@ import PublicLayout from "./PublicLayout";
 import Tasks from "./pages/task";
 import PrivacyPolicy from './auth/privacypolicy';
 import TermsandConditions from './auth/termsandconditions';
+import ForgotPassword from "./auth/ForgotPassword";
 
 function App() {
   const location = useLocation();
@@ -63,6 +64,7 @@ function App() {
           <Route path="/" element={<PublicLayout><AuthHome /></PublicLayout>} exact />
           <Route path="/login" element={<AuthLogin />} />
           <Route path="/register" element={<AuthRegister />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/verify" element={<AuthVerify />} />
           <Route path="/app/tasks" element={user ? <Tasks /> : <Navigate to="/login" />} />
           <Route path="/privacypolicy" element={<PublicLayout><PrivacyPolicy /></PublicLayout>} /> 

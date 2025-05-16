@@ -7,6 +7,13 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  verified: { type: Boolean, required: true, default: false },
+  passwordReset: { type: Boolean, default: false }
+});
+
+const userSchema = new Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   verified: { type: Boolean, required: true, default: false }
 });
 

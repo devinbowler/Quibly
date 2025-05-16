@@ -98,6 +98,7 @@ body.dark-mode .signup-text {
 /* Light mode signup text */
 body.light-mode .signup-text {
   color: #777;
+  margin-bottom: 0;
   text-align: center;
   font-size: 15px !important;
 }
@@ -119,10 +120,25 @@ body.dark-mode .signup-text a:hover {
   color: #285388;
 }
 
+.login-form h2, .login-form p {
+  text-align: center;
+}
+
 /* Light mode signup link hover */
 body.light-mode .signup-text a:hover {
   color: #3344d8;
 }
+
+.forgot-password {
+  text-align: center;
+  font-size: 15px !important;
+}
+
+.forgot-password a {
+  text-decoration: none;
+  color: #3344d8;
+}
+
 
 .login-logo {
   display: block;

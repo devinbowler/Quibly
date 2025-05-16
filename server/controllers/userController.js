@@ -106,35 +106,16 @@ const loginUser = async (req, res) => {
   try {
     const user = await User.login(email, password);
     const token = createToken(user._id);
-    res.status(200).json({ email, token });
+    res.status(200).json({ 
+      email, 
+      token,
+      passwordReset: user.passwordReset || false
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
-// ========================
-// Update
-// ========================
-const updateUser = async (req, res) => {
-    const { email, password } = req.body;
-    const userId = req.user._id; // assuming authentication middleware sets req.user
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Neither field may be empty' });
-    }
-    try {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-      const updatedUser = await User.findByIdAndUpdate(
-        userId,
-        { email, password: hashedPassword },
-        { new: true }
-      );
-      if (!updatedUser) throw new Error("User not found");
-      res.status(200).json({ email: updatedUser.email });
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }
-  };
 
 // ========================
 // Verify OTP and Create Permanent User
@@ -224,6 +205,90 @@ const resendOTP = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+// Request password reset.
+const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+  try {
+    // Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      throw new Error('No account with that email exists');
+    }
+
+    // Generate a temporary password (8 characters)
+    const tempPassword = Math.random().toString(36).slice(-8);
+    
+    // Hash the temporary password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(tempPassword, salt);
+    
+    // Update user's password
+    user.password = hashedPassword;
+    user.passwordReset = true; // Flag to indicate password should be changed
+    await user.save();
+    
+    // Send email with temporary password
+    const mailOptions = {
+      from: process.env.AUTH_EMAIL,
+      to: email,
+      subject: "Your Temporary Password",
+      html: `<p>Your temporary password is: <b>${tempPassword}</b></p>
+            <p>Please log in and change your password immediately for security reasons.</p>`,
+    };
+    
+    await transporter.sendMail(mailOptions);
+    
+    res.status(200).json({
+      status: "SUCCESS",
+      message: "Password reset email sent successfully",
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Change password.
+const changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user._id;
+  
+  try {
+    // Find the user
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    
+    // Check if current password is correct (skip for reset passwords)
+    if (!user.passwordReset) {
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        throw new Error('Current password is incorrect');
+      }
+    }
+    
+    // Validate new password strength
+    if (!validator.isStrongPassword(newPassword)) {
+      throw new Error('New password must be at least 8 characters with lowercase, uppercase, number, and symbol');
+    }
+    
+    // Update password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    
+    user.password = hashedPassword;
+    user.passwordReset = false; // Reset the flag
+    await user.save();
+    
+    res.status(200).json({
+      status: "SUCCESS",
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
   
   // Delete Account – deletes the authenticated user's account
   const deleteAccount = async (req, res) => {
@@ -242,6 +307,8 @@ const resendOTP = async (req, res) => {
     loginUser,
     verifyOTP,
     resendOTP,
-    updateUser,  
+    updateUser,
+    requestPasswordReset,
+    changePassword,
     deleteAccount
   };

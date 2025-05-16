@@ -1,6 +1,6 @@
 // routes/user.js
 const express = require('express');
-const { signupUser, loginUser, verifyOTP, resendOTP, updateUser, deleteAccount } = require('../controllers/userController');
+const { signupUser, loginUser, verifyOTP, resendOTP, updateUser, requestPasswordReset, changePassword, deleteAccount } = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -21,5 +21,8 @@ router.post('/verify-otp', verifyOTP);
 
 // Resend OTP route – resend the OTP code
 router.post('/resend-otp', resendOTP);
+
+router.post('/forgot-password', requestPasswordReset);
+router.post('/change-password', requireAuth, changePassword);
 
 module.exports = router;
