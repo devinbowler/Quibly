@@ -11,12 +11,6 @@ const userSchema = new Schema({
   passwordReset: { type: Boolean, default: false }
 });
 
-const userSchema = new Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  verified: { type: Boolean, required: true, default: false }
-});
-
 // static signup method
 userSchema.statics.signup = async function(email, password) {
   if (!email || !password) {
