@@ -307,7 +307,6 @@ const changePassword = async (req, res) => {
     loginUser,
     verifyOTP,
     resendOTP,
-    updateUser,
     requestPasswordReset,
     changePassword,
     deleteAccount
