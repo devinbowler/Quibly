@@ -1030,7 +1030,10 @@ body.light-mode .bn-slash-menu-item:hover {
   .back-button:hover {
       text-decoration: underline;
   }
-
+  body.light-mode .modal.folder input {
+    color: black;
+  }
+  
   .note-view input, .note-view textarea {
       border: none;
       outline: none;
