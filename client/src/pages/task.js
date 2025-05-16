@@ -189,10 +189,6 @@ function Task() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     
-    // Clear previous errors/success messages
-    setPasswordError(null);
-    setPasswordSuccess(null);
-    
     // Check if new passwords match
     if (newPassword !== confirmPassword) {
       setPasswordError("New passwords don't match");
@@ -200,17 +196,13 @@ function Task() {
     }
     
     try {
-      // Prepare request body based on password reset status
+      // Get the token from localStorage
+      const user = JSON.parse(localStorage.getItem('user'));
+      
+      // Create request body - only include currentPassword if not in reset mode
       const requestBody = isPasswordReset 
         ? { newPassword } 
         : { currentPassword, newPassword };
-      
-      // Get the token from localStorage
-      const user = JSON.parse(localStorage.getItem('user'));
-      if (!user || !user.token) {
-        setPasswordError("You must be logged in to change your password");
-        return;
-      }
       
       const response = await fetch('https://quibly.onrender.com/api/user/change-password', {
         method: 'POST',
@@ -225,6 +217,7 @@ function Task() {
       
       if (!response.ok) {
         setPasswordError(json.error || "An error occurred");
+        setPasswordSuccess(null);
       } else {
         // Update local storage to remove passwordReset flag if it was set
         if (isPasswordReset) {
@@ -234,6 +227,7 @@ function Task() {
         }
         
         setPasswordSuccess("Password changed successfully");
+        setPasswordError(null);
         
         // Clear input fields
         setCurrentPassword('');
@@ -243,6 +237,7 @@ function Task() {
     } catch (error) {
       console.error("Error changing password:", error);
       setPasswordError("An error occurred. Please try again later.");
+      setPasswordSuccess(null);
     }
   };
 
@@ -767,13 +762,13 @@ return (
     {showSettings && (
       <div className="modal-overlay settings-modal-overlay" onClick={() => {
         setShowSettings(false);
-        setPasswordError(null); // Clear errors when closing
+        setPasswordError(null);
         setPasswordSuccess(null);
       }}>
-        <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal settings-modal" onClick={(e) => e.stopPropagation()}>
           <button className="modal-close-btn" onClick={() => {
             setShowSettings(false);
-            setPasswordError(null); // Clear errors when closing
+            setPasswordError(null);
             setPasswordSuccess(null);
           }}>
             <i className="fas fa-times"></i>
@@ -830,14 +825,12 @@ return (
                 required
               />
               
-              {/* Error and success messages */}
-              {passwordError && <div className="error">{passwordError}</div>}
-              {passwordSuccess && <div className="success">{passwordSuccess}</div>}
-              
-              {/* Button */}
               <button type="submit">
                 {isPasswordReset ? "Set New Password" : "Update Password"}
               </button>
+              
+              {passwordError && <div className="error">{passwordError}</div>}
+              {passwordSuccess && <div className="success">{passwordSuccess}</div>}
             </form>
           </div>
           
@@ -850,6 +843,8 @@ return (
         </div>
       </div>
     )}
+
+
     {/* Filter Buttons */}
     <div className="filter-buttons">
       { viewType !== 'note' && (
