@@ -1033,6 +1033,9 @@ body.light-mode .bn-slash-menu-item:hover {
   body.light-mode .modal.folder input {
     color: black;
   }
+  body.light-mode .modal-textarea {
+    color: black !important;
+  }
   
   .note-view input, .note-view textarea {
       border: none;
