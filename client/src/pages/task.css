@@ -1389,7 +1389,6 @@ body.light-mode .form-error {
 
   .modal.folder {
       color: white !important;
-      height: 250px !important;
   }
 
   .modal.folder input {
@@ -2053,7 +2052,6 @@ body.light-mode .form-error {
 
   .modal {
       width: 400px;
-      height: 700px;
       background-color: #171716;
       padding: 30px;
       border-radius: 10px;
