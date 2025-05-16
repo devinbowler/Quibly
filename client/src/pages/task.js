@@ -189,6 +189,10 @@ function Task() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     
+    // Clear previous errors/success messages
+    setPasswordError(null);
+    setPasswordSuccess(null);
+    
     // Check if new passwords match
     if (newPassword !== confirmPassword) {
       setPasswordError("New passwords don't match");
@@ -201,11 +205,18 @@ function Task() {
         ? { newPassword } 
         : { currentPassword, newPassword };
       
+      // Get the token from localStorage
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (!user || !user.token) {
+        setPasswordError("You must be logged in to change your password");
+        return;
+      }
+      
       const response = await fetch('https://quibly.onrender.com/api/user/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user')).token}`
+          'Authorization': `Bearer ${user.token}`
         },
         body: JSON.stringify(requestBody)
       });
@@ -213,26 +224,25 @@ function Task() {
       const json = await response.json();
       
       if (!response.ok) {
-        setPasswordError(json.error);
-        setPasswordSuccess(null);
+        setPasswordError(json.error || "An error occurred");
       } else {
-        // Update local storage to remove passwordReset flag
+        // Update local storage to remove passwordReset flag if it was set
         if (isPasswordReset) {
-          const user = JSON.parse(localStorage.getItem('user'));
           user.passwordReset = false;
           localStorage.setItem('user', JSON.stringify(user));
           setIsPasswordReset(false);
         }
         
         setPasswordSuccess("Password changed successfully");
-        setPasswordError(null);
+        
+        // Clear input fields
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
       }
     } catch (error) {
-      setPasswordError("An error occurred. Try again later.");
-      setPasswordSuccess(null);
+      console.error("Error changing password:", error);
+      setPasswordError("An error occurred. Please try again later.");
     }
   };
 
@@ -755,9 +765,17 @@ return (
 
     {/* Settings Modal */}
     {showSettings && (
-      <div className="modal-overlay settings-modal-overlay" onClick={() => setShowSettings(false)}>
-        <div className="modal settings-modal" onClick={(e) => e.stopPropagation()}>
-          <button className="modal-close-btn" onClick={() => { setShowSettings(false); setErrorMessage(null); }}>
+      <div className="modal-overlay settings-modal-overlay" onClick={() => {
+        setShowSettings(false);
+        setPasswordError(null); // Clear errors when closing
+        setPasswordSuccess(null);
+      }}>
+        <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-close-btn" onClick={() => {
+            setShowSettings(false);
+            setPasswordError(null); // Clear errors when closing
+            setPasswordSuccess(null);
+          }}>
             <i className="fas fa-times"></i>
           </button>
           
@@ -783,6 +801,7 @@ return (
                 For security reasons, please create a new password.
               </div>
             )}
+            
             <form
               className="update-form"
               onSubmit={handlePasswordChange}
@@ -790,33 +809,38 @@ return (
               {!isPasswordReset && (
                 <input
                   type="password"
-                  value={currentPassword}
+                  value={currentPassword || ''}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="Current Password"
-                  required
+                  required={!isPasswordReset}
                 />
               )}
               <input
                 type="password"
-                value={newPassword}
+                value={newPassword || ''}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="New Password"
                 required
               />
               <input
                 type="password"
-                value={confirmPassword}
+                value={confirmPassword || ''}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirm New Password"
                 required
               />
+              
+              {/* Error and success messages */}
+              {passwordError && <div className="error">{passwordError}</div>}
+              {passwordSuccess && <div className="success">{passwordSuccess}</div>}
+              
+              {/* Button */}
               <button type="submit">
                 {isPasswordReset ? "Set New Password" : "Update Password"}
               </button>
-              <ErrorMessage message={passwordError} />
-              {passwordSuccess && <div className="success">{passwordSuccess}</div>}
             </form>
           </div>
+          
           <button className="logout-button" onClick={handleLogout}>
             Logout
           </button>
@@ -826,7 +850,6 @@ return (
         </div>
       </div>
     )}
-
     {/* Filter Buttons */}
     <div className="filter-buttons">
       { viewType !== 'note' && (
