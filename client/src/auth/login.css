@@ -170,3 +170,7 @@ body.light-mode .error {
   border-radius: 25px;
   text-align: center;
 }
+
+.success-message {
+  text-align: center;
+}
