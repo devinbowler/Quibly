@@ -124,6 +124,10 @@ body.dark-mode .signup-text a:hover {
   text-align: center;
 }
 
+body.light-mode .login-form h2, body.light-mode .login-form p {
+  color: white !important;
+}
+
 /* Light mode signup link hover */
 body.light-mode .signup-text a:hover {
   color: #3344d8;
