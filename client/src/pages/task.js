@@ -537,13 +537,16 @@ function Task() {
   const handleUpdateTask = async () => {
     if (!selectedTask) return;
     try {
+      const localDueDate = new Date(selectedTask.dueDate + 'T00:00:00');
+      
       const updatedTask = await updateTask(selectedTask._id, {
         title: selectedTask.title,
-        dueDate: selectedTask.dueDate,
+        dueDate: localDueDate,
         color: selectedTask.color,
         details: selectedTask.details,
         completed: selectedTask.completed,
       });
+
       setTasks(tasks.map(task => task._id === updatedTask._id ? updatedTask : task));
       setSelectedTask(null);
       setViewType('task');
