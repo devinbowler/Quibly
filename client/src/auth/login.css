@@ -128,6 +128,10 @@ body.light-mode .login-form h2, body.light-mode .login-form p {
   color: white !important;
 }
 
+body.light-mode .login-form .signup-text p {
+  color: black !important;
+}
+
 /* Light mode signup link hover */
 body.light-mode .signup-text a:hover {
   color: #3344d8;
