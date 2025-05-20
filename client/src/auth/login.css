@@ -128,7 +128,7 @@ body.light-mode .login-form h2, body.light-mode .login-form p {
   color: white !important;
 }
 
-body.light-mode .login-form .signup-text p {
+body.light-mode .login-form p.signup-text {
   color: black !important;
 }
 
