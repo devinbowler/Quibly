@@ -254,10 +254,12 @@ body.light-mode .bn-toolbar .mantine-ActionIcon-root {
 body.light-mode .bn-editor {
   color: black !important;
   padding-bottom: 150px;
+  font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace !important;
 }
 
 body.dark-mode .bn-editor {
   padding-bottom: 150px;
+  font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace !important;
 }
   
 
@@ -554,6 +556,7 @@ body.light-mode .img-wrapper img {
 .bn-editor {
   padding-bottom: 150px;
   background-color: transparent !important;
+  font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace !important;
 }
 
 .bn-toolbar button {
