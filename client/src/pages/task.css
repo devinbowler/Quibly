@@ -2303,6 +2303,7 @@ body.light-mode .form-error {
       padding: 20px;
       margin-left: 50px; /* Align with the rest of the content */
       margin-right: 50px;
+      max-width: 95%;
   }
 
   .grid-item {
