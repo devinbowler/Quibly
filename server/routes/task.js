@@ -1,40 +1,39 @@
-// routes/task.js
 const express = require('express');
 const {
-  getAllItems,
-  createFolder,
+  getAllTasks,
+  getTasksByDateRange,
   createTask,
-  createNote,
-  deleteItem,
+  createMultipleTasks,
   updateTask,
-  updateNote,
-  getNoteDetails,
-  updateFolder, // Import updateFolder
+  deleteTask,
+  toggleTaskCompletion
 } = require('../controllers/taskController');
 const requireAuth = require('../middleware/requireAuth');
 
 const router = express.Router();
+
+// All routes require authentication
 router.use(requireAuth);
 
-// Get all items (tasks, notes, folders)
-router.get('/', getAllItems);
+// Get all tasks
+router.get('/', getAllTasks);
 
-// Fetch note details by ID
-router.get('/note/:id', getNoteDetails);
+// Get tasks by date range (for calendar)
+router.get('/range', getTasksByDateRange);
 
-// Create a folder, task, or note
-router.post('/folder', createFolder);
-router.post('/task', createTask);
-router.post('/note', createNote);
+// Create a single task
+router.post('/', createTask);
 
-// Delete an item (folder, task, or note)
-router.delete('/:id/:type', deleteItem);
+// Create multiple tasks (for AI generation)
+router.post('/batch', createMultipleTasks);
 
-// Update a task or note
-router.patch('/task/:id', updateTask);
-router.patch('/note/:id', updateNote);
+// Update a task
+router.patch('/:id', updateTask);
 
-// Update a folder
-router.patch('/folder/:id', updateFolder);
+// Toggle task completion
+router.patch('/:id/toggle', toggleTaskCompletion);
+
+// Delete a task
+router.delete('/:id', deleteTask);
 
 module.exports = router;

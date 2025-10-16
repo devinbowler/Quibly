@@ -1,200 +1,177 @@
-const { Task, Folder, Note } = require('../models/taskModel');
+const Task = require('../models/taskModel');
 const mongoose = require('mongoose');
 
-// Get all tasks, notes, and folders
-const getAllItems = async (req, res) => {
-    const user_id = req.user._id;
-
-    try {
-        const tasks = await Task.find({ user_id });
-        const folders = await Folder.find({ user_id });
-        const notes = await Note.find({ user_id });
-        
-        res.status(200).json({ tasks, folders, notes });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Create a folder
-const createFolder = async (req, res) => {
-  const { name, parentFolder } = req.body;  // Now accepting parentFolder from the client
+// Get all tasks for the authenticated user
+const getAllTasks = async (req, res) => {
   const user_id = req.user._id;
 
   try {
-    const folder = await Folder.create({ name, parentFolder, user_id });
-    res.status(201).json(folder);
+    const tasks = await Task.find({ user_id }).sort({ dueDate: 1 });
+    res.status(200).json(tasks);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
-
-// Create a task
-const createTask = async (req, res) => {
-  // Log the request body to see all incoming values
-  // console.log('Create Task Request Body:', req.body);
-
-  // Destructure the fields from the request body.
-  // Note: We removed parentFolder since it's not needed.
-  const { title, dueDate, color, details, completed } = req.body;
+// Get tasks for a specific date range (for calendar view)
+const getTasksByDateRange = async (req, res) => {
   const user_id = req.user._id;
-  
+  const { startDate, endDate } = req.query;
+
   try {
-    // Log the values being used to create the task
-    // console.log('Creating task with:', { title, dueDate, color, details, completed, user_id });
+    const tasks = await Task.find({
+      user_id,
+      dueDate: {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate)
+      }
+    }).sort({ dueDate: 1 });
     
-    // Create the task
-    const task = await Task.create({ title, dueDate, color, details, completed, user_id });
-    
-    // Log the successfully created task
-    // console.log('Task created successfully:', task);
+    res.status(200).json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Create a new task
+const createTask = async (req, res) => {
+  const { title, details, dueDate, color } = req.body;
+  const user_id = req.user._id;
+
+  if (!title || !dueDate) {
+    return res.status(400).json({ error: 'Title and due date are required' });
+  }
+
+  try {
+    const task = await Task.create({
+      title,
+      details: details || '',
+      dueDate: new Date(dueDate),
+      color: color || '#495BFA',
+      completed: 'false',
+      user_id
+    });
     
     res.status(201).json(task);
   } catch (error) {
-    // Log the full error for debugging
-    console.error('Error creating task:', error);
     res.status(400).json({ error: error.message });
   }
 };
 
-// Create a note
-const createNote = async (req, res) => {
-    const { title, body, parentFolder } = req.body;
-    const user_id = req.user._id;
+// Create multiple tasks (for AI-generated tasks)
+const createMultipleTasks = async (req, res) => {
+  const { tasks } = req.body;
+  const user_id = req.user._id;
 
-    try {
-        const note = await Note.create({ title, body, user_id, parentFolder });
-        res.status(201).json(note);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
+  if (!Array.isArray(tasks) || tasks.length === 0) {
+    return res.status(400).json({ error: 'Tasks array is required' });
+  }
+
+  try {
+    const tasksToCreate = tasks.map(task => ({
+      ...task,
+      user_id,
+      dueDate: new Date(task.dueDate),
+      color: task.color || '#495BFA',
+      completed: 'false',
+      details: task.details || task.description || '' // Support both for API flexibility
+    }));
+
+    const createdTasks = await Task.insertMany(tasksToCreate);
+    res.status(201).json(createdTasks);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 };
 
-// Delete a folder, task, or note
-const deleteItem = async (req, res) => {
-    const { id, type } = req.params;  // Type: 'task', 'note', 'folder'
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'Invalid ID' });
-    }
-
-    try {
-        let deletedItem;
-        if (type === 'task') {
-            deletedItem = await Task.findByIdAndDelete(id);
-        } else if (type === 'note') {
-            deletedItem = await Note.findByIdAndDelete(id);
-        } else if (type === 'folder') {
-            deletedItem = await Folder.findByIdAndDelete(id);
-        }
-
-        if (!deletedItem) {
-            return res.status(404).json({ error: 'Item not found' });
-        }
-
-        res.status(200).json(deletedItem);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Update a task or note
+// Update a task
 const updateTask = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'Invalid ID' });
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'Invalid task ID' });
+  }
+
+  try {
+    const updateData = { ...req.body, lastUpdateTime: Date.now() };
+    
+    // Support both details and description for flexibility
+    if (updateData.description && !updateData.details) {
+      updateData.details = updateData.description;
+      delete updateData.description;
+    }
+    
+    const task = await Task.findOneAndUpdate(
+      { _id: id, user_id: req.user._id },
+      updateData,
+      { new: true }
+    );
+
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
     }
 
-    try {
-        const task = await Task.findByIdAndUpdate(id, req.body, { new: true });
-        if (!task) return res.status(404).json({ error: 'Task not found' });
-
-        res.status(200).json(task);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-const updateNote = async (req, res) => {
-    const { id } = req.params;
+// Delete a task
+const deleteTask = async (req, res) => {
+  const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'Invalid ID' });
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'Invalid task ID' });
+  }
+
+  try {
+    const task = await Task.findOneAndDelete({
+      _id: id,
+      user_id: req.user._id
+    });
+
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
     }
 
-    try {
-        const note = await Note.findByIdAndUpdate(id, req.body, { new: true });
-        if (!note) return res.status(404).json({ error: 'Note not found' });
-
-        res.status(200).json(note);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-const getNoteDetails = async (req, res) => {
-    const { id } = req.params;
+// Toggle task completion
+const toggleTaskCompletion = async (req, res) => {
+  const { id } = req.params;
 
-    // Validate ID
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'Invalid Note ID' });
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'Invalid task ID' });
+  }
+
+  try {
+    const task = await Task.findOne({ _id: id, user_id: req.user._id });
+    
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
     }
 
-    try {
-        const note = await Note.findById(id);
+    task.completed = task.completed === 'true' ? 'false' : 'true';
+    task.lastUpdateTime = Date.now();
+    await task.save();
 
-        if (!note) {
-            return res.status(404).json({ error: 'Note not found' });
-        }
-
-        res.status(200).json(note);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
-// Update a folder
-const updateFolder = async (req, res) => {
-    const { id } = req.params;
-    const { name: newName } = req.body;  // the new folder name
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(404).json({ error: 'Invalid ID' });
-    }
-    try {
-      // Find the folder to update
-      const folder = await Folder.findById(id);
-      if (!folder) return res.status(404).json({ error: 'Folder not found' });
-  
-      // Compute the old full path and the new full path
-      // For example, if folder.parentFolder === "system:/user/" and folder.name is "OldFolder"
-      const oldFullPath = folder.parentFolder + folder.name;
-      const newFullPath = folder.parentFolder + newName;
-  
-      // Update the folder's name
-      folder.name = newName;
-      const updatedFolder = await folder.save();
-  
-      // Cascade update: update tasks, notes, and subfolders whose parentFolder equals the old full path
-      await Task.updateMany({ parentFolder: oldFullPath }, { parentFolder: newFullPath });
-      await Note.updateMany({ parentFolder: oldFullPath }, { parentFolder: newFullPath });
-      await Folder.updateMany({ parentFolder: oldFullPath }, { parentFolder: newFullPath });
-  
-      res.status(200).json(updatedFolder);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  };
-  
-  module.exports = {
-    getAllItems,
-    createFolder,
-    createTask,
-    createNote,
-    deleteItem,
-    updateTask,
-    updateNote,
-    getNoteDetails,
-    updateFolder,
-  };
+module.exports = {
+  getAllTasks,
+  getTasksByDateRange,
+  createTask,
+  createMultipleTasks,
+  updateTask,
+  deleteTask,
+  toggleTaskCompletion
+};

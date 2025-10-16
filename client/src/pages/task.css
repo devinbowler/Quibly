@@ -1,291 +1,1155 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+  --light-bg-color: #f5f5f5;
+  --light-card-bg: #ffffff;
+  --light-text-color: #333333;
+  --light-border-color: #e0e0e0;
+  --light-accent-color: #495BFA;
+  
+  --dark-bg-color: #0f0f0f;
+  --dark-card-bg: #171716;
+  --dark-text-color: white;
+  --dark-border-color: #444;
+  --dark-accent-color: #495BFA;
+}
 
 body {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
   margin: 0;
   padding: 0;
-  color: #333;
-}
-
-.unselectable {
-    user-select: none;             /* Standard syntax */
-    -webkit-user-select: none;     /* Chrome, Safari */
-    -moz-user-select: none;        /* Firefox */
-    -ms-user-select: none;         /* Internet Explorer/Edge */
-}
-
-/* Light Mode Styles */
-:root {
-  --light-bg-color: #f5f5f5;
-  --light-card-bg: #ffffff;
-  --light-text-color: #333333;
-  --light-border-color: #e0e0e0;
-  --light-highlight: #9ba3fb;
-  --light-secondary-bg: #f0f0f0;
-  --light-button-bg: #e8e8e8;
-  --light-button-hover: #d0d0d0;
-  --light-accent-color: #495BFA;
-  
-  /* Dark Mode Colors for reference */
-  --dark-bg-color: #0f0f0f;
-  --dark-card-bg: #171716;
-  --dark-text-color: white;
-  --dark-border-color: #444;
-  --dark-highlight: #495BFA;
-  --dark-secondary-bg: #171716;
-  --dark-button-bg: #171716;
-  --dark-button-hover: #343434;
-}
-
-/* Base styles that apply to both modes */
-body {
-  font-family: 'Roboto', sans-serif;
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Default Dark Mode (current app design) */
 body.dark-mode {
   background-color: var(--dark-bg-color) !important;
   color: var(--dark-text-color) !important;
 }
 
-body.dark-mode .app-container {
-  background-color: var(--dark-bg-color) !important;
-}
-
-/* Light Mode Styles */
 body.light-mode {
   background-color: var(--light-bg-color) !important;
   color: var(--light-text-color) !important;
 }
 
-body.light-mode, 
-body.light-mode html {
-    width: 100%;
-    background-color: var(--light-bg-color) !important;
-    overflow-x: hidden;
-  }
-
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--dark-bg-color);
+}
 
 body.light-mode .app-container {
   background-color: var(--light-bg-color) !important;
 }
 
 /* Top Bar */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background-color: var(--dark-card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  z-index: 100;
+}
+
 body.light-mode .top-bar {
-  background-color: var(--light-card-bg) !important;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
-  color: var(--light-text-color) !important;
+  background-color: var(--light-card-bg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.left-content {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.greeting {
+  font-size: 19px;
+  color: white;
 }
 
 body.light-mode .greeting {
-  color: var(--light-text-color) !important;
+  color: var(--light-text-color);
 }
 
-body.light-mode .settings-gear {
-  color: var(--light-text-color) !important;
+.statistics-date {
+  font-size: 15px;
+  color: grey;
 }
 
-body.light-mode .statistics-date,
-body.light-mode .statistics-due {
-  color: #777 !important;
+body.light-mode .statistics-date {
+  color: #888;
+}
+
+.settings-gear {
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.settings-gear .fa {
+  font-size: 16px;
+  color: rgba(202, 202, 202, 0.8);
 }
 
 body.light-mode .settings-gear .fa {
-  color: rgba(50, 50, 50, 0.8) !important;
+  color: rgba(50, 50, 50, 0.8);
 }
 
-body.light-mode .modal-input {
-  color: black;
+/* View Toggle Buttons */
+.filter-buttons {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  margin: 0;
 }
 
-/* Modals and Settings */
-body.light-mode .modal,
-body.light-mode .settings-modal,
-body.light-mode .modal-view {
-  background-color: var(--light-card-bg) !important;
-  color: var(--light-text-color) !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+.left-buttons {
+  display: flex;
+  gap: 10px;
 }
 
-body.light-mode .update-form input[type="password"],
-body.light-mode .update-form input[type="email"] {
-  background-color: var(--light-bg-color) !important;
-  color: var(--light-text-color) !important;
-  border: 1px solid var(--light-border-color) !important;
-}
-
-/* Task View and Grid View */
-body.light-mode .file-system-viewer {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .grid-item.folder i, 
-body.light-mode .grid-item.folder .file-name {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .grid-item.file i, 
-body.light-mode .grid-item.file .file-name {
-  color: #555 !important;
-}
-
-body.light-mode .grid-item:hover {
-  box-shadow: inset 0 0 0 2px var(--light-border-color) !important;
-}
-
-body.light-mode .task-item,
-body.light-mode .file-item {
-  border-bottom: 1px solid var(--light-border-color) !important;
-}
-
-body.light-mode .task-item.selected,
-body.light-mode .file-item.selected {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Buttons */
-body.light-mode .filter-buttons button {
-  background-color: var(--light-button-bg) !important;
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .filter-buttons button.active {
-  background-color: var(--light-button-hover) !important;
-}
-
-body.light-mode .filter-buttons button:hover {
-  background-color: var(--light-button-hover) !important;
-}
-
-/* Task Items */
-body.light-mode .section-header h2 {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .task-group p {
-  color: #777 !important;
-}
-
-body.light-mode .task-count {
-  color: #777 !important;
-}
-
-body.light-mode .task-completed-checkbox {
-  border: 2px solid #999 !important;
-}
-
-body.light-mode .task-completed-checkbox:checked {
-  background-color: var(--light-accent-color) !important;
-  border-color: var(--light-accent-color) !important;
-}
-
-body.light-mode .task-view {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .task-due {
-  color: #666 !important;
-}
-
-body.light-mode .task-item.completed {
-  background-color: rgba(0, 180, 0, 0.1) !important;
-}
-
-/* Notes View */
-body.light-mode .note-view {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .note-view input, 
-body.light-mode .note-view textarea {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .note-title::placeholder, 
-body.light-mode .note-body::placeholder {
-  color: rgba(0, 0, 0, 0.3) !important;
-}
-
-/* BlockNote Editor Light Theme */
-body.light-mode .editor-container {
-  --bn-colors-editor-background: #ffffff !important;
-  --bn-colors-editor-text: black !important;
-  --bn-colors-menu-background: #f5f5f5 !important;
-  --bn-colors-menu-text: #333333 !important;
-  --bn-colors-tooltip-background: #f5f5f5 !important;
-  --bn-colors-tooltip-text: #333333 !important;
-  --bn-colors-line: rgba(0, 0, 0, 0.1) !important;
-  --bn-colors-background-muted: rgba(0, 0, 0, 0.05) !important;
-  
-  /* Code block colors */
-  --bn-colors-code-block-background: #f0f0f0 !important;
-  --bn-colors-code-block-text: #333333 !important;
-}
-
-body.light-mode .bn-toolbar {
-  background-color: #f5f5f5 !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-}
-
-body.light-mode .bn-mantine .mantine-Menu-item {
-  background-color: white !important;
-}
-
-body.light-mode .bn-toolbar button {
-  color: #333333 !important;
-}
-
-body.light-mode .bn-mantine .mantine-Menu-dropdown {
-  background-color: white !important;
-  box-shadow: 0 4px 12px grey !important;
-  border: none !important;
-}
-
-body.light-mode .bn-toolbar .mantine-Button-root {
-  background-color: white !important;
-}
-
-body.light-mode .bn-toolbar .mantine-ActionIcon-root {
-  background-color: white !important;
-}
-
-body.light-mode .bn-editor {
-  color: black !important;
-  padding-bottom: 150px;
-  font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace !important;
-}
-
-body.dark-mode .bn-editor {
-  padding-bottom: 150px;
-  font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace !important;
-}
-  
-
-body.light-mode .bn-toolbar button:hover {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-body.light-mode .fullscreen-button {
-  color: #333333 !important;
-}
-
-body.light-mode .bn-code-block {
-  background-color: #f0f0f0 !important;
-}
-
-/* Theme Toggle Switch */
-.theme-toggle {
+.filter-buttons button {
+  background-color: var(--dark-card-bg);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  margin: auto;
+  gap: 8px;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.filter-buttons button:hover {
+  background-color: #343434;
+}
+
+.filter-buttons button.active {
+  background-color: #343434;
+}
+
+body.light-mode .filter-buttons button {
+  background-color: var(--light-card-bg);
+  color: var(--light-text-color);
+}
+
+body.light-mode .filter-buttons button:hover,
+body.light-mode .filter-buttons button.active {
+  background-color: var(--light-border-color);
+}
+
+/* Task Prompt View */
+.task-prompt-view {
+  width: 1100px;
+  max-width: 1800px;
+  margin: 95px auto 0;
+  padding: 0 40px;
+}
+
+.prompt-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.prompt-header h2 {
+  font-size: 36px;
+  margin-bottom: 15px;
+  color: white;
+  font-weight: 400;
+}
+
+body.light-mode .prompt-header h2 {
+  color: var(--light-text-color);
+}
+
+.prompt-header p {
+  color: grey;
+  font-size: 18px;
+}
+
+body.light-mode .prompt-header p {
+  color: #777;
+}
+
+.minimize-button {
+  display: block;
+  margin: 30px auto 0;
+  background-color: var(--dark-card-bg);
+  border: none;
+  color: white;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-size: 20px;
+}
+
+.minimize-button:hover {
+  background-color: #343434;
+  transform: scale(1.1);
+}
+
+body.light-mode .minimize-button {
+  background-color: var(--light-card-bg);
+  color: var(--light-text-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .minimize-button:hover {
+  background-color: var(--light-border-color);
+}
+
+/* Collapsed Prompt Section */
+.collapsed-prompt-section {
+  margin-bottom: 50px;
+}
+
+.collapsed-prompt-header {
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.toggle-label {
-  margin-right: 10px;
+.collapsed-prompt-header h3 {
+  font-size: 28px;
+  color: white;
+  font-weight: 400;
+  margin: 0;
+}
+
+body.light-mode .collapsed-prompt-header h3 {
+  color: var(--light-text-color);
+}
+
+.collapsed-prompt {
+  background-color: var(--dark-card-bg);
+  border-radius: 10px;
+  padding: 20px 30px;
+  margin: 0 auto;
+  max-width: 1800px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.collapsed-prompt:hover {
+  background-color: #343434;
+}
+
+body.light-mode .collapsed-prompt {
+  background-color: var(--light-card-bg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .collapsed-prompt:hover {
+  background-color: var(--light-border-color);
+}
+
+.collapsed-prompt i:first-child {
+  color: var(--dark-accent-color);
+  font-size: 18px;
+}
+
+.collapsed-prompt span {
   font-size: 16px;
+  color: white;
+  font-weight: 500;
+}
+
+body.light-mode .collapsed-prompt span {
+  color: var(--light-text-color);
+}
+
+.collapsed-prompt i:last-child {
+  color: grey;
+  font-size: 14px;
+}
+
+body.light-mode .collapsed-prompt i:last-child {
+  color: #888;
+}
+
+.prompt-container {
+  background-color: var(--dark-card-bg);
+  border-radius: 15px;
+  padding: 40px;
+  margin-bottom: 40px;
+}
+
+body.light-mode .prompt-container {
+  background-color: var(--light-card-bg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.prompt-textarea {
+  width: 100%;
+  min-height: 150px;
+  background-color: transparent;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: white;
+  padding: 20px;
+  font-size: 18px;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+body.light-mode .prompt-textarea {
+  border-color: var(--light-border-color);
+  color: var(--light-text-color);
+}
+
+.generate-button {
+  width: 100%;
+  background-color: var(--dark-accent-color);
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: background-color 0.2s;
+}
+
+.generate-button:hover {
+  background-color: #3344d8;
+}
+
+.generate-button:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+/* Active Tasks Section */
+.todays-tasks {
+  margin-top: 50px;
+}
+
+.todays-tasks h3 {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: white;
+  font-weight: 400;
+}
+
+body.light-mode .todays-tasks h3 {
+  color: var(--light-text-color);
+}
+
+.task-card {
+  background-color: var(--dark-card-bg);
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+body.light-mode .task-card {
+  background-color: var(--light-card-bg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.task-info h4 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  color: white;
+  font-weight: 500;
+}
+
+body.light-mode .task-info h4 {
+  color: var(--light-text-color);
+}
+
+.task-info p {
+  margin: 0;
+  color: grey;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body.light-mode .task-info p {
+  color: #777;
+}
+
+.task-checkbox {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+/* Completed Tasks Section */
+.completed-tasks {
+  margin-top: 40px;
+}
+
+.completed-tasks h3 {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: white;
+  font-weight: 400;
+}
+
+body.light-mode .completed-tasks h3 {
+  color: var(--light-text-color);
+}
+
+.completed-task-card {
+  background-color: rgba(156, 0, 0, 0.2) !important;
+  border: 1px solid rgba(184, 0, 0, 0.3);
+}
+
+body.light-mode .completed-task-card {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.completed-task-card .task-info h4,
+.completed-task-card .task-info p {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.no-tasks {
+  text-align: center;
+  color: grey;
+  padding: 50px;
+  font-size: 16px;
+}
+
+body.light-mode .no-tasks {
+  color: #888;
+}
+
+/* Calendar View */
+.calendar-view {
+  display: flex;
+  height: calc(100vh - 65px);
+  margin-top: 65px;
+  padding: 0;
+  width: 100%;
+  position: relative;
+}
+
+/* Calendar Sidebar - NOW FOLLOWS THEME */
+.calendar-sidebar {
+  position: fixed;
+  left: 0;
+  top: 65px;
+  width: 400px;
+  height: calc(100vh - 65px);
+  background-color: var(--dark-card-bg);
+  padding: 30px 20px;
+  overflow-y: auto;
+  z-index: 99;
+}
+
+body.light-mode .calendar-sidebar {
+  background-color: var(--light-card-bg);
+  color: var(--light-text-color);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.calendar-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.calendar-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.calendar-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+body.light-mode .calendar-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.calendar-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+body.light-mode .calendar-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-header {
+  margin-bottom: 30px;
+}
+
+.sidebar-add-button {
+  width: 100%;
+  background-color: var(--dark-accent-color);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background-color 0.2s;
+  margin-bottom: 30px;
+}
+
+.sidebar-add-button:hover {
+  background-color: #3344d8;
+}
+
+/* Mini Calendar */
+.mini-calendar {
+  margin-bottom: 30px;
+}
+
+.mini-calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 0 5px;
+}
+
+.mini-calendar-header h3 {
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+
+body.light-mode .mini-calendar-header h3 {
+  color: var(--light-text-color);
+}
+
+.mini-nav-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.mini-nav-button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+body.light-mode .mini-nav-button {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mini-nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+body.light-mode .mini-nav-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--light-text-color);
+}
+
+.mini-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.mini-day-header {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+  padding: 8px 0;
+  text-transform: uppercase;
+}
+
+body.light-mode .mini-day-header {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.mini-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+body.light-mode .mini-day {
+  color: var(--light-text-color);
+}
+
+.mini-day:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.light-mode .mini-day:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.mini-day.other-month {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+body.light-mode .mini-day.other-month {
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.mini-day.today {
+  background-color: var(--dark-accent-color);
+  color: white;
+  font-weight: 600;
+}
+
+.mini-day.selected {
+  background-color: rgba(73, 91, 250, 0.3);
+  border: 2px solid var(--dark-accent-color);
+}
+
+body.light-mode .mini-day.selected {
+  background-color: rgba(73, 91, 250, 0.15);
+}
+
+.mini-day.has-tasks::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--dark-accent-color);
+}
+
+.mini-day.selected.has-tasks::after {
+  background-color: white;
+}
+
+body.light-mode .mini-day.has-tasks::after {
+  background-color: var(--light-accent-color);
+}
+
+body.light-mode .mini-day.selected.has-tasks::after {
+  background-color: var(--light-accent-color);
+}
+
+/* Sidebar Selected Day Tasks */
+.sidebar-tasks {
+  margin-top: 20px;
+}
+
+.sidebar-tasks h4 {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+body.light-mode .sidebar-tasks h4 {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.sidebar-task-item {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-left: 3px solid;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+body.light-mode .sidebar-task-item {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.sidebar-task-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.light-mode .sidebar-task-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-task-content {
+  flex: 1;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sidebar-task-title {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+body.light-mode .sidebar-task-title {
+  color: var(--light-text-color);
+}
+
+.sidebar-task-details {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  text-align: left;
+}
+
+body.light-mode .sidebar-task-details {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.sidebar-task-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.sidebar-delete-btn {
+  background-color: rgba(220, 53, 69, 0.2);
+  border: none;
+  color: #dc3545;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.sidebar-delete-btn:hover {
+  background-color: rgba(220, 53, 69, 0.4);
+}
+
+.sidebar-no-tasks {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+  text-align: center;
+  padding: 20px;
+}
+
+body.light-mode .sidebar-no-tasks {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Main Calendar Grid Area */
+.calendar-main {
+  margin-left: 400px;
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.calendar-header {
+  display: none;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.calendar-nav h2 {
+  font-size: 28px;
+  margin: 0;
+  color: white;
+  font-weight: 400;
+}
+
+body.light-mode .calendar-nav h2 {
+  color: var(--light-text-color);
+}
+
+.nav-button {
+  background-color: var(--dark-card-bg);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.light-mode .nav-button {
+  background-color: transparent;
+  color: var(--light-text-color);
+}
+
+/* Calendar Grid */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto repeat(6, 1fr);
+  gap: 1px;
+  background-color: #333;
+  border: 1px solid #333;
+  flex: 1;
+  min-height: 0;
+}
+
+body.light-mode .calendar-grid {
+  background-color: var(--light-border-color);
+  border-color: var(--light-border-color);
+}
+
+.calendar-day-header {
+  background-color: var(--dark-bg-color);
+  padding: 20px 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  color: grey;
+}
+
+body.light-mode .calendar-day-header {
+  background-color: var(--light-bg-color);
+  color: #666;
+}
+
+.calendar-day {
+  background-color: var(--dark-bg-color);
+  min-height: 100px;
+  padding: 10px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-day:hover {
+  background-color: #1a1a1a;
+}
+
+body.light-mode .calendar-day {
+  background-color: white;
+}
+
+body.light-mode .calendar-day:hover {
+  background-color: #f9f9f9;
+}
+
+.calendar-day.other-month {
+  opacity: 0.4;
+}
+
+.calendar-day.today {
+  border: 2px solid var(--dark-accent-color);
+}
+
+.day-number {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+}
+
+body.light-mode .day-number {
+  color: var(--light-text-color);
+}
+
+.calendar-day.today .day-number {
+  color: var(--dark-accent-color);
+}
+
+.day-tasks {
+  margin-top: 35px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.task-indicator {
+  color: white;
+  font-size: 17px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.6;
+  font-weight: 500;
+}
+
+.more-tasks {
+  font-size: 12px;
+  color: grey;
+  padding: 6px 10px;
+  font-weight: 500;
+}
+
+body.light-mode .more-tasks {
+  color: #888;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+body.light-mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  background-color: var(--dark-card-bg);
+  border-radius: 10px;
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+body.light-mode .modal {
+  background-color: var(--light-card-bg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: white;
+}
+
+body.light-mode .modal-header h3 {
+  color: var(--light-text-color);
+}
+
+.task-view-date {
+  margin-top: 40px;
+  padding-top: 0;
+  margin-bottom: 20px;
+}
+
+.task-view-actions .edit-task-button {
+  color: white;
+  background-color: #2c2c2c;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-right: 10px;
+}
+
+body.light-mode .task-view-actions .edit-task-button {
+  background-color: var(--light-border-color);
+  color: var(--light-text-color);
+}
+
+.close-button {
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0;
+}
+
+body.light-mode .close-button {
+  color: var(--light-text-color);
+}
+
+.modal-input,
+.modal-textarea {
+  width: 100%;
+  background-color: var(--dark-bg-color);
+  border: 1px solid #333;
+  border-radius: 5px;
+  color: white;
+  padding: 12px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  font-family: inherit;
+}
+
+body.light-mode .modal-input,
+body.light-mode .modal-textarea {
+  background-color: var(--light-bg-color);
+  border-color: var(--light-border-color);
+  color: var(--light-text-color);
+}
+
+.modal-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.modal-color {
+  width: 100%;
+  height: 50px;
+  background-color: var(--dark-bg-color);
+  border: 1px solid #333;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+body.light-mode .modal-color {
+  background-color: var(--light-bg-color);
+  border-color: var(--light-border-color);
+}
+
+.create-button {
+  width: 100%;
+  background-color: var(--dark-accent-color);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.create-button:hover {
+  background-color: #3344d8;
+}
+
+/* Day Tasks List */
+.day-tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.task-detail {
+  background-color: var(--dark-bg-color);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+body.light-mode .task-detail {
+  background-color: var(--light-bg-color);
+}
+
+.task-detail > div {
+  flex: 1;
+  margin-right: 15px;
+}
+
+.task-detail h4 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: white;
+  font-weight: 500;
+}
+
+body.light-mode .task-detail h4 {
+  color: var(--light-text-color);
+}
+
+.task-detail p {
+  margin: 0;
+  color: grey;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+body.light-mode .task-detail p {
+  color: #777;
+}
+
+.delete-task-button {
+  background-color: #700000;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.delete-task-button:hover {
+  background-color: #850000;
+}
+
+/* Settings Modal */
+.settings-modal {
+  max-width: 400px;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.toggle-label {
+  font-size: 16px;
+  color: white;
+}
+
+body.light-mode .toggle-label {
+  color: var(--light-text-color);
 }
 
 .toggle-switch {
@@ -310,7 +1174,7 @@ body.light-mode .bn-code-block {
   bottom: 0;
   background-color: #ccc;
   border-radius: 24px;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 .toggle-slider:before {
@@ -322,18 +1186,17 @@ body.light-mode .bn-code-block {
   bottom: 3px;
   background-color: white;
   border-radius: 50%;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 input:checked + .toggle-slider {
-  background-color: var(--dark-highlight);
+  background-color: var(--dark-accent-color);
 }
 
 input:checked + .toggle-slider:before {
   transform: translateX(26px);
 }
 
-/* Icons for light/dark mode */
 .toggle-slider .light-icon,
 .toggle-slider .dark-icon {
   position: absolute;
@@ -360,2114 +1223,286 @@ input:checked + .toggle-slider .dark-icon {
   opacity: 1;
 }
 
-/* Modal Task View Light Mode */
-body.light-mode .modal-overlay p.modal-title,
-body.light-mode .modal-overlay p.modal-details {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .modal-overlay p.modal-date {
-  color: #666 !important;
-}
-
-/* Back Button Light Mode */
-body.light-mode .back-button {
-  color: var(--light-accent-color) !important;
-}
-
-/* Action Buttons in Light Mode */
-body.light-mode .logout-button,
-body.light-mode .update-form button,
-body.light-mode .create-button,
-body.light-mode .editing.update-button {
-  background-color: var(--light-accent-color) !important;
-  color: white !important;
-}
-
-body.light-mode .logout-button:hover,
-body.light-mode .update-form button:hover,
-body.light-mode .create-button:hover,
-body.light-mode .editing.update-button:hover {
-  background-color: #3344d8 !important;
-}
-
-body.light-mode .deleteAcc-button,
-body.light-mode .editing.deleteTask-button {
-  background-color: #a12121 !important;
-  color: white !important;
-}
-
-body.light-mode .deleteAcc-button:hover,
-body.light-mode .editing.deleteTask-button:hover {
-  background-color: #c42b2b !important;
-}
-
-body.light-mode .editing.close-button {
-  background-color: #555 !important;
-  color: white !important;
-}
-
-body.light-mode .editing.close-button:hover {
-  background-color: #444 !important;
-}
-
-body.light-mode .delete-folder-button {
-  background-color: #a12121 !important;
-  color: white !important;
-}
-
-body.light-mode .delete-folder-button:hover {
-  background-color: #c42b2b !important;
-}
-
-body.light-mode .viewing.deleteTask-button {
-  color: #c42b2b !important;
-}
-
-body.light-mode .viewing.update-button,
-body.light-mode .viewing.close-button {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .note-view .delete-button {
-  background-color: var(--light-button-bg) !important;
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .note-view .delete-button:hover {
-  background-color: var(--light-button-hover) !important;
-}
-
-body.light-mode .error {
-  background-color: rgba(156, 0, 0, 0.2) !important;
-  border: rgb(184, 0, 0) solid 2px !important;
-  color: #900 !important;
-}
-
-body.light-mode html, 
-body.light-mode {
-  background-color: var(--light-bg-color) !important;
-}
-
-body.light-mode .home .content h1 {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .topbar {
-  background-color: var(--light-bg-color) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-}
-
-body.light-mode .navbar a {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .feature-content {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .feature-title {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .cs-nav {
-  color: var(--light-text-color) !important;
-}
-
-body.light-mode .cs-nav-link {
-  color: #777 !important;
-}
-
-body.light-mode .feature-images img,
-body.light-mode .img-wrapper img {
-  border: 2px solid var(--light-border-color) !important;
-}
-
-
-/* Force app container background in all media queries */
-@media only screen and (min-width: 0em),
-       only screen and (min-width: 48em),
-       only screen and (min-width: 72em) {
-  body.light-mode .app-container {
-    background-color: var(--light-bg-color) !important;
-  }
-  
-  body.light-mode .top-bar {
-    background-color: var(--light-card-bg) !important;
-    color: var(--light-text-color) !important;
-  }
-  
-  body.light-mode .greeting {
-    color: var(--light-text-color) !important;
-  }
-}
-/* Mobile View */
-@media only screen and (min-width: 0em){
-.editor-container {
-  position: relative;
-  --bn-colors-editor-background: #0f0f0f !important;
-  --bn-colors-editor-text: white !important;
-  --bn-colors-menu-background: #171716 !important;
-  --bn-colors-menu-text: white !important;
-  --bn-colors-tooltip-background: #171716 !important;
-  --bn-colors-tooltip-text: white !important;
-  --bn-colors-text-muted: #aaa !important;
-  --bn-colors-line: rgba(255, 255, 255, 0.1) !important;
-  --bn-colors-background-muted: rgba(255, 255, 255, 0.05) !important;
-  --bn-border-radius: 5px !important;
-  
-  /* Code block colors */
-  --bn-colors-code-block-background: #171716 !important;
-  --bn-colors-code-block-text: white !important;
-
-  left: -50px;
-  width: calc(100% + 90px);
-}
-
-  body.light-mode html,
-  html body.light-mode {
-    width: 100%;
-    background-color: var(--light-bg-color) !important;
-    overflow-x: hidden;
-  }
-   html body.light-mode,
-  body.light-mode,
-  body.light-mode html {
-    background-color: var(--light-bg-color) !important;
-  } 
-  body.light-mode .home .content h1 {
-    color: var(--light-text-color) !important;
-  }
-  
-  body.light-mode .feature-content {
-    color: var(--light-text-color) !important;
-  }
-  
-  body.light-mode .feature-title {
-    color: var(--light-text-color) !important;
-  }
-
-/* Ensuring good contrast in the toolbar and controls */
-.bn-toolbar {
-  background-color: #171716 !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-.bn-editor {
-  padding-bottom: 150px;
-  background-color: transparent !important;
-  font-family: 'Courier New', 'Monaco', 'Menlo', 'Consolas', monospace !important;
-}
-
-.bn-toolbar button {
-  color: white !important;
-}
-
-.bn-toolbar button:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Style for BlockNote within the app */
-.note-view .bn-container {
-  border: none !important;
-  box-shadow: none !important;
-}
-
-  body.light-mode .bn-container {
-  --bn-colors-editor-background: #ffffff !important;
-  --bn-colors-editor-text: #333333 !important;
-}
-
-/* Fix toolbar in light mode */
-body.light-mode .bn-toolbar {
-  background-color: #f5f5f5 !important;
-  box-shadow: 0 4px 12px grey !important;
-  border-color: rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Fix text selection in light mode */
-body.light-mode .bn-selected {
-  background-color: rgba(73, 91, 250, 0.2) !important;
-}
-
-/* Fix plus menu in light mode */
-body.light-mode .bn-menu {
-  background-color: #ffffff !important;
-  color: #333333 !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-}
-
-body.light-mode .bn-menu-item {
-  color: #333333 !important;
-}
-
-body.light-mode .bn-menu-item:hover {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Fix toolbar buttons in light mode */
-body.light-mode .bn-toolbar button,
-body.light-mode .bn-toolbar button svg {
-  color: #333333 !important;
-  fill: #333333 !important;
-}
-
-body.light-mode .bn-toolbar button:hover {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Fix inline toolbar in light mode */
-body.light-mode .bn-inline-menu {
-  background-color: #f5f5f5 !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-}
-
-body.light-mode .bn-inline-menu-item {
-  color: #333333 !important;
-}
-
-body.light-mode .bn-inline-menu-item:hover {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Fix slash menu in light mode */
-body.light-mode .bn-slash-menu {
-  background-color: #ffffff !important;
-  color: #333333 !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-}
-
-body.light-mode .bn-slash-menu-item {
-  color: #333333 !important;
-}
-
-body.light-mode .bn-slash-menu-item:hover {
-  background-color: rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Consistent error styling */
-.form-error {
-  background-color: rgba(156, 0, 0, 0.582);
-  border: rgb(184, 0, 0) solid 2px;
+.user-settings h3 {
   color: white;
-  padding: 1rem;
-  border-radius: 25px;
-  text-align: center;
-  margin: 10px 0;
+  margin-bottom: 15px;
+}
+
+body.light-mode .user-settings h3 {
+  color: var(--light-text-color);
+}
+
+.update-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.update-form input {
+  background-color: var(--dark-bg-color);
+  color: white;
+  padding: 12px;
+  border: 1px solid #383838;
+  border-radius: 5px;
+  margin-bottom: 15px;
   font-size: 14px;
 }
 
-.modal .form-error {
-  position: relative; /* Change from absolute to normal flow */
-  background-color: rgba(156, 0, 0, 0.582);
-  border: rgb(184, 0, 0) solid 2px;
+body.light-mode .update-form input {
+  background-color: var(--light-bg-color);
+  border-color: var(--light-border-color);
+  color: var(--light-text-color);
+}
+
+.update-form button {
+  padding: 12px;
+  background-color: var(--dark-accent-color);
   color: white;
-  padding: 1rem;
-  border-radius: 25px; /* Match the login error box radius */
-  text-align: center;
-  margin: 10px 0; /* Add some margin instead of absolute positioning */
-  font-size: 14px;
-}
-
-/* Light mode version */
-body.light-mode .modal .form-error {
-  background-color: rgba(156, 0, 0, 0.2);
-  border: rgb(184, 0, 0) solid 2px;
-  color: #900;
-}
-
-.folder-modal .form-error {
-  bottom: 60px;
-}
-body.light-mode .form-error {
-  background-color: rgba(156, 0, 0, 0.2);
-  border: rgb(184, 0, 0) solid 2px;
-  color: #900;
-  padding: 1rem;
-  border-radius: 25px;
-  text-align: center;
-}
-
-/* Custom styling for code blocks */
-.bn-code-block {
-  background-color: #171716 !important;
-  border-radius: 5px !important;
-  margin: 8px 0 !important;
-}
-
-/* Fullscreen button positioning when in BlockNote view */
-.fullscreen-button {
-  background-color: transparent !important;
-  color: white;
-  border: none !important;
-  position: relative;
-  z-index: 2000;
-}
-  /* Main Styling */
-  .app-container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      background-color: #0f0f0f;
-  }
-
-  /* Hovering Bar */
-  .top-bar {
-    position: fixed;
-    top: 25px;
-    left: 15px;
-    height: 65px;
-    width: calc(100% - 30px);
-    background-color: #171716;
-    color: white;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-    z-index: 100;
-  }
-
-  .left-content {
-    display: flex;
-    align-items: center;
-  }
-
-  .tasks-buttons {
-      padding-right: 35px;
-  }
-
-  .top-bar .greeting {
-    color: white !important;
-    font-size: 16px;
-    margin-right: 50px;
-  }
-
-  .top-bar .statistics-date {
-    color: grey !important;
-    font-size: 12px;
-    margin-right: 50px;
-  }
-
-  .top-bar .statistics-due {
-    color: grey !important;
-    font-size: 15px;
-    margin-right: 50px;
-  }
-
-  .settings-gear {
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .settings-gear .fa {
-      font-size: 16px;
-      color:rgba(202, 202, 202, 0.8);
-  }
-
-
-
-
-
-  /* User Settings */
-  .logout-button {
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 150px;
-  }
-
-  .deleteAcc-button {
-      padding: 10px 20px;
-      background-color: #700808;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: -10px;
-  }
-
-  .user-settings .update-form {
-      background-color: transparent;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      box-shadow: none;
-  }
-  .password-reset-notice {
-    background-color: rgba(255, 165, 0, 0.2);
-    border: 1px solid orange;
-    color: orange;
-    padding: 1rem;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-
-  body.light-mode .password-reset-notice {
-    background-color: rgba(255, 165, 0, 0.1);
-    color: darkorange;
-  }
-  .success {
-    background-color: rgba(0, 156, 0, 0.582);
-    border: rgb(0, 184, 0) solid 2px;
-    color: white;
-    padding: 1rem;
-    border-radius: 25px;
-    text-align: center;
-  }
-
-  body.light-mode .success {
-    background-color: rgba(0, 156, 0, 0.2);
-    border: rgb(0, 184, 0) solid 2px;
-    color: #090;
-    padding: 1rem;
-    border-radius: 25px;
-    text-align: center;
-  }
-  .update-form input[type="password"],
-  .update-form input[type="email"] {
-    background-color: #121111;
-    color: white;
-    padding: 1rem;
-    border: 1px solid #383838;
-    border-radius: 5px;
-    outline: none;
-    margin-bottom: 1rem;
-  }
-
-  .update-form button {
-    padding: 10px 20px;
-    background-color: #221170;
-    color: #fff;
-    font-size: 15px !important;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 1rem;
-  }
-    
-
-  .error {
-    background-color: rgba(156, 0, 0, 0.582); /* Transparent red background */
-    border: rgb(184, 0, 0) solid 2px;
-    color: white;
-    padding: 1rem;
-    border-radius: 25px;
-    text-align: center;
-  }
-
-  .update-form button:hover {
-    background-color: #331c99;
-  }
-
-
-
-
-
-  /* Back Button */
-  .back-button-container {
-      display: flex;
-      align-items: center;
-      margin-top: 30px;
-      margin-left: 15px;
-      width: calc(100% - 10px);
-      margin-right: 15px;
-  }
-
-  .back-button-container .back-button {
-      color: #007BFF;  /* Blue color */
-      margin-right: 10px; /* Adds some space between the label and the path */
-      min-width: 70px;
-  }
-
-
-
-
-
-  /* Top Buttons */
-  .filter-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      justify-content: space-between; /* Ensures that left and right buttons are aligned to opposite ends */
-      margin-top: 100px; /* Adjusts the space below the top bar */
-      margin-left: 15px; /* Aligns with the left side of the top bar */
-      margin-right: 15px; /* Aligns with the right side of the top bar */
-      align-items: center; /* Vertically centers the buttons in the container */
-  }
-
-  .combined-buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-
-  .combined-buttons .left-group {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-  }
-
-  .filter-buttons button {
-      background-color: #171716;
-      color: white;
-      border: none;
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 5px;
-      cursor: pointer;
-      width: 100%;
-  }
-
-  .filter-buttons button.active {
-      background-color: #343434; /* Slightly different background for active state */
-  }
-
-  .filter-buttons .combined-buttons {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 10px;
-  }
-
-  .left-buttons, .right-buttons {
-      display: flex;
-      flex-direction: row;
-      margin-bottom: 10px;
-      width: 100%;
-      gap: 10px;
-  }
-  .filter-buttons.code-grid .right-buttons {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  /* By default the first three buttons will fill row 1.
-     Force the delete button to be placed in the second row,
-     centered in the middle column. */
-  .right-buttons button.delete-folder-button {
-    grid-column: 2;  /* Place it in the second column */
-    grid-row: 2;         /* Force it onto row 2 */
-  }
-
-
-  .filter-buttons button:last-child {
-      margin-right: 0; /* Removes margin from the last button to prevent extra spacing */
-  }
-
-  .filter-buttons button.active {
-      background-color: #343434; /* Differentiates the active button */
-  }
-
-  .delete-folder-button {
-      padding: 5px 10px;
-      background-color: rgb(102, 0, 0) !important;
-      color: #fff !important;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: bold;
-  }
-    
-  .delete-folder-button:hover {
-    background-color: darkred;
-  }
-
-
-
-  /* File System */
-  .file-system-viewer {
-      color: white !important;
-      font-family: monospace;
-      font-size: 17px;
-      margin: 20px 5px 5px; /* Adjust left and right margins, add bottom padding */
-      height: calc(100vh - 210px); /* Adjust height to take full vertical space minus offsets */
-      overflow-y: auto; /* Allows scrolling */
-      box-sizing: border-box; /* Includes padding in height calculation */
-  }
-
-  .file-name {
-      margin-top: 5px; /* Space between icon and text */
-      text-align: center;
-  }
-
-  .grid-item i {
-      font-size: 24px;  /* Increase the font size as needed */
-      margin-bottom: 8px;  /* Optional: Add some space below the icon */
-  }
-
-  .file-item {
-      display: flex;
-      justify-content: space-between; /* Aligns items on the left and right */
-      padding: 5px 10px;
-      cursor: pointer;
-  }
-
-  .file-item.selected {
-      background-color: #4444; /* Slightly lighter than the viewer's background */
-  }
-
-  .last-accessed {
-      margin-left: auto; /* Pushes the date to the right */
-      white-space: nowrap; /* Prevents date from wrapping */
-  }
-
-  .grid-view {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Changed from 6 to 3 columns */
-    gap: 10px; /* Reduced gap size for mobile */
-    padding: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
-    width: calc(100% - 10px); /* Ensure it takes full width minus margins */
-  }
-  
-  .grid-item {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 15px;
-      cursor: pointer;
-      transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
-      box-shadow: inset 0 0 0 0px #555; /* Initially no visible inset shadow */
-      border: 2px solid transparent; /* Transparent border to prevent layout shift */
-  }
-
-  .action-icons {
-      display: none;
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      cursor: pointer;
-  }
-
-  .grid-item:hover .action-icons {
-      display: block; /* Show action icons on hover */
-  }
-
-  .icon {
-      margin-left: 5px;
-      color: #fff; /* White icon color */
-  }
-
-  .grid-item:hover {
-      box-shadow: inset 0 0 0 2px #555; /* Inset shadow acts as a border */
-  }
-
-
-  .grid-item.folder i, .grid-item.folder .file-name {
-      color: white; /* Folder icon and name color */
-  }
-
-  .grid-item.file i, .grid-item.file .file-name {
-      color: grey; /* File icon and name color */
-  }
-
-
-
-
-  /* File System Notes */ 
-  .note-view {
-      padding: 5px;
-      padding-left: 25px;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      position: absolute;
-      top: 100px;
-      width: calc(100% - 32px);
-      margin-left: 20px;
-      margin-top: 50px;
-      z-index: 10; /* Ensures it's on top */
-  }
-
-  .back-button {
-      font-size: 16px;
-      color: #007BFF;
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin-bottom: 20px;
-      text-align: left;
-  }
-
-  .back-button:hover {
-      text-decoration: underline;
-  }
-  body.light-mode .modal.folder input {
-    color: black;
-  }
-  body.light-mode .modal-textarea {
-    color: black !important;
-  }
-  
-  .note-view input, .note-view textarea {
-      border: none;
-      outline: none;
-      background: transparent;
-      color:  white;
-      font-size: 16px;
-      width: 100%;
-      margin-bottom: 10px;
-      font-family: 'Roboto', sans-serif;
-      cursor: pointer;
-  }
-
-  .note-view textarea {
-      height: 75vh;
-      width: 1000px;
-      cursor: pointer;
-  }
-
-  .note-title::placeholder, .note-body::placeholder {
-      color: rgba(255, 255, 255, 0.5); /* Light grey placeholder */
-  }
-
-  .note-view .note-title {
-      font-size: 28px;
-      pointer: cursor;
-      margin-bottom: 0;
-      font-weight: 500;
-  }
-
-  .note-view .note-body {
-      resize: none; /* Prevent resizing */
-      pointer: cursor;
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 25px;
-  }
-
-  .note-view .delete-button {
-      background-color: #171616;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 5px;
-  }
-
-  .note-body {
-    overflow: auto;          /* Ensure scrolling is enabled */
-    -ms-overflow-style: none; /* Hide scrollbar in IE and Edge */
-    scrollbar-width: none;   /* Hide scrollbar in Firefox */
-  }
-  
-  .note-body::-webkit-scrollbar {
-    display: none;           /* Hide scrollbar in Chrome, Safari, and Opera */
-  }
-
-  .note-view .delete-button::hover {
-    background-color: grey;
-  }
-
-
-
-
-/* Tasks View */
-.task-view {
-  color: white !important;
-  font-family: monospace;
-  font-size: 17px;
-  margin: 20px 150px 150px; /* Adjust margins to align with file-system-viewer */
-  height: calc(100vh - 210px); /* Adjust height similarly */
-  overflow-y: auto; /* Allows scrolling */
-  box-sizing: border-box; /* Include padding in height calculation */
-}
-
-.task-group {
-  margin-bottom: 30px;
-}
-
-.tasks-container.collapsed-style {
-  display: none;
-}
-
-.task-group h2 {
-  margin-left: 15px;
-  font-size: 17px;
-  min-width: 135px;
-}
-
-.task-group .section-header {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: center;
-  margin-bottom: 25px;
-  margin-left: 15px;
-}
-
-.task-group .section-header .collapse {
-  cursor: pointer;
-  user-select: none;
-}
-
-.task-group .section-header .task-count {
-  font-size: 12px;
-  color: grey;
-}
-
-.task-group p {
-  margin-left: 15px;
-  font-size: 14px;
-  margin-bottom: 30px;
-}
-
-/* Flex-based task item layout */
-.task-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-/* Left container: Title and Details on one line */
-.task-info {
-  display: flex;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-/* Task Title */
-.task-title {
-  max-width: 13ch;
-  min-width: 13ch;
-  font-size: 13px;
-  padding: 5px 10px;
-}
-
-/* Task Details */
-.task-details {
-  max-width: 10ch; /* roughly 10 characters wide */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 13px;
-  margin-left: 10px;       /* Margin between title and details */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Right container: Due Date and Checkbox */
-.task-meta {
-  display: flex;
-  align-items: center;
-}
-
-/* Task Due Date */
-.task-due {
-  font-size: 12px;
-  color: #ccc;
-  margin-right: 10px;
-  text-align: right;
-}
-
-/* Selected state (if needed) */
-.task-item.selected {
-  background-color: #4444;
-}
-
-/* Existing input/textarea rules */
-.task-view input, .task-view textarea {
+  font-size: 15px;
   border: none;
-  outline: none;
-  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.update-form button:hover {
+  background-color: #3344d8;
+}
+
+.logout-button {
+  padding: 12px 20px;
+  background-color: #221170;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 20px;
   width: 100%;
 }
 
-/* Checkbox styling */
-.task-completed-checkbox {
-  appearance: none;
-  -webkit-appearance: none;
-  outline: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #ccc;
-  border-radius: 50%;
+.logout-button:hover {
+  background-color: #331c99;
+}
+
+.password-reset-notice {
+  background-color: rgba(255, 165, 0, 0.2);
+  border: 1px solid orange;
+  color: orange;
+  padding: 12px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+
+body.light-mode .password-reset-notice {
+  background-color: rgba(255, 165, 0, 0.1);
+  color: darkorange;
+}
+
+/* Error and Success Messages */
+.error,
+.error-banner {
+  background-color: rgba(156, 0, 0, 0.582);
+  border: 2px solid rgb(184, 0, 0);
+  color: white;
+  padding: 12px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 75px 50px 10px 50px;
+}
+
+body.light-mode .error,
+body.light-mode .error-banner {
+  background-color: rgba(156, 0, 0, 0.2);
+  color: #900;
+}
+
+.success {
+  background-color: rgba(0, 156, 0, 0.582);
+  border: 2px solid rgb(0, 184, 0);
+  color: white;
+  padding: 12px;
+  border-radius: 5px;
+  text-align: center;
+  margin: 75px 50px 10px 50px;
+}
+
+body.light-mode .success {
+  background-color: rgba(0, 156, 0, 0.2);
+  color: #090;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-  background: transparent;
+  z-index: 1000;
 }
 
-.task-completed-checkbox:checked {
-  background-color: white;
-  border-color: white;
+body.light-mode .modal-close-btn {
+  color: var(--light-text-color);
 }
 
-.task-item.completed .task-title {
-  background-color: transparent !important;
-}
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .top-bar {
+    left: 0;
+    right: 0;
+    padding: 0 15px;
+  }
 
-/* Completed tasks get a green background in both info and meta */
-.task-item.completed {
-  background-color: rgba(0, 128, 0, 0.2);
-}
+  .filter-buttons {
+    position: static;
+    transform: none;
+    margin: 70px 15px 20px 15px;
+  }
 
+  .error-banner,
+  .success {
+    margin: 75px 15px 10px 15px;
+  }
 
-
-
-  /* Task Form */
-  .modal-view {
-    width: calc(100% - 20px);
-    height: 400px;
-    background-color: #171716;
-    padding: 30px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
+  .left-content {
     gap: 20px;
   }
 
-  .modal-close-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    color: black;
-    cursor: pointer;
-    transition: color 0.2s;
-    z-index: 1000;
+  .greeting {
+    font-size: 16px;
   }
 
-  .modal-close-btn:hover {
-    color: white;
-  }
-
-  body.light-mode .modal-close-btn:hover {
-    color: #333;
-  }
-
-/* Make sure modals have position relative for proper button positioning */
-.modal, .settings-modal, .modal-view {
-  position: relative;
-}
-
-  .modal-overlay p.modal-title {
-    font-size: 18px;
-    background-color: transparent;
-    text-decoration: none;
-    resize: none;
-    border: none;
-    color: white;
-  }
-
-  .modal-overlay p.modal-date {
+  .statistics-date {
     font-size: 12px;
-    background-color: transparent;
-    text-decoration: none;
-    resize: none;
-    border: none;
-    color: grey;
-    margin-top: -30px;
-    margin-bottom: 10px;
   }
 
-  .modal-overlay p.modal-details {
+  .filter-buttons {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+  .task-prompt-view {
+    max-width: 100%;
+    margin: 75px auto 0;
+    padding: 0 15px;
+  }
+
+  .prompt-header h2 {
+    font-size: 24px;
+  }
+
+  .prompt-header p {
     font-size: 14px;
-    background-color: transparent;
-    text-decoration: none;
-    resize: none;
-    border: none;
-    color: white;
   }
 
-  .modal.folder {
-      color: white !important;
+  .minimize-button {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+    margin: 20px auto 0;
   }
 
-  .modal.folder input {
-      background-color: transparent;
-      border: 1px solid rgb(53, 53, 53);
-      padding: 15px 10px;
-      border-radius: 5px;
-      color: white;
+  .collapsed-prompt {
+    padding: 15px 20px;
+    margin-bottom: 30px;
   }
 
-  button.modal-close-btn {
-    background-color: transparent !important;
-    color: black !important;
+  .collapsed-prompt span {
+    font-size: 14px;
   }
 
-  body.dark-mode button.modal-close-btn {
-    color: white !important;
+  .prompt-container {
+    padding: 25px;
   }
 
-  .modal.folder button {
-      padding: 10px 10px;
-      background-color: #221170;
-      border: none;
-      color: white;
-      border-radius: 5px;
+  .prompt-textarea {
+    font-size: 16px;
+    padding: 15px;
+    min-height: 120px;
   }
 
-  .modal.folder button:hover {
-      cursor: pointer;
-      background-color: #331c99;
+  .generate-button {
+    font-size: 16px;
+    padding: 15px;
   }
 
-  .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+  .todays-tasks h3 {
+    font-size: 20px;
   }
 
-  .modal {
-      width: calc(100% - 20px);
-      margin-bottom: 15px;
-      background-color: #171716;
-      padding: 30px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+  .completed-tasks h3 {
+    font-size: 20px;
   }
 
-  .modal-input, .modal-textarea {
-      background-color: transparent;
-      color: white;
-      border: none;
-      padding: 10px;
-      outline: none;
-      width: 100%;
+  .task-card {
+    padding: 18px;
   }
 
-  .modal-input {
-      font-size: 24px; /* Increased font size for the title */
-      padding-bottom: 5px; /* Reduced padding below the title */
+  .task-info h4 {
+    font-size: 17px;
   }
 
-  .modal-input[type="date"] {
-      font-size: 16px;
-      margin-top: 10px; /* Reduced the gap between title and date */
+  .task-info p {
+    font-size: 14px;
   }
 
-  .modal-textarea {
-      border-top: 1px solid rgba(255, 255, 255, 0.5); /* Half-opacity grey border */
-      height: 200px;
-      resize: none;
+  .calendar-view {
+    flex-direction: column;
+    margin-top: 65px;
   }
 
-  /* Modal buttons styling */
-  .modal-buttons {
-    display: flex;
+  .calendar-sidebar {
+    position: relative;
     width: 100%;
-    gap: 10px;
-    margin-top: auto;
-    align-items: center;
-    text-align: center;
+    height: auto;
+    padding: 20px 15px;
+    top: 0;
   }
 
-  .modal-buttons button {
-    flex: 1;
-    padding: 12px 20px;
-    background-color: #221170; /* Same color as Add Task button */
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
+  .calendar-main {
+    margin-left: 0;
+    padding: 0 15px 20px 15px;
   }
 
-
-
-  /* Special case for delete buttons or secondary actions */
-  .modal-buttons button.editing.deleteTask-button {
-    background-color: #700000;
-  }
-
-  .modal-buttons button.editing.deleteTask-button:hover {
-    background-color: #850000;
-  }
-
-  .create-button {
-      margin-top: auto;
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .create-button:hover {
-      background-color: #331c99;
-  }
-
-  .modal-header {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .editing.update-button {
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .editing.update-button:hover {
-      background-color: #331c99;
-  }
-
-  .editing.close-button {
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .editing.close-button:hover {
-      background-color: #331c99;
-  }
-
-  .editing.deleteTask-button {
-      padding: 10px 20px;
-      background-color: #700000;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .editing.deleteTask-button:hover {
-      background-color: #850000;
-  }
-
-  .editing.modal-buttons {
-    display: flex;
-    gap: 10px;          /* Adds a gap between the buttons */
-    margin-top: auto;    /* Adds some space above the buttons */
-    width: 100%;        /* Ensures the container fills the modal's width */
-  }
-
-  .viewing.update-button {
-      padding: 2px 2px;
-      background-color: transparent;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .viewing.close-button {
-      padding: 2px 2px;
-      background-color: transparent;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-
-  .viewing.deleteTask-button {
-      padding: 2px 2px;
-      background-color: transparent;
-      color: red;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-
-  .viewing.modal-buttons {
-    display: flex;
-    margin-left: auto;    /* Adds some space above the buttons */
-    width: 30%;        /* Ensures the container fills the modal's width */
-    margin-top: -50px;
-    margin-right: -20px;
-  }
-
-
-  .modal-buttons button {
-      flex: 1;            /* Makes each button take equal space */
-  }
-}
-
-
-/* Desktop View */
-@media only screen and (min-width: 48em){
-  /* Main Styling */
-  .app-container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      background-color: #0f0f0f;
-  }
-
-  /* Hovering Bar */
-  .top-bar {
-      position: fixed;
-      top: 25px;
-      left: 50px;
-      width: calc(100% - 100px);
-      height: 65px;
-      background-color: #171716;
-      color: white;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between; /* Aligns greeting and gear icon on opposite sides */
-      padding: 0 30px;
-      z-index: 100;
-  }
-
-  .left-content {
-    display: flex;
-    align-items: center;
-  }
-
-  .tasks-buttons {
-      padding-right: 35px;
-  }
-
-  .top-bar .greeting {
-    color: white !important;
-    font-size: 19px;
-    margin-right: 50px;
-  }
-
-  .top-bar .statistics-date {
-    color: grey !important;
-    font-size: 15px;
-    margin-right: 50px;
-  }
-
-  .top-bar .statistics-due {
-    color: grey !important;
-    font-size: 15px;
-    margin-right: 50px;
-  }
-
-  .settings-gear {
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .settings-gear .fa {
-      font-size: 16px;
-      color:rgba(202, 202, 202, 0.8);
-  }
-
-
-
-
-
-  /* User Settings */
-  .logout-button {
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 150px;
-  }
-
-  .deleteAcc-button {
-      padding: 10px 20px;
-      background-color: #700808;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: -10px;
-  }
-
-  .user-settings .update-form {
-      background-color: transparent;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      box-shadow: none;
-  }
-
-  .update-form input[type="password"],
-  .update-form input[type="email"] {
-    background-color: #121111;
-    color: white;
-    padding: 1rem;
-    border: 1px solid #383838;
-    border-radius: 5px;
-    outline: none;
-    margin-bottom: 1rem;
-  }
-
-  .update-form button {
-    padding: 10px 20px;
-    background-color: #221170;
-    color: #fff;
-    font-size: 15px !important;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 1rem;
-  }
-    
-
-  .error {
-    background-color: rgba(156, 0, 0, 0.582); /* Transparent red background */
-    border: rgb(184, 0, 0) solid 2px;
-    color: white;
-    padding: 1rem;
-    border-radius: 25px;
-    text-align: center;
-  }
-
-  .update-form button:hover {
-    background-color: #331c99;
-  }
-
-  /* Back Button */
-  .back-button-container {
-      display: flex;
-      align-items: center;
-      margin-top: 30px;
-      margin-left: 55px;
-      margin-right: 55px;
-  }
-
-
-
-  /* Top Buttons */
-  .filter-buttons {
-      display: flex;
-      justify-content: space-between; /* Ensures that left and right buttons are aligned to opposite ends */
-      flex-direction: row;
-      margin-top: 100px; /* Adjusts the space below the top bar */
-      margin-left: 50px; /* Aligns with the left side of the top bar */
-      margin-right: 50px; /* Aligns with the right side of the top bar */
-      align-items: center; /* Vertically centers the buttons in the container */
-  }
-
-  .filter-buttons button {
-      background-color: #171716;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: auto;
-  }
-
-  .filter-buttons button.active {
-      background-color: #343434; /* Slightly different background for active state */
-  }
-
-  .left-buttons,
-  .right-buttons {
-    display: flex;
-    flex-wrap: nowrap;      /* all buttons in one line */
-    width: auto;
-  }
-
-  .right-buttons {
-    justify-content: flex-end;
-    /* Optionally, if the right-buttons container has a fixed width or flex:1,
-       make sure it stretches so its content reaches the edge */
-  }
-
-  .filter-buttons button:last-child {
-      margin-right: 0; /* Removes margin from the last button to prevent extra spacing */
-  }
-
-  .filter-buttons button.active {
-      background-color: #343434; /* Differentiates the active button */
-  }
-
-
-
-
-
-  /* File System */
-  .file-system-viewer {
-      color: white !important;
-      font-family: monospace;
-      font-size: 17px;
-      margin: 50px 50px 50px; /* Adjust left and right margins, add bottom padding */
-      height: calc(100vh - 210px); /* Adjust height to take full vertical space minus offsets */
-      overflow-y: auto; /* Allows scrolling */
-      box-sizing: border-box; /* Includes padding in height calculation */
-  }
-
-  .file-name {
-      margin-top: 5px; /* Space between icon and text */
-  }
-
-  .grid-item i {
-      font-size: 24px;  /* Increase the font size as needed */
-      margin-bottom: 8px;  /* Optional: Add some space below the icon */
-  }
-
-  .file-item {
-      display: flex;
-      justify-content: space-between; /* Aligns items on the left and right */
-      padding: 5px 10px;
-      cursor: pointer;
-  }
-
-  .file-item.selected {
-      background-color: #4444; /* Slightly lighter than the viewer's background */
-  }
-
-  .last-accessed {
-      margin-left: auto; /* Pushes the date to the right */
-      white-space: nowrap; /* Prevents date from wrapping */
-  }
-
-  .grid-view {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr); /* 6 items per line */
-      gap: 20px; /* Spacing between grid items */
-      padding: 20px;
-      margin-left: 50px; /* Align with the rest of the content */
-      margin-right: 50px;
-  }
-
-  .grid-item {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 25px; /* Constant padding */
-      cursor: pointer;
-      text-align: center;
-      transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
-      box-shadow: inset 0 0 0 0px #555; /* Initially no visible inset shadow */
-      border: 2px solid transparent; /* Transparent border to prevent layout shift */
-  }
-
-  .action-icons {
-      display: none;
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      cursor: pointer;
-  }
-
-  .grid-item:hover .action-icons {
-      display: block; /* Show action icons on hover */
-  }
-
-  .icon {
-      margin-left: 5px;
-      color: #fff; /* White icon color */
-  }
-
-  .grid-item:hover {
-      box-shadow: inset 0 0 0 2px #555; /* Inset shadow acts as a border */
-  }
-
-
-  .grid-item.folder i, .grid-item.folder .file-name {
-      color: white; /* Folder icon and name color */
-  }
-
-  .grid-item.file i, .grid-item.file .file-name {
-      color: grey; /* File icon and name color */
-  }
-
-
-
-
-  /* File System Notes */ 
-  .note-view {
-    padding: 5px;
-    padding-left: 55px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: absolute;
-    top: 100px;
-    width: calc(100% - 250px);
-    margin-left: 100px;
-    z-index: 10;
-  }
-
-  .back-button {
-      font-size: 16px;
-      color: #007BFF;
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin-bottom: 20px;
-      text-align: left;
-  }
-
-  .back-button:hoverwidth {
-      text-decoration: underline;
-  }
-
-  .note-view input, .note-view textarea {
-      border: none;
-      outline: none;
-      background: transparent;
-      color:  white;
-      font-size: 16px;
-      width: 100%;
-      margin-bottom: 10px;
-      font-family: 'Roboto', sans-serif;
-      cursor: pointer;
+  .calendar-day {
+    min-height: 140px;
+    padding: 8px;
   }
 
-  .note-view textarea {
-      height: 75vh;
-      cursor: pointer;
+  .day-number {
+    font-size: 11px;
   }
 
-  .note-title::placeholder, .note-body::placeholder {
-      color: rgba(255, 255, 255, 0.5); /* Light grey placeholder */
+  .day-tasks {
+    margin-top: 28px;
   }
-
-  .note-view .note-title {
-      font-size: 36px;
-      pointer: cursor;
-      margin-bottom: 0;
-      font-weight: 500;
-  }
-
-  .note-view .note-body {
-      resize: none; /* Prevent resizing */
-      pointer: cursor;
-      font-size: 14px;
-      line-height: 1.5;
-  }
-
-  .note-view .delete-button {
-      background-color: #171616;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 5px;
-  }
-
-  .note-view .delete-button::hover {
-    background-color: grey;
-  }
-
-
-
-
-
-  /* Tasks View */
-  .task-view {
-      color: white !important;
-      font-family: monospace;
-      font-size: 17px;
-      margin: 20px 150px 150px; /* Adjust margins to align with file-system-viewer */
-      height: calc(100vh - 210px); /* Adjust height similarly */
-      overflow-y: auto; /* Allows scrolling */
-      box-sizing: border-box; /* Include padding in height calculation */
-  }
-
-  .task-title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 20ch;
-    min-width: 20ch;
-    font-size: 16px;
-    padding: 5px 10px;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-
-  .task-details {
-    max-width: 50ch; /* roughly 10 characters wide */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
-    margin-left: 10px;       /* Margin between title and details */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-
 
-  /* Task Form */
-  .modal-view {
-    width: 600px;
-    height: 400px;
-    background-color: #171716;
-    padding: 30px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  .task-indicator {
+    font-size: 10px;
+    padding: 4px 6px;
   }
 
-  .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+  .more-tasks {
+    font-size: 10px;
+    padding: 4px 6px;
   }
 
   .modal {
-      width: 400px;
-      background-color: #171716;
-      padding: 30px;
-      border-radius: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-  }
-}
-
-@media only screen and (min-width: 72em){
-  /* Main Styling */
-  .app-container {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      background-color: #0f0f0f;
+    width: 95%;
+    max-width: 95%;
+    padding: 20px;
   }
 
-  /* Hovering Bar */
-  .top-bar {
-    position: fixed;
-    top: 25px;
-    left: 50px;
-    height: 65px;
-    width: calc(100% - 100px);
-    background-color: #171716;
-    color: white;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-    z-index: 100;
-  }
-
-  .left-content {
-    display: flex;
-    align-items: center;
-  }
-
-  .tasks-buttons {
-      padding-right: 35px;
-  }
-
-  .top-bar .greeting {
-    color: white !important;
-    font-size: 19px;
-    margin-right: 50px;
-  }
-
-  .top-bar .statistics-date {
-    color: grey !important;
-    font-size: 15px;
-    margin-right: 50px;
-  }
-
-  .top-bar .statistics-due {
-    color: grey !important;
-    font-size: 15px;
-    margin-right: 50px;
-  }
-
-  .settings-gear {
-      cursor: pointer;
-      font-size: 16px;
-  }
-
-  .settings-gear .fa {
-      font-size: 16px;
-      color:rgba(202, 202, 202, 0.8);
-  }
-
-
-
-
-
-  /* User Settings */
-  .logout-button {
-      padding: 10px 20px;
-      background-color: #221170;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 150px;
-  }
-
-  .deleteAcc-button {
-      padding: 10px 20px;
-      background-color: #700808;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: -10px;
-  }
-
-  .user-settings .update-form {
-      background-color: transparent;
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      box-shadow: none;
-  }
-
-  .update-form input[type="password"],
-  .update-form input[type="email"] {
-    background-color: #121111;
-    color: white;
-    padding: 1rem;
-    border: 1px solid #383838;
-    border-radius: 5px;
-    outline: none;
-    margin-bottom: 1rem;
-  }
-
-  .update-form button {
-    padding: 10px 20px;
-    background-color: #221170;
-    color: #fff;
-    font-size: 15px !important;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 1rem;
-  }
-    
-
-  .error {
-    background-color: rgba(156, 0, 0, 0.582); /* Transparent red background */
-    border: rgb(184, 0, 0) solid 2px;
-    color: white;
-    padding: 1rem;
-    border-radius: 25px;
-    text-align: center;
-  }
-
-  .update-form button:hover {
-    background-color: #331c99;
-  }
-
-
-
-
-
-  /* Top Buttons */
-  .filter-buttons {
-      display: flex;
-      justify-content: space-between; /* Ensures that left and right buttons are aligned to opposite ends */
-      flex-direction: row;
-      margin-top: 100px; /* Adjusts the space below the top bar */
-      margin-left: 50px; /* Aligns with the left side of the top bar */
-      margin-right: 50px; /* Aligns with the right side of the top bar */
-      align-items: center; /* Vertically centers the buttons in the container */
-  }
-
-  .filter-buttons.task-view-buttons .left-buttons,
-  .filter-buttons.task-view-buttons .right-buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-  }
-
-  .filter-buttons button {
-      background-color: #171716;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  }
-
-  .filter-buttons button.active {
-      background-color: #343434; /* Slightly different background for active state */
-  }
-
-  .left-buttons, .right-buttons {
-      display: flex; /* Makes buttons in these divs line up horizontally */
-  }
-
-  .filter-buttons button:last-child {
-      margin-right: 0; /* Removes margin from the last button to prevent extra spacing */
-  }
-
-  .filter-buttons button.active {
-      background-color: #343434; /* Differentiates the active button */
-  }
-
-  /* Back Button */
-  .back-button-container {
-      display: flex;
-      align-items: center;
-      margin-top: 30px;
-      margin-left: 55px;
-      margin-right: 55px;
-  }
-
-
-
-  /* File System */
-  .file-system-viewer {
-      color: white !important;
-      font-family: monospace;
-      font-size: 17px;
-      margin: 50px 50px 50px; /* Adjust left and right margins, add bottom padding */
-      height: calc(100vh - 210px); /* Adjust height to take full vertical space minus offsets */
-      overflow-y: auto; /* Allows scrolling */
-      box-sizing: border-box; /* Includes padding in height calculation */
-  }
-
-  .file-name {
-      margin-top: 5px; /* Space between icon and text */
-  }
-
-  .grid-item i {
-      font-size: 24px;  /* Increase the font size as needed */
-      margin-bottom: 8px;  /* Optional: Add some space below the icon */
-  }
-
-  .file-item {
-      display: flex;
-      justify-content: space-between; /* Aligns items on the left and right */
-      padding: 5px 10px;
-      cursor: pointer;
-  }
-
-  .file-item.selected {
-      background-color: #4444; /* Slightly lighter than the viewer's background */
-  }
-
-  .last-accessed {
-      margin-left: auto; /* Pushes the date to the right */
-      white-space: nowrap; /* Prevents date from wrapping */
-  }
-
-  .grid-view {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr); /* 6 items per line */
-      gap: 20px; /* Spacing between grid items */
-      padding: 20px;
-      margin-left: 50px; /* Align with the rest of the content */
-      margin-right: 50px;
-      max-width: 95%;
-  }
-
-  .grid-item {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px; /* Constant padding */
-      cursor: pointer;
-      text-align: center;
-      transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
-      box-shadow: inset 0 0 0 0px #555; /* Initially no visible inset shadow */
-      border: 2px solid transparent; /* Transparent border to prevent layout shift */
-  }
-
-  .action-icons {
-      display: none;
-      position: absolute;
-      top: 5px;
-      right: 10px;
-      cursor: pointer;
-  }
-
-  .grid-item:hover .action-icons {
-      display: block; /* Show action icons on hover */
-  }
-
-  .icon {
-      margin-left: 5px;
-      color: #fff; /* White icon color */
-  }
-
-  .grid-item:hover {
-      box-shadow: inset 0 0 0 2px #555; /* Inset shadow acts as a border */
-  }
-
-
-  .grid-item.folder i, .grid-item.folder .file-name {
-      color: white; /* Folder icon and name color */
-  }
-
-  .grid-item.file i, .grid-item.file .file-name {
-      color: grey; /* File icon and name color */
-  }
-
-
-
-
-  /* File System Notes */ 
-  .note-view {
-    padding: 5px;
-    padding-left: 55px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: absolute;
-    top: 100px;
-    width: calc(100% - 450px);
-    margin-left: 200px;
-    z-index: 10;
-  }
-
-  .back-button {
-      font-size: 16px;
-      color: #007BFF;
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin-bottom: 20px;
-      text-align: left;
-  }
-
-  .back-button:hover {
-      text-decoration: underline;
-  }
-
-  .note-view input, .note-view textarea {
-      border: none;
-      outline: none;
-      background: transparent;
-      color:  white;
-      font-size: 16px;
-      width: 100%;
-      margin-bottom: 10px;
-      font-family: 'Roboto', sans-serif;
-      cursor: pointer;
-  }
-
-  .note-view textarea {
-      height: 75vh;
-      cursor: pointer;
-  }
-
-  .note-title::placeholder, .note-body::placeholder {
-      color: rgba(255, 255, 255, 0.5); /* Light grey placeholder */
-  }
-
-  .note-view .note-title {
-      font-size: 36px;
-      pointer: cursor;
-      margin-bottom: 0;
-      font-weight: 500;
-  }
-
-  .note-view .note-body {
-      resize: none; /* Prevent resizing */
-      pointer: cursor;
-      font-size: 14px;
-      line-height: 1.5;
-  }
-
-  .note-view .delete-button {
-      background-color: #171616;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 16px;
-      border-radius: 5px;
-  }
-
-  .note-view .delete-button::hover {
-    background-color: grey;
-  }
-
-
-
-
-
-  /* Tasks View */
-  .task-view {
-      color: white !important;
-      font-family: monospace;
-      font-size: 17px;
-      margin: 20px 150px 150px; /* Adjust margins to align with file-system-viewer */
-      height: calc(100vh - 210px); /* Adjust height similarly */
-      overflow-y: auto; /* Allows scrolling */
-      box-sizing: border-box; /* Include padding in height calculation */
-  }
-
-  .task-title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 20ch;
-    min-width: 20ch;
+  .task-detail h4 {
     font-size: 16px;
-    padding: 5px 10px;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
   }
 
-
-  .task-details {
-    max-width: 100ch; /* roughly 10 characters wide */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
-    margin-left: 10px;       /* Margin between title and details */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  .task-detail p {
+    font-size: 14px;
   }
 }

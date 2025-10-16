@@ -3,68 +3,80 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-
 const taskRoutes = require('./routes/task');
 const userRoutes = require('./routes/user');
+const dailyTaskRoutes = require('./routes/dailyTask');
 
 // Express app
 const app = express();
 
 const allowedOrigins = [
-  'https://quibly.net', // No trailing slash
+  'http://localhost:3000',          // Development frontend
+  'https://quibly.net',             // Production
   'https://quibly.net/register',
   'https://quibly.net/login',
-  'http://localhost:3000',
 ];
 
 // CORS configuration
-// CORS configuration: allow all origins by reflecting the request's origin
 const corsOptions = {
   origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.log('CORS blocked origin:', origin);
       callback(new Error('CORS not allowed from this origin'));
     }
   },
   credentials: true,
 };
+
 app.use(cors(corsOptions));
 
-
-// Explicitly handle all OPTIONS requests
+// Handle preflight requests
 app.options('*', (req, res) => {
-    // console.log('Received OPTIONS request:', req.path);
-    res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.sendStatus(200);
-  });
-  
-  
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.sendStatus(200);
+});
 
 // Middleware
 app.use(express.json());
 
+// Logging middleware for development
 app.use((req, res, next) => {
-    // console.log(`Incoming request: ${req.method} ${req.path}`);
-    // console.log(`Incoming request: ${req.method} ${req.path}, Body:`, req.body);
-    next();
+  console.log(`${req.method} ${req.path}`);
+  next();
 });
+
 // Routes
 app.use('/api/tasks', taskRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/dailytasks', dailyTaskRoutes);
 
+// Test route
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Backend is working!' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
+  res.status(500).json({ error: err.message });
+});
 
 // Connect to DB and start server
 mongoose.connect(process.env.MONG_URI)
-    .then(() => {
-        // console.log('Connected to MongoDB');
-        app.listen(process.env.PORT, () => {
-            // console.log(`Server running on port ${process.env.PORT}`);
-        });
-    })
-    .catch((error) => {
-        console.error('MongoDB connection error:', error.message);
+  .then(() => {
+    console.log('✅ Connected to MongoDB');
+    const PORT = process.env.PORT || 4000;
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`📍 API available at http://localhost:${PORT}/api`);
     });
+  })
+  .catch((error) => {
+    console.error('❌ MongoDB connection error:', error.message);
+  });
