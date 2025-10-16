@@ -80,9 +80,44 @@ const deleteAllDailyTasks = async (req, res) => {
   }
 };
 
+// Update a daily task
+const updateDailyTask = async (req, res) => {
+  const { id } = req.params;
+  const { title, details } = req.body;
+  
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'Invalid task ID' });
+  }
+  
+  try {
+    const task = await DailyTask.findOneAndUpdate(
+      { _id: id, user_id: req.user._id },
+      { title, details },
+      { new: true }
+    );
+    
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+    
+    res.status(200).json(task);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAllDailyTasks,
   createMultipleDailyTasks,
   toggleDailyTaskCompletion,
-  deleteAllDailyTasks
+  deleteAllDailyTasks,
+  updateDailyTask  // Add this to exports
+};
+
+module.exports = {
+  getAllDailyTasks,
+  createMultipleDailyTasks,
+  toggleDailyTaskCompletion,
+  deleteAllDailyTasks,
+  updateDailyTask
 };

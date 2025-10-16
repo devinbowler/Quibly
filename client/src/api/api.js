@@ -1,7 +1,7 @@
 // Use local backend for development
-// const API_URL = 'http://localhost:4000/api';
+const API_URL = 'http://localhost:4000/api';
 // Production backend (commented out)
-const API_URL = 'https://quibly.onrender.com/api';
+// const API_URL = 'https://quibly.onrender.com/api';
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {
@@ -112,6 +112,25 @@ export const deleteAllDailyTasks = async () => {
     headers: getAuthHeaders()
   });
   if (!response.ok) throw new Error('Failed to delete daily tasks');
+  return response.json();
+};
+
+export const updateDailyTask = async (taskId, updates) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+  
+  const response = await fetch(`http://localhost:4000/api/dailytasks/${taskId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${user.token}`
+    },
+    body: JSON.stringify(updates)
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to update daily task');
+  }
+  
   return response.json();
 };
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import "./task.css";
 import { useTheme } from '../ThemeContext';
@@ -39,6 +40,8 @@ function Task() {
   const [miniCalendarMonth, setMiniCalendarMonth] = useState(new Date());
   const [selectedMiniDay, setSelectedMiniDay] = useState(new Date());
   const [isPromptCollapsed, setIsPromptCollapsed] = useState(false);
+  const [isEditingDailyTasks, setIsEditingDailyTasks] = useState(false);
+  const [editedDailyTasks, setEditedDailyTasks] = useState({});
   
   const [newTask, setNewTask] = useState({
     title: '',
@@ -388,6 +391,83 @@ function Task() {
     setCurrentMonth(newDate);
   };
 
+  // Handle Edit Daily Tasks button click
+  const handleEditDailyTasks = () => {
+    if (isEditingDailyTasks) {
+      // Save mode - save all edited tasks
+      handleSaveDailyTasks();
+    } else {
+      // Edit mode - initialize edited tasks state
+      const initialEditedTasks = {};
+      getActiveDailyTasks().forEach(task => {
+        initialEditedTasks[task._id] = {
+          title: task.title,
+          details: task.details
+        };
+      });
+      setEditedDailyTasks(initialEditedTasks);
+      setIsEditingDailyTasks(true);
+    }
+  };
+
+  // Update edited task values
+  const handleEditedTaskChange = (taskId, field, value) => {
+    setEditedDailyTasks(prev => ({
+      ...prev,
+      [taskId]: {
+        ...prev[taskId],
+        [field]: value
+      }
+    }));
+  };
+
+  // Save all edited daily tasks
+  const handleSaveDailyTasks = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+      
+      // Update each edited task
+      const updatePromises = Object.entries(editedDailyTasks).map(async ([taskId, editedTask]) => {
+        const response = await fetch(`http://localhost:4000/api/dailytasks/${taskId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`
+          },
+          body: JSON.stringify({
+            title: editedTask.title,
+            details: editedTask.details
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to update task');
+        }
+        
+        return response.json();
+      });
+      
+      const updatedTasks = await Promise.all(updatePromises);
+      
+      // Update the dailyTasks state with the new values
+      setDailyTasks(prevTasks => 
+        prevTasks.map(task => {
+          const updated = updatedTasks.find(ut => ut._id === task._id);
+          return updated || task;
+        })
+      );
+      
+      setIsEditingDailyTasks(false);
+      setEditedDailyTasks({});
+      
+    } catch (error) {
+      console.error('Error saving daily tasks:', error);
+      setErrorMessage('Failed to save tasks. Please try again.');
+    }
+  };
+
+
+
   const calendarDays = getCalendarDays();
   const miniCalendarDays = getMiniCalendarDays();
   const monthYear = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -553,19 +633,52 @@ function Task() {
 
           {/* Active Daily Tasks Section */}
           <div className="todays-tasks">
-            <h3>Active Daily Tasks</h3>
+            <div className="todays-tasks-header">
+              <h3>Active Daily Tasks</h3>
+              {getActiveDailyTasks().length > 0 && (
+                <button 
+                  className={`edit-tasks-button ${isEditingDailyTasks ? 'save-mode' : ''}`}
+                  onClick={handleEditDailyTasks}
+                >
+                  <i className={`fas fa-${isEditingDailyTasks ? 'save' : 'edit'}`}></i>
+                  {isEditingDailyTasks ? 'Save Tasks' : 'Edit Tasks'}
+                </button>
+              )}
+            </div>
             {getActiveDailyTasks().map(task => (
               <div key={task._id} className="task-card" style={{ borderLeft: `4px solid ${task.color}` }}>
                 <div className="task-info">
-                  <h4>{task.title}</h4>
-                  <p>{task.details}</p>
+                  {isEditingDailyTasks ? (
+                    <>
+                      <input
+                        type="text"
+                        value={editedDailyTasks[task._id]?.title || task.title}
+                        onChange={(e) => handleEditedTaskChange(task._id, 'title', e.target.value)}
+                        className="task-edit-input"
+                        placeholder="Task title"
+                      />
+                      <textarea
+                        value={editedDailyTasks[task._id]?.details || task.details}
+                        onChange={(e) => handleEditedTaskChange(task._id, 'details', e.target.value)}
+                        className="task-edit-textarea"
+                        placeholder="Task details"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <h4>{task.title}</h4>
+                      <p>{task.details}</p>
+                    </>
+                  )}
                 </div>
-                <input
-                  type="checkbox"
-                  checked={false}
-                  onChange={() => handleToggleDailyTask(task._id)}
-                  className="task-checkbox"
-                />
+                {!isEditingDailyTasks && (
+                  <input
+                    type="checkbox"
+                    checked={false}
+                    onChange={() => handleToggleDailyTask(task._id)}
+                    className="task-checkbox"
+                  />
+                )}
               </div>
             ))}
             {getActiveDailyTasks().length === 0 && (

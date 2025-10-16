@@ -36,7 +36,7 @@ body.light-mode {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: var(--dark-bg-color);
+  background-color: #1e1e1e;
 }
 
 body.light-mode .app-container {
@@ -224,10 +224,10 @@ body.light-mode .minimize-button:hover {
 }
 
 .collapsed-prompt-header h3 {
-  font-size: 28px;
+  font-size: 36px;
+  margin-top: 40px;
   color: white;
   font-weight: 400;
-  margin: 0;
 }
 
 body.light-mode .collapsed-prompt-header h3 {
@@ -236,9 +236,10 @@ body.light-mode .collapsed-prompt-header h3 {
 
 .collapsed-prompt {
   background-color: var(--dark-card-bg);
+  margin-bottom: 50px;
+  margin-top: 65px;
   border-radius: 10px;
   padding: 20px 30px;
-  margin: 0 auto;
   max-width: 1800px;
   display: flex;
   align-items: center;
@@ -286,7 +287,6 @@ body.light-mode .collapsed-prompt i:last-child {
 }
 
 .prompt-container {
-  background-color: var(--dark-card-bg);
   border-radius: 15px;
   padding: 40px;
   margin-bottom: 40px;
@@ -298,7 +298,7 @@ body.light-mode .prompt-container {
 }
 
 .prompt-textarea {
-  width: 100%;
+  width: 96%;
   min-height: 150px;
   background-color: transparent;
   border: 1px solid #333;
@@ -339,7 +339,7 @@ body.light-mode .prompt-textarea {
 }
 
 .generate-button:disabled {
-  background-color: #666;
+  background-color: #222;
   cursor: not-allowed;
 }
 
@@ -348,15 +348,69 @@ body.light-mode .prompt-textarea {
   margin-top: 50px;
 }
 
+.todays-tasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
 .todays-tasks h3 {
   font-size: 24px;
-  margin-bottom: 25px;
+  margin: 0;
   color: white;
   font-weight: 400;
 }
 
 body.light-mode .todays-tasks h3 {
   color: var(--light-text-color);
+}
+
+.edit-tasks-button {
+  background-color: var(--dark-card-bg);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-tasks-button:hover {
+  background-color: #343434;
+}
+
+.edit-tasks-button.save-mode {
+  background-color: var(--dark-accent-color);
+}
+
+.edit-tasks-button.save-mode:hover {
+  background-color: #3344d8;
+}
+
+body.light-mode .edit-tasks-button {
+  background-color: var(--light-card-bg);
+  color: var(--light-text-color);
+  border: 1px solid var(--light-border-color);
+}
+
+body.light-mode .edit-tasks-button:hover {
+  background-color: var(--light-border-color);
+}
+
+body.light-mode .edit-tasks-button.save-mode {
+  background-color: var(--light-accent-color);
+  color: white;
+  border: 1px solid var(--light-accent-color);
+}
+
+body.light-mode .edit-tasks-button.save-mode:hover {
+  background-color: #3344d8;
 }
 
 .task-card {
@@ -372,6 +426,11 @@ body.light-mode .todays-tasks h3 {
 body.light-mode .task-card {
   background-color: var(--light-card-bg);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.task-info {
+  flex: 1;
+  margin-right: 15px;
 }
 
 .task-info h4 {
@@ -394,6 +453,43 @@ body.light-mode .task-info h4 {
 
 body.light-mode .task-info p {
   color: #777;
+}
+
+.task-edit-input,
+.task-edit-textarea {
+  width: 100%;
+  background-color: var(--dark-bg-color);
+  border: 1px solid #444;
+  border-radius: 5px;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  font-family: inherit;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+
+.task-edit-input:focus,
+.task-edit-textarea:focus {
+  outline: none;
+  border-color: var(--dark-accent-color);
+}
+
+.task-edit-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+body.light-mode .task-edit-input,
+body.light-mode .task-edit-textarea {
+  background-color: var(--light-bg-color);
+  border-color: var(--light-border-color);
+  color: var(--light-text-color);
+}
+
+body.light-mode .task-edit-input:focus,
+body.light-mode .task-edit-textarea:focus {
+  border-color: var(--light-accent-color);
 }
 
 .task-checkbox {
@@ -772,13 +868,12 @@ body.light-mode .sidebar-no-tasks {
 
 /* Main Calendar Grid Area */
 .calendar-main {
-  margin-left: 400px;
+  margin-left: 440px;
   flex: 1;
   padding: 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 .calendar-header {
@@ -837,11 +932,11 @@ body.light-mode .calendar-grid {
 }
 
 .calendar-day-header {
-  background-color: var(--dark-bg-color);
+  background-color: #242424;
   padding: 20px 15px;
   text-align: center;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 17px;
   color: grey;
 }
 
@@ -851,7 +946,7 @@ body.light-mode .calendar-day-header {
 }
 
 .calendar-day {
-  background-color: var(--dark-bg-color);
+  background-color: #1e1e1e;
   min-height: 100px;
   padding: 10px;
   cursor: pointer;
@@ -1040,16 +1135,50 @@ body.light-mode .modal-textarea {
 .modal-color {
   width: 100%;
   height: 50px;
-  background-color: var(--dark-bg-color);
-  border: 1px solid #333;
-  border-radius: 5px;
+  background: linear-gradient(90deg, 
+    #FF6B6B 0%, 
+    #FFA500 14%, 
+    #FFD93D 28%, 
+    #6BCF7F 42%, 
+    #4ECDC4 57%, 
+    #495BFA 71%, 
+    #9B6BFA 85%, 
+    #FF6B9D 100%
+  );
+  border: 2px solid transparent;
+  border-radius: 8px;
   cursor: pointer;
   margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.modal-color:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(73, 91, 250, 0.3);
+}
+
+.modal-color::after {
+  content: 'Click to choose color';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
 }
 
 body.light-mode .modal-color {
-  background-color: var(--light-bg-color);
-  border-color: var(--light-border-color);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .modal-color::after {
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .create-button {
