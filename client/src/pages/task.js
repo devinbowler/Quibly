@@ -485,10 +485,10 @@ function Task() {
         <div className="filter-buttons">
           <div className="left-buttons">
             <button onClick={() => setView('task')} className={view === 'task' ? 'active' : ''}>
-              <i className="fas fa-sparkles"></i> AI Tasks
+              <i className="fas fa-tasks"></i>Tasks
             </button>
             <button onClick={() => setView('calendar')} className={view === 'calendar' ? 'active' : ''}>
-              <i className="fas fa-calendar"></i> Calendar
+              <i className="fas fa-calendar"></i>Calendar
             </button>
           </div>
         </div>

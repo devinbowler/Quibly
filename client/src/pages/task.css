@@ -298,7 +298,7 @@ body.light-mode .prompt-container {
 }
 
 .prompt-textarea {
-  width: 96%;
+  width: 100%;
   min-height: 150px;
   background-color: transparent;
   border: 1px solid #333;
@@ -310,6 +310,7 @@ body.light-mode .prompt-container {
   resize: vertical;
   margin-bottom: 25px;
   line-height: 1.6;
+  box-sizing: border-box;
 }
 
 body.light-mode .prompt-textarea {
@@ -467,6 +468,7 @@ body.light-mode .task-info p {
   font-family: inherit;
   margin-bottom: 10px;
   transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 
 .task-edit-input:focus,
@@ -1118,6 +1120,7 @@ body.light-mode .close-button {
   margin-bottom: 15px;
   font-size: 16px;
   font-family: inherit;
+  box-sizing: border-box;
 }
 
 body.light-mode .modal-input,
@@ -1374,6 +1377,7 @@ body.light-mode .user-settings h3 {
   border-radius: 5px;
   margin-bottom: 15px;
   font-size: 14px;
+  box-sizing: border-box;
 }
 
 body.light-mode .update-form input {
@@ -1485,12 +1489,22 @@ body.light-mode .modal-close-btn {
     left: 0;
     right: 0;
     padding: 0 15px;
+    height: 60px;
+    flex-wrap: nowrap;
   }
 
   .filter-buttons {
     position: static;
     transform: none;
-    margin: 70px 15px 20px 15px;
+    margin: 0;
+    gap: 5px;
+  }
+  
+  .filter-buttons button {
+    padding: 8px 12px;
+    font-size: 13px;
+    gap: 5px;
+    white-space: nowrap;
   }
 
   .error-banner,
@@ -1499,15 +1513,21 @@ body.light-mode .modal-close-btn {
   }
 
   .left-content {
-    gap: 20px;
+    gap: 15px;
+    flex-shrink: 1;
+    min-width: 0;
+  }
+  
+  .top-bar-right {
+    flex-shrink: 0;
   }
 
   .greeting {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .statistics-date {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .filter-buttons {
@@ -1516,9 +1536,9 @@ body.light-mode .modal-close-btn {
   }
 
   .task-prompt-view {
-    max-width: 100%;
+    max-width: 92%;
     margin: 75px auto 0;
-    padding: 0 15px;
+    padding: 0 20px;
   }
 
   .prompt-header h2 {
@@ -1543,6 +1563,10 @@ body.light-mode .modal-close-btn {
 
   .collapsed-prompt span {
     font-size: 14px;
+  }
+  
+  .collapsed-prompt-header h3 {
+    font-size: 28px;
   }
 
   .prompt-container {
@@ -1570,6 +1594,7 @@ body.light-mode .modal-close-btn {
 
   .task-card {
     padding: 18px;
+    margin-bottom: 15px;
   }
 
   .task-info h4 {
@@ -1583,11 +1608,13 @@ body.light-mode .modal-close-btn {
   .calendar-view {
     flex-direction: column;
     margin-top: 65px;
+    height: auto;
+    min-height: calc(100vh - 65px);
   }
 
   .calendar-sidebar {
     position: relative;
-    width: 100%;
+    width: 94%;
     height: auto;
     padding: 20px 15px;
     top: 0;
@@ -1595,12 +1622,18 @@ body.light-mode .modal-close-btn {
 
   .calendar-main {
     margin-left: 0;
-    padding: 0 15px 20px 15px;
+    padding: 20px 15px;
+    overflow-y: visible;
+    min-height: 500px;
   }
 
   .calendar-day {
     min-height: 140px;
     padding: 8px;
+  }
+  
+  .calendar-grid {
+    min-height: auto;
   }
 
   .day-number {
@@ -1625,6 +1658,11 @@ body.light-mode .modal-close-btn {
     width: 95%;
     max-width: 95%;
     padding: 20px;
+  }
+  
+  .modal-input,
+  .modal-textarea {
+    font-size: 16px;
   }
 
   .task-detail h4 {

@@ -6,6 +6,7 @@ const cors = require('cors');
 const taskRoutes = require('./routes/task');
 const userRoutes = require('./routes/user');
 const dailyTaskRoutes = require('./routes/dailyTask');
+const aiRoutes = require('./routes/ai');
 
 // Express app
 const app = express();
@@ -55,6 +56,7 @@ app.use((req, res, next) => {
 app.use('/api/tasks', taskRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/dailytasks', dailyTaskRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Test route
 app.get('/api/test', (req, res) => {
