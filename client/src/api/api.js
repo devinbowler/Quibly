@@ -1,7 +1,7 @@
 // Use local backend for development
-const API_URL = 'http://localhost:4000/api';
+// const API_URL = 'http://localhost:4000/api';
 // Production backend (commented out)
-// const API_URL = 'https://quibly.onrender.com/api';
+const API_URL = 'https://quibly.onrender.com/api';
 
 // Helper function to get auth headers
 const getAuthHeaders = () => {
