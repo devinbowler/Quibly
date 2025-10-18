@@ -6,6 +6,10 @@ body.dark-mode .login-container {
   justify-content: center;
   align-items: center;
   min-height: 90vh;
+  color: white;
+}
+
+body.light-mode .login-container {
   color: black !important;
 }
 
