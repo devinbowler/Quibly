@@ -13,7 +13,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 3rem;
+  padding: .5rem 2rem;
   position: fixed;
   width: 100%;
   top: 0;
@@ -168,7 +168,6 @@ body.light-mode .home .navbar a {
 .home .content {
   flex: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
   text-align: center;
   padding: 2rem;
@@ -177,7 +176,7 @@ body.light-mode .home .navbar a {
 
 .home .hero {
   max-width: 900px;
-  margin: 0 auto;
+  margin-top: 200px;
   animation: fadeInUp 0.8s ease-out;
 }
 
@@ -236,7 +235,7 @@ body.dark-mode .home .hero p {
 }
 
 body.light-mode .home .hero p {
-  font-size: 1.5rem;
+  font-size: 1rem;
   color: #666666;
   margin-bottom: 3rem;
   font-weight: 300;
@@ -248,9 +247,9 @@ body.light-mode .home .hero p {
   background: linear-gradient(135deg, #495BFA 0%, #3344d8 100%);
   color: white !important;
   text-decoration: none;
-  padding: 1.25rem 3rem;
+  padding: 1rem 2rem;
   border-radius: 12px;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 10px 30px rgba(73, 91, 250, 0.3);

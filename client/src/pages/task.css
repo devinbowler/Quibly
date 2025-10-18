@@ -150,10 +150,10 @@ body.light-mode .filter-buttons button.active {
 
 /* Task Prompt View */
 .task-prompt-view {
-  width: 1100px;
   max-width: 1800px;
   margin: 95px auto 0;
   padding: 0 40px;
+  margin-bottom: 50px;
 }
 
 .prompt-header {
@@ -162,7 +162,7 @@ body.light-mode .filter-buttons button.active {
 }
 
 .prompt-header h2 {
-  font-size: 36px;
+  font-size: 30px;
   margin-bottom: 15px;
   color: white;
   font-weight: 400;
@@ -174,7 +174,7 @@ body.light-mode .prompt-header h2 {
 
 .prompt-header p {
   color: grey;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 body.light-mode .prompt-header p {
@@ -305,7 +305,7 @@ body.light-mode .prompt-container {
   border-radius: 8px;
   color: white;
   padding: 20px;
-  font-size: 18px;
+  font-size: 16px;
   font-family: inherit;
   resize: vertical;
   margin-bottom: 25px;
@@ -325,7 +325,7 @@ body.light-mode .prompt-textarea {
   border: none;
   padding: 18px;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
   cursor: pointer;
   display: flex;
@@ -340,7 +340,7 @@ body.light-mode .prompt-textarea {
 }
 
 .generate-button:disabled {
-  background-color: #222;
+  background-color: #0e0e0e;
   cursor: not-allowed;
 }
 
@@ -357,7 +357,7 @@ body.light-mode .prompt-textarea {
 }
 
 .todays-tasks h3 {
-  font-size: 24px;
+  font-size: 21px;
   margin: 0;
   color: white;
   font-weight: 400;
@@ -436,7 +436,7 @@ body.light-mode .task-card {
 
 .task-info h4 {
   margin: 0 0 10px 0;
-  font-size: 20px;
+  font-size: 18px;
   color: white;
   font-weight: 500;
 }
@@ -448,7 +448,7 @@ body.light-mode .task-info h4 {
 .task-info p {
   margin: 0;
   color: grey;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -558,7 +558,7 @@ body.light-mode .no-tasks {
   position: fixed;
   left: 0;
   top: 65px;
-  width: 400px;
+  width: 300px;
   height: calc(100vh - 65px);
   background-color: var(--dark-card-bg);
   padding: 30px 20px;
@@ -606,7 +606,7 @@ body.light-mode .calendar-sidebar::-webkit-scrollbar-thumb:hover {
   background-color: var(--dark-accent-color);
   color: white;
   border: none;
-  padding: 12px 20px;
+  padding: 12px 16px;
   border-radius: 8px;
   cursor: pointer;
   display: flex;
@@ -614,7 +614,7 @@ body.light-mode .calendar-sidebar::-webkit-scrollbar-thumb:hover {
   justify-content: center;
   gap: 8px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 13px;
   transition: background-color 0.2s;
   margin-bottom: 30px;
 }
@@ -870,7 +870,7 @@ body.light-mode .sidebar-no-tasks {
 
 /* Main Calendar Grid Area */
 .calendar-main {
-  margin-left: 440px;
+  margin-left: 340px;
   flex: 1;
   padding: 20px;
   overflow-y: auto;
@@ -1004,8 +1004,8 @@ body.light-mode .day-number {
 
 .task-indicator {
   color: white;
-  font-size: 17px;
-  padding: 6px 10px;
+  font-size: 13px;
+  padding: 6px 6px;
   border-radius: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1067,11 +1067,18 @@ body.light-mode .modal {
 
 .modal-header h3 {
   margin: 0;
-  color: white;
+  color: grey;
+  font-size: 13px;
 }
 
 body.light-mode .modal-header h3 {
-  color: var(--light-text-color);
+  font-size: 14px;
+  color: rgba(128, 128, 128, 0.74);
+}
+
+.task-view-title {
+  margin: 0;
+  margin-top: -20px;  
 }
 
 .task-view-date {
@@ -1468,9 +1475,9 @@ body.light-mode .success {
 }
 
 .modal-close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  position: relative;
+  top: -5px;
+  left: 95%;
   background: none;
   border: none;
   font-size: 20px;
@@ -1527,7 +1534,7 @@ body.light-mode .modal-close-btn {
   }
 
   .statistics-date {
-    font-size: 11px;
+    display: none;
   }
 
   .filter-buttons {
@@ -1536,9 +1543,8 @@ body.light-mode .modal-close-btn {
   }
 
   .task-prompt-view {
-    max-width: 92%;
+    max-width: 85%;
     margin: 75px auto 0;
-    padding: 0 20px;
   }
 
   .prompt-header h2 {
@@ -1621,7 +1627,7 @@ body.light-mode .modal-close-btn {
   }
 
   .calendar-main {
-    margin-left: 0;
+    margin-left: 0; 
     padding: 20px 15px;
     overflow-y: visible;
     min-height: 500px;
@@ -1655,9 +1661,8 @@ body.light-mode .modal-close-btn {
   }
 
   .modal {
-    width: 95%;
-    max-width: 95%;
-    padding: 20px;
+    width: 85%;
+    margin: 20px;
   }
   
   .modal-input,
@@ -1671,5 +1676,14 @@ body.light-mode .modal-close-btn {
 
   .task-detail p {
     font-size: 14px;
+  }
+}
+
+@media screen and (min-width: 1050px) {
+  .task-prompt-view {
+      min-width: 900px;
+      margin: 95px auto 0;
+      padding: 0 40px;
+      margin-bottom: 50px;
   }
 }
